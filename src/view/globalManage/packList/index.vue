@@ -1,34 +1,26 @@
-<style lang="less">
-@import "./user.less";
-</style>
 <template>
-    <div class="user-list">
+    <div>
         <Card :bordered="true">
             <Row :gutter="rowGutter">
                 <Form ref="searchForm" :model="searchForm" :rules="searchRules" inline>
-                    <FormItem prop="account">
-                        <Input type="text" v-model="searchForm.account" placeholder="用户账号">
+                    <FormItem prop="code">
+                        <Input type="text" v-model="searchForm.code" placeholder="套餐编号">
                             <Icon type="ios-color-filter" slot="prepend"></Icon>
                         </Input>
                     </FormItem>
-                    <FormItem prop="nickname">
-                        <Input type="text" v-model="searchForm.nickname" placeholder="用户昵称">
+                    <FormItem prop="name">
+                        <Input type="text" v-model="searchForm.name" placeholder="套餐名称">
                             <Icon type="ios-color-filter" slot="prepend"></Icon>
                         </Input>
                     </FormItem>
-                    <FormItem prop="phone">
-                        <Input type="text" v-model="searchForm.phone" placeholder="用户电话">
-                            <Icon type="ios-color-filter" slot="prepend"></Icon>
-                        </Input>
-                    </FormItem>
-                    <FormItem prop="sex">
-                        <Select v-model="searchForm.sex" :style="selectStyle" placeholder="性别">
-                            <Option v-for="item,i in sexList" :value="item.v">{{ item.k }}</Option>
+                    <FormItem prop="type">
+                        <Select v-model="searchForm.type" :style="selectStyle" placeholder="套餐类型">
+                            <Option v-for="item,i in typeList" :value="item.v">{{ item.k }}</Option>
                         </Select>
                     </FormItem>
-                    <FormItem prop="status">
-                        <Select v-model="searchForm.status" :style="selectStyle" placeholder="状态">
-                            <Option v-for="item,i in statusList" :value="item.v">{{ item.k }}</Option>
+                    <FormItem prop="use">
+                        <Select v-model="searchForm.use" :style="selectStyle" placeholder="套餐状态">
+                            <Option v-for="item,i in useList" :value="item.v">{{ item.k }}</Option>
                         </Select>
                     </FormItem>
                     <FormItem>
@@ -37,9 +29,10 @@
                     </FormItem>
                 </Form>
             </Row>
-            <!-- <Row :gutter="rowGutter">
-                <Button type="primary" class="mg-btn" @click="add">添加</Button>
-            </Row> -->
+            <Row :gutter="rowGutter">
+                <Button type="primary" class="mg-btn" @click="add('recharge')" v-if="authMap['packAddRecharge']"><Icon type="md-add" size="16" /> 新增充值套餐</Button>
+                <Button type="primary" class="mg-btn" @click="add('video')" v-if="authMap['packAddVideo']"><Icon type="md-add" size="16" /> 新增视频套餐</Button>
+            </Row>
             <Row :gutter="rowGutter" class="margin-top10">
                 <Table border :columns="columns" :data="datas" :loading="isLoading"></Table>
             </Row>
@@ -49,21 +42,18 @@
                 show-sizer show-elevator show-total />
             </Row>
         </Card>
-        <detail ref="detail" @lastLoad="resetData"></detail>
-        <recharge ref="recharge" @lastLoad="getList"></recharge>
+        <packEdit ref="packEdit" @lastLoad="searchData"></packEdit>
     </div>
 </template>
 <script>
-import imgIcon from '@/assets/images/icon/img.png'
-import { pageData, delData, banData } from '@/api/user'
+import { pageData, delData, changeUseData } from '@/api/pack'
 import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
-import { userSexMap, userVipTypeMap, userStatusMap } from '@/libs/dict'
-import detail from './detail.vue'
-import recharge from './recharge.vue'
+import { packTypeMap, packUseMap } from '@/libs/dict'
+import packEdit from './packEdit.vue'
 export default {
-  name: 'user-list',
+  name: 'pack-list',
   components: {
-    detail, recharge
+    packEdit
   },
   props: {
 
@@ -73,9 +63,8 @@ export default {
       checkTxt,
       checkTxtDef,
       timeFmt,
-      imgIcon,
-      userSexMap,
-      userStatusMap,
+      packTypeMap,
+      packUseMap,
       pageData: {
         page: 1,
         rows: 10,
@@ -91,68 +80,89 @@ export default {
       },
       columns: [
         {
-          title: '用户头像',
-          key: 'avatar',
-          width: 100,
+          fixed: 'left',
+          title: '套餐编号',
+          key: 'code',
+          tooltip: true,
+          width: 240
+        },
+        {
+          fixed: 'left',
+          title: '套餐名称',
+          key: 'name',
+          tooltip: true,
+          width: 260,
           render: (h, params) => {
             let d = params.row
-            let url = d.avatar ? d.avatar : imgIcon
-            return h('div', { attrs: { class: 'table-img' } }, [h('img', { attrs: { src: url } }, '')])
+            let v = checkTxtDef(d.name, '未命名')
+            return h('div', `${v}`)
           }
         },
         {
-          title: '用户账号',
-          key: 'account'
-        },
-        {
-          title: '用户昵称',
-          key: 'nickname'
-        },
-        {
-          title: '性别',
-          key: 'type',
-          width: 80,
+          title: '原价',
+          key: 'originMoney',
+          tooltip: true,
+          width: 150,
           render: (h, params) => {
             let d = params.row
-            let dict = userSexMap
-            let v = checkTxtDef(d.sex, '')
+            let v = checkTxtDef(d.originMoney, '0')
+            return h('div', { style: { color: '#66a5e9' } }, `${v}元`)
+          }
+        },
+        {
+          title: '优惠价',
+          key: 'money',
+          tooltip: true,
+          width: 150,
+          render: (h, params) => {
+            let d = params.row
+            let v = checkTxtDef(d.money, '0')
+            return h('div', { style: { color: '#f1606c' } }, `${v}元`)
+          }
+        },
+        {
+          title: '套餐类型',
+          key: 'type',
+          width: 120,
+          render: (h, params) => {
+            let d = params.row
+            let dict = packTypeMap
+            let v = checkTxtDef(d.type, '')
             let sv = dict[v]
-            sv = checkTxtDef(sv, '未定义')
-            return h('div', sv)
+            sv = sv == null ? { v: '未定义', c: 'red' } : sv
+            return h('Tag', { props: { color: sv.c } }, sv.v)
           }
         },
         {
-          title: '用户电话',
-          key: 'phone'
-        },
-        {
-          title: '用户余额（元）',
-          key: 'money'
-        },
-        {
-          title: '会员信息',
-          key: 'vipType',
-          width: 240,
+          title: '其他',
+          tooltip: true,
+          width: 200,
           render: (h, params) => {
             let d = params.row
-            let hList = []
-            if (d.vipType) {
-              let vipList = d.vipType.split('、')
-              for (let i = 0; i < vipList.length; i++) {
-                const val = vipList[i]
-                let dict = userVipTypeMap
-                let v = checkTxtDef(val, '')
-                let sv = dict[v]
-                sv = sv == null ? { v: '未定义', c: 'red' } : sv
-                hList.push(h('Tag', { props: { color: sv.c } }, sv.v))
-              }
+            let v = '无'
+            if (d.type == 'recharge') {
+              v = `${d.res ? `可获得平台币${d.res}，` : ''}${d.gifts ? `赠送平台币${d.gifts}` : ''}`
             }
-            return h('div', hList)
+            return h('div', `${v}`)
           }
         },
         {
-          title: '入筑时间',
+          title: '状态',
+          key: 'use',
+          width: 120,
+          render: (h, params) => {
+            let d = params.row
+            let dict = packUseMap
+            let v = checkTxtDef(d.use, '')
+            let sv = dict[v]
+            sv = sv == null ? { v: '未定义', c: 'error' } : sv
+            return h('Tag', { props: { color: sv.c } }, sv.v)
+          }
+        },
+        {
+          title: '创建时间',
           key: 'type',
+          width: 160,
           render: (h, params) => {
             let d = params.row
             let txt = timeFmt(d.createTime)
@@ -160,22 +170,11 @@ export default {
           }
         },
         {
-          title: '用户状态',
-          key: 'vipType',
-          render: (h, params) => {
-            let d = params.row
-            let dict = userStatusMap
-            let v = checkTxtDef(d.status, '')
-            let sv = dict[v]
-            sv = sv == null ? { v: '未定义', c: 'red' } : sv
-            return h('Tag', { props: { color: sv.c } }, sv.v)
-          }
-        },
-        {
           title: 'Action',
           key: 'action',
           width: 240,
           align: 'center',
+          fixed: 'right',
           render: (h, params) => {
             let row = params.row
             return h('div', [
@@ -185,14 +184,30 @@ export default {
                   size: 'small'
                 },
                 style: {
-                  marginRight: '5px'
+                  marginRight: '5px',
+                  display: [2].includes(row.use) ? '' : 'none'
                 },
                 on: {
                   click: () => {
-                    this.recharge(row)
+                    this.changeUse(row)
                   }
                 }
-              }, '充值'),
+              }, '上架'),
+              h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px',
+                  display: [1].includes(row.use) ? '' : 'none'
+                },
+                on: {
+                  click: () => {
+                    this.changeUse(row)
+                  }
+                }
+              }, '下架'),
               h('Button', {
                 props: {
                   type: 'warning',
@@ -213,34 +228,7 @@ export default {
                   size: 'small'
                 },
                 style: {
-                  marginRight: '5px',
-                  display: row.status == 1 ? '' : 'none'
-                },
-                on: {
-                  click: () => {
-                    this.ban(row)
-                  }
-                }
-              }, '封禁'),
-              h('Button', {
-                props: {
-                  type: 'success',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px',
-                  display: row.status == 2 ? '' : 'none'
-                },
-                on: {
-                  click: () => {
-                    this.ban(row)
-                  }
-                }
-              }, '解封'),
-              h('Button', {
-                props: {
-                  type: 'error',
-                  size: 'small'
+
                 },
                 on: {
                   click: () => {
@@ -253,8 +241,9 @@ export default {
         }
       ],
       datas: [],
-      sexList: [],
-      statusList: []
+      typeList: [],
+      statusList: [],
+      authMap: {}
     }
   },
   computed: {
@@ -262,6 +251,7 @@ export default {
   },
   created () {},
   mounted () {
+    this.authMap = this.$store.state.user.userInfo.authMap
     this.init()
   },
   methods: {
@@ -270,16 +260,16 @@ export default {
       this.getList()
     },
     initDictData () {
-      let sexList = []
-      for (let k in userSexMap) {
-        sexList.push({ k: userSexMap[k], v: k })
+      let typeList = []
+      for (let k in packTypeMap) {
+        typeList.push({ k: packTypeMap[k].v, v: k })
       }
-      this.sexList = sexList
-      let statusList = []
-      for (let k in userStatusMap) {
-        statusList.push({ k: userStatusMap[k].v, v: k })
+      this.typeList = typeList
+      let useList = []
+      for (let k in packUseMap) {
+        useList.push({ k: packUseMap[k].v, v: k })
       }
-      this.statusList = statusList
+      this.useList = useList
     },
     getParams () {
       let pd = this.pageData
@@ -288,10 +278,14 @@ export default {
         rows: pd.rows
       }
       let sf = this.searchForm
+      if (this.pid) {
+        sf.pid = this.pid
+      } else {
+        sf.pid = null
+      }
       for (let k in sf) {
         if (checkTxt(sf[k])) ps[k] = sf[k]
       }
-      ps.type = 'user'
       return ps
     },
     getList () {
@@ -315,6 +309,8 @@ export default {
       this.pageData.page = 1
       this.pageData.total = 0
       this.searchForm = {}
+      this.pid = null
+      this.pName = ''
       this.getList()
     },
     pageChange (v) {
@@ -328,14 +324,29 @@ export default {
       this.pageData.total = 0
       this.getList()
     },
-    recharge (row) {
-      this.$refs.recharge.open(row.id)
+    changeUse (row) {
+      let _that = this
+      this.$Modal.confirm({
+        title: '提示',
+        content: '<p>确定执行该操作吗？</p>',
+        onOk: () => {
+          _that.isLoading = true
+          changeUseData(row.id).then(res => {
+            _that.isLoading = false
+            _that.$Message.success('执行成功')
+            _that.getList()
+          })
+        },
+        onCancel: () => {
+
+        }
+      })
     },
-    add () {
-      this.$refs.detail.open()
+    add (dt) {
+      this.$refs.packEdit.open(dt, 'add', null)
     },
     update (row) {
-      this.$refs.detail.open('update', row.id)
+      this.$refs.packEdit.open(row.type, 'update', row.id)
     },
     del (row) {
       let _that = this
@@ -354,25 +365,10 @@ export default {
 
         }
       })
-    },
-    ban (row) {
-      let _that = this
-      this.$Modal.confirm({
-        title: '提示',
-        content: '<p>确定封禁该用户吗？</p>',
-        onOk: () => {
-          _that.isLoading = true
-          banData(row.id).then(res => {
-            _that.isLoading = false
-            _that.$Message.success('操作成功')
-            _that.getList()
-          })
-        },
-        onCancel: () => {
-
-        }
-      })
     }
   }
 }
 </script>
+<style lang="less">
+
+</style>

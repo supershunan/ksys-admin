@@ -69,7 +69,7 @@
                 </Col>
                 <Col span="16">
                     <div class="works-video el-center-list">
-                        <uploadFile ref="uploadVideo" :size="500 * 1024" item="ksys" module="works" type="videoSing" 
+                        <uploadFile ref="uploadVideo" :size="500 * 1024" item="ksys" module="works" type="videoSing"
                         @fileResult="videoResult" @videoTimeResult="videoTimeResult" @filePro="videoProResult"></uploadFile>
                         <Progress v-if="videoPerShow" style="margin-top: 10px;" :percent="videoPer" :stroke-color="['#108ee9', '#87d068']" ></Progress>
                     </div>
@@ -85,214 +85,217 @@
     </Modal>
 </template>
 <script>
-import imgIcon from "@/assets/images/icon/img.png"
-import { addVideoData,addFolderData,infoData,updateData,listFolderApi } from "@/api/works"
-import { videoListData } from "@/api/label"
-import { checkTxt,checkTxtDef,timeFmt,checkFieldTipReqs } from "@/libs/util"
-import uploadFile from "_c/upload/uploadFile.vue"
+import imgIcon from '@/assets/images/icon/img.png'
+import { addVideoData, addFolderData, infoData, updateData, listFolderApi } from '@/api/works'
+import { videoListData } from '@/api/label'
+import { checkTxt, checkTxtDef, timeFmt, checkFieldTipReqs } from '@/libs/util'
+import uploadFile from '_c/upload/uploadFile.vue'
 export default {
   name: '',
   components: {
     uploadFile
   },
   props: {
-    
+
   },
-  data() {
+  data () {
     return {
-        checkTxt,checkTxtDef,timeFmt,imgIcon,
-        modalShow: false,
-        modalType: 'add',
-        modalLoading: false,
-        modalTitle: "发布视频",
-        infoTitle: '',
-        rowGutter: 10,
-        labelWidth: 80,
-        dataForm: {},
-        dataRules: {
-            
-        },
-        dataType: 'video',
-        nowField: '',
-        videoPer: 0,
-        videoPerShow: false,
-        folderList: [],
-        labelList: [],
-        cLabelList: [],
-    };
+      checkTxt,
+      checkTxtDef,
+      timeFmt,
+      imgIcon,
+      modalShow: false,
+      modalType: 'add',
+      modalLoading: false,
+      modalTitle: '发布视频',
+      infoTitle: '',
+      rowGutter: 10,
+      labelWidth: 80,
+      dataForm: {},
+      dataRules: {
+
+      },
+      dataType: 'video',
+      nowField: '',
+      videoPer: 0,
+      videoPerShow: false,
+      folderList: [],
+      labelList: [],
+      cLabelList: []
+    }
   },
   computed: {
-    
+
   },
-  created() {},
-  mounted() {
-    this.init();
+  created () {},
+  mounted () {
+    this.init()
   },
   methods: {
-    init() {
+    init () {
       this.getLabels()
       this.getFolders()
     },
-    getLabels() {
-        let _that = this
-        videoListData().then(res => {
-            if (res.data) {
-                _that.labelList = res.data
-            }
-        })
-    },
-    getFolders() {
-        let _that = this
-        listFolderApi().then(res => {
-            if (res.data) {
-                _that.folderList = res.data
-            }
-        })
-    },
-    open(dt,type,id,pid) {
-        if (dt == 'folder') {
-            this.modalTitle = '创建合集'
-            this.infoTitle = '合集信息'
-        } else {
-            this.modalTitle = '发布视频'
-            this.infoTitle = '视频信息'
+    getLabels () {
+      let _that = this
+      videoListData().then(res => {
+        if (res.data) {
+          _that.labelList = res.data
         }
-        if (this.$refs.uploadVideo) {
-            this.$refs.uploadVideo.resetData()
+      })
+    },
+    getFolders () {
+      let _that = this
+      listFolderApi().then(res => {
+        if (res.data) {
+          _that.folderList = res.data
         }
-        this.cLabelList = []
-        this.modalLoading = false
-        this.modalShow = true
-        this.dataType = dt
-        this.dataForm = { pid:pid }
-        if (type == null || type == 'add') {
-            this.modalType = 'add'
-        } else {
-            this.modalType = type
-            this.getInfo(id)
+      })
+    },
+    open (dt, type, id, pid) {
+      if (dt == 'folder') {
+        this.modalTitle = '创建合集'
+        this.infoTitle = '合集信息'
+      } else {
+        this.modalTitle = '发布视频'
+        this.infoTitle = '视频信息'
+      }
+      if (this.$refs.uploadVideo) {
+        this.$refs.uploadVideo.resetData()
+      }
+      this.cLabelList = []
+      this.modalLoading = false
+      this.modalShow = true
+      this.dataType = dt
+      this.dataForm = { pid: pid }
+      if (type == null || type == 'add') {
+        this.modalType = 'add'
+      } else {
+        this.modalType = type
+        this.getInfo(id)
+      }
+    },
+    getInfo (id) {
+      let _that = this
+      _that.modalLoading = true
+      infoData(id).then(res => {
+        _that.modalLoading = false
+        _that.dataForm = res.data
+        _that.dataForm.status = _that.dataForm.status + ''
+        _that.dataForm.pid = parseInt(_that.dataForm.pid)
+        if (checkTxt(_that.dataForm.playUrl) && this.$refs.uploadVideo) {
+          _that.$refs.uploadVideo.setVal(_that.dataForm.playUrl)
         }
-    },
-    getInfo(id) {
-        let _that = this
-        _that.modalLoading = true
-        infoData(id).then(res => {
-            _that.modalLoading = false
-            _that.dataForm = res.data
-            _that.dataForm.status = _that.dataForm.status+''
-            _that.dataForm.pid = parseInt(_that.dataForm.pid)
-            if (checkTxt(_that.dataForm.playUrl) && this.$refs.uploadVideo) {
-                _that.$refs.uploadVideo.setVal(_that.dataForm.playUrl)
-            }
-            let ldList = _that.dataForm.labelDataList
-            if (ldList && ldList.length > 0) {
-                let nList = []
-                for (let i = 0; i < ldList.length; i++) {
-                    const iObj = ldList[i];
-                    nList.push(iObj.id)
-                }
-                _that.cLabelList = nList
-            }
-        })
-    },
-    moduleClose() {
-        this.modalShow = false
-    },
-    imgClick(field) {
-        this.nowField = field
-        this.$refs.uploadImg.clickFile()
-    },
-    videoResult(v) {
-        this.dataForm.playUrl = v
-    },
-    videoTimeResult(v) {
-        if (v != null) {
-            this.dataForm.playTime = v
+        let ldList = _that.dataForm.labelDataList
+        if (ldList && ldList.length > 0) {
+          let nList = []
+          for (let i = 0; i < ldList.length; i++) {
+            const iObj = ldList[i]
+            nList.push(iObj.id)
+          }
+          _that.cLabelList = nList
         }
+      })
     },
-    videoProResult(v) {
-        v = parseFloat(v)
-        this.videoPer = v
-        if (v < 100) {
-            this.videoPerShow = true
-        } else {
-            this.videoPerShow = false
-        }
+    moduleClose () {
+      this.modalShow = false
     },
-    imgResult(v) {
-        let field = this.nowField
-        let d = {...this.dataForm}
-        d[field] = v
-        this.dataForm = d
+    imgClick (field) {
+      this.nowField = field
+      this.$refs.uploadImg.clickFile()
     },
-    openImg(field) {
-        let url = this.dataForm[field]
-        if (!url) {
-            this.$Message.warning('未上传')
-            return
-        }
-        this.$refs.mediaSee.open(url)
+    videoResult (v) {
+      this.dataForm.playUrl = v
     },
-    submit() {
-        let _that = this
-        this.$refs['dataForm'].validate((valid) => {
-            if (valid) {
-                let d = _that.dataForm
-                if (this.cLabelList && this.cLabelList.length > 0) {
-                    d.labelList = [...this.cLabelList]
-                }
-                if (_that.modalType == "add") {
-                    if (_that.dataType == 'video') {
-                        let fs = [ {f:"title",m:"视频名称"},{f:"useTime",m:"购买后的使用时间"},{f:"money",m:"价格"}
-                        ,{f:"coverImg",m:"封面图",t:"未上传"},{f:"playUrl",m:"视频",t:"未上传"} ]
-                        if (!checkFieldTipReqs(d,fs)) {
-                            return
-                        }
-                        _that.modalLoading = true
-                        addVideoData(d).then(res => {
-                            _that.modalLoading = false
-                            _that.$Message.success("发布成功，请耐心等待审核")
-                            _that.$emit('lastLoad')
-                            _that.moduleClose()
-                        })
-                    } else {
-                        let fs = [ {f:"title",m:"合集名称"},{f:"collNum",m:"集数"} ]
-                        if (!checkFieldTipReqs(d,fs)) {
-                            return
-                        }
-                        _that.modalLoading = true
-                        addFolderData(d).then(res => {
-                            _that.modalLoading = false
-                            _that.$Message.success("创建合集成功")
-                            _that.$emit('lastLoad')
-                            _that.moduleClose()
-                        })
-                    }
-                } else {
-                    if (_that.dataType == 'video') {
-                        let fs = [ {f:"title",m:"视频名称"},{f:"useTime",m:"购买后的使用时间"},{f:"money",m:"价格"}
-                        ,{f:"coverImg",m:"封面图",t:"未上传"},{f:"playUrl",m:"视频",t:"未上传"} ]
-                        if (!checkFieldTipReqs(d,fs)) {
-                            return
-                        }
-                    } else {
-                        let fs = [ {f:"title",m:"合集名称"},{f:"collNum",m:"集数"} ]
-                        if (!checkFieldTipReqs(d,fs)) {
-                            return
-                        }
-                    }
-                    _that.modalLoading = true
-                    updateData(d).then(res => {
-                        _that.modalLoading = false
-                        _that.$Message.success("修改成功")
-                        _that.$emit('lastLoad')
-                        _that.moduleClose()
-                    })
-                }
+    videoTimeResult (v) {
+      if (v != null) {
+        this.dataForm.playTime = v
+      }
+    },
+    videoProResult (v) {
+      v = parseFloat(v)
+      this.videoPer = v
+      if (v < 100) {
+        this.videoPerShow = true
+      } else {
+        this.videoPerShow = false
+      }
+    },
+    imgResult (v) {
+      let field = this.nowField
+      let d = { ...this.dataForm }
+      d[field] = v
+      this.dataForm = d
+    },
+    openImg (field) {
+      let url = this.dataForm[field]
+      if (!url) {
+        this.$Message.warning('未上传')
+        return
+      }
+      this.$refs.mediaSee.open(url)
+    },
+    submit () {
+      let _that = this
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          let d = _that.dataForm
+          if (this.cLabelList && this.cLabelList.length > 0) {
+            d.labelList = [...this.cLabelList]
+          }
+          if (_that.modalType == 'add') {
+            if (_that.dataType == 'video') {
+              let fs = [ { f: 'title', m: '视频名称' }, { f: 'useTime', m: '购买后的使用时间' }, { f: 'money', m: '价格' },
+                { f: 'coverImg', m: '封面图', t: '未上传' }, { f: 'playUrl', m: '视频', t: '未上传' } ]
+              if (!checkFieldTipReqs(d, fs)) {
+                return
+              }
+              _that.modalLoading = true
+              addVideoData(d).then(res => {
+                _that.modalLoading = false
+                _that.$Message.success('发布成功，请耐心等待审核')
+                _that.$emit('lastLoad')
+                _that.moduleClose()
+              })
             } else {
-                this.$Message.error('请填写必要信息');
+              let fs = [ { f: 'title', m: '合集名称' }, { f: 'collNum', m: '集数' } ]
+              if (!checkFieldTipReqs(d, fs)) {
+                return
+              }
+              _that.modalLoading = true
+              addFolderData(d).then(res => {
+                _that.modalLoading = false
+                _that.$Message.success('创建合集成功')
+                _that.$emit('lastLoad')
+                _that.moduleClose()
+              })
             }
-        })
-    },
-  },
-};
+          } else {
+            if (_that.dataType == 'video') {
+              let fs = [ { f: 'title', m: '视频名称' }, { f: 'useTime', m: '购买后的使用时间' }, { f: 'money', m: '价格' },
+                { f: 'coverImg', m: '封面图', t: '未上传' }, { f: 'playUrl', m: '视频', t: '未上传' } ]
+              if (!checkFieldTipReqs(d, fs)) {
+                return
+              }
+            } else {
+              let fs = [ { f: 'title', m: '合集名称' }, { f: 'collNum', m: '集数' } ]
+              if (!checkFieldTipReqs(d, fs)) {
+                return
+              }
+            }
+            _that.modalLoading = true
+            updateData(d).then(res => {
+              _that.modalLoading = false
+              _that.$Message.success('修改成功')
+              _that.$emit('lastLoad')
+              _that.moduleClose()
+            })
+          }
+        } else {
+          this.$Message.error('请填写必要信息')
+        }
+      })
+    }
+  }
+}
 </script>

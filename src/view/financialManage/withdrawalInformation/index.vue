@@ -1,20 +1,20 @@
-<style lang="less">
-@import "./vip.less";
-</style>
 <template>
     <div class="user-list">
         <Card :bordered="true">
             <Row :gutter="rowGutter">
                 <Form ref="searchForm" :model="searchForm" :rules="searchRules" inline>
-                    <FormItem prop="account">
-                        <Input type="text" v-model="searchForm.account" placeholder="用户账号">
-                            <Icon type="ios-color-filter" slot="prepend"></Icon>
-                        </Input>
+                  <FormItem prop="status">
+                        <span>提现类型：</span>
+                        <Select v-model="searchForm.status" :style="selectStyle" placeholder="状态">
+                            <Option v-for="item,i in statusList" :value="item.v">{{ item.k }}</Option>
+                        </Select>
+                    </FormItem>
+                    <FormItem>
+                      <span>时间：</span>
+                      <DatePicker @on-change="timeChange" type="daterange" split-panels placeholder="选择时间" style="width: 200px"></DatePicker>
                     </FormItem>
                     <FormItem prop="nickname">
-                        <Input type="text" v-model="searchForm.nickname" placeholder="用户昵称">
-                            <Icon type="ios-color-filter" slot="prepend"></Icon>
-                        </Input>
+                        <Input type="text" v-model="searchForm.nickname" placeholder="用户昵称或姓名"></Input>
                     </FormItem>
                     <FormItem>
                         <Button type="primary" class="mg-btn" @click="searchData">查询</Button>
@@ -31,28 +31,31 @@
                 show-sizer show-elevator show-total />
             </Row>
         </Card>
-        <EvipAdd ref="EvipAdd" @lastLoad="getList"></EvipAdd>
+        <detail ref="detail" @lastLoad="resetData"></detail>
+        <recharge ref="recharge" @lastLoad="getList"></recharge>
     </div>
 </template>
 <script>
-import { pageEvipData } from '@/api/user'
-import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
+import imgIcon from '@/assets/images/icon/img.png'
+import { pageData } from '@/api/user'
+import { checkTxt, checkTxtDef, timeFmt } from '@/libs/util'
 import { userSexMap, userVipTypeMap, userStatusMap } from '@/libs/dict'
-import EvipAdd from './evipAdd.vue'
+import detail from './detail.vue'
+import recharge from './recharge.vue'
 export default {
-  name: 'evip-list',
+  name: 'user-list',
   components: {
-    EvipAdd
+    detail, recharge
   },
   props: {
 
   },
   data () {
     return {
-      authMap: {},
       checkTxt,
       checkTxtDef,
       timeFmt,
+      imgIcon,
       userSexMap,
       userStatusMap,
       pageData: {
@@ -70,6 +73,16 @@ export default {
       },
       columns: [
         {
+          title: '用户头像',
+          key: 'avatar',
+          width: 100,
+          render: (h, params) => {
+            let d = params.row
+            let url = d.avatar ? d.avatar : imgIcon
+            return h('div', { attrs: { class: 'table-img' } }, [h('img', { attrs: { src: url } }, '')])
+          }
+        },
+        {
           title: '用户账号',
           key: 'account'
         },
@@ -78,8 +91,9 @@ export default {
           key: 'nickname'
         },
         {
-          title: '性别',
+          title: '提现类型',
           key: 'type',
+          width: 100,
           render: (h, params) => {
             let d = params.row
             let dict = userSexMap
@@ -90,11 +104,15 @@ export default {
           }
         },
         {
-          title: '用户电话',
+          title: '提现方式',
           key: 'phone'
         },
         {
-          title: '会员信息',
+          title: '提现信息',
+          key: 'money'
+        },
+        {
+          title: '状态',
           key: 'vipType',
           width: 240,
           render: (h, params) => {
@@ -115,63 +133,29 @@ export default {
           }
         },
         {
-          title: '会员有效期',
+          title: '时间',
           key: 'type',
-          width: 400,
           render: (h, params) => {
             let d = params.row
-            let hList = []
-            if (d.evipList) {
-              for (let i = 0; i < d.evipList.length; i++) {
-                const iObj = d.evipList[i]
-                let fmt = 'yyyy-MM-DD'
-                let v = `${iObj.expertName}（${timeFmt(iObj.startTime, fmt)} ~ ${timeFmt(iObj.endTime, fmt)}）`
-                hList.push(h('Tag', { props: { color: 'warning' } }, v))
-              }
-            }
-            return h('div', hList)
-          }
-        },
-        {
-          title: '用户状态',
-          key: 'vipType',
-          render: (h, params) => {
-            let d = params.row
-            let dict = userStatusMap
-            let v = checkTxtDef(d.status, '')
-            let sv = dict[v]
-            sv = sv == null ? { v: '未定义', c: 'red' } : sv
-            return h('Tag', { props: { color: sv.c } }, sv.v)
-          }
-        },
-        {
-          title: 'Action',
-          key: 'action',
-          width: 240,
-          align: 'center',
-          render: (h, params) => {
-            let row = params.row
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'error',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px',
-                  display: this.authMap['evipAdd'] ? '' : 'none'
-                },
-                on: {
-                  click: () => {
-                    this.addEvipTime(row)
-                  }
-                }
-              }, '会员延时')
-            ])
+            let txt = timeFmt(d.createTime)
+            return h('div', txt)
           }
         }
+        // {
+        //   title: '用户状态',
+        //   key: 'vipType',
+        //   render: (h, params) => {
+        //     let d = params.row
+        //     let dict = userStatusMap
+        //     let v = checkTxtDef(d.status, '')
+        //     let sv = dict[v]
+        //     sv = sv == null ? { v: '未定义', c: 'red' } : sv
+        //     return h('Tag', { props: { color: sv.c } }, sv.v)
+        //   }
+        // }
       ],
-      datas: []
+      datas: [],
+      statusList: []
     }
   },
   computed: {
@@ -183,8 +167,15 @@ export default {
   },
   methods: {
     init () {
-      this.authMap = this.$store.state.user.userInfo.authMap
+      this.initDictData()
       this.getList()
+    },
+    initDictData () {
+      let statusList = []
+      for (let k in userStatusMap) {
+        statusList.push({ k: userStatusMap[k].v, v: k })
+      }
+      this.statusList = statusList
     },
     getParams () {
       let pd = this.pageData
@@ -196,13 +187,14 @@ export default {
       for (let k in sf) {
         if (checkTxt(sf[k])) ps[k] = sf[k]
       }
+      ps.type = 'user'
       return ps
     },
     getList () {
       let ps = this.getParams()
       this.isLoading = true
       let _that = this
-      pageEvipData(ps).then(res => {
+      pageData(ps).then(res => {
         _that.datas = res.rows
         _that.pageData.total = res.total
         _that.isLoading = false
@@ -232,9 +224,12 @@ export default {
       this.pageData.total = 0
       this.getList()
     },
-    addEvipTime (row) {
-      this.$refs.EvipAdd.open(row.id, row.evipList ? row.evipList : [])
+    timeChange (v) {
+      console.log(v)
     }
   }
 }
 </script>
+<style lang="less">
+@import "./user.less";
+</style>

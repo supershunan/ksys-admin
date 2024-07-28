@@ -67,16 +67,16 @@ export default [
     },
     component: Main,
     children: [
-      {
-        path: 'packList',
-        name: '充值套餐',
-        meta: {
-          icon: 'md-contact',
-          title: '充值套餐', // 修改
-          access: 'packList'
-        },
-        component: () => import('@/view/business/pack/packList.vue')
-      },
+      // {
+      //   path: 'packList',
+      //   name: '充值套餐',
+      //   meta: {
+      //     icon: 'md-contact',
+      //     title: '充值套餐', // 修改
+      //     access: 'packList'
+      //   },
+      //   component: () => import('@/view/userClient/packList/packList.vue')
+      // },
       {
         path: 'moneyLog',
         name: '管理设置',
@@ -85,7 +85,7 @@ export default [
           title: '管理设置', // 新增
           access: 'moneyLog'
         },
-        component: () => import('@/view/business/user/moneyLogList.vue')
+        component: () => import('@/view/userClient/manageSetting/index.vue')
       }
     ]
   },
@@ -107,7 +107,7 @@ export default [
           title: '公告', // 新增
           access: 'packList'
         },
-        component: () => import('@/view/business/pack/packList.vue')
+        component: () => import('@/view/expertEnd/notice/index.vue')
       },
       {
         path: 'moneyLog',
@@ -117,7 +117,7 @@ export default [
           title: '教程', // 新增
           access: 'moneyLog'
         },
-        component: () => import('@/view/business/user/moneyLogList.vue')
+        component: () => import('@/view/expertEnd/tutorial/index.vue')
       },
       {
         path: 'moneyLog',
@@ -127,7 +127,7 @@ export default [
           title: '信息', // 新增
           access: 'moneyLog'
         },
-        component: () => import('@/view/business/user/moneyLogList.vue')
+        component: () => import('@/view/expertEnd/information/index.vue')
       },
       {
         path: 'moneyLog',
@@ -137,7 +137,7 @@ export default [
           title: '推广详情', // 新增
           access: 'moneyLog'
         },
-        component: () => import('@/view/business/user/moneyLogList.vue')
+        component: () => import('@/view/expertEnd/promotiondetails/index.vue')
       },
       {
         path: 'moneyLog',
@@ -147,7 +147,7 @@ export default [
           title: '设置', // 新增
           access: 'moneyLog'
         },
-        component: () => import('@/view/business/user/moneyLogList.vue')
+        component: () => import('@/view/expertEnd/setUp/index.vue')
       }
     ]
   },
@@ -169,7 +169,7 @@ export default [
           title: '用户信息',
           access: 'userList'
         },
-        component: () => import('@/view/business/user/list.vue')
+        component: () => import('@/view/userManage/userInformation/index.vue')
       },
       {
         path: 'moneyLog',
@@ -179,7 +179,7 @@ export default [
           title: '团长信息', // 新增
           access: 'moneyLog'
         },
-        component: () => import('@/view/business/user/moneyLogList.vue')
+        component: () => import('@/view/userManage/leaderInformation/index.vue')
       },
       {
         path: 'moneyLog',
@@ -189,7 +189,7 @@ export default [
           title: '达人信息', // 新增
           access: 'moneyLog'
         },
-        component: () => import('@/view/business/user/moneyLogList.vue')
+        component: () => import('@/view/userManage/expertInformation/index.vue')
       },
       {
         path: 'vipPlat',
@@ -199,7 +199,7 @@ export default [
           title: '专属会员', // 修改
           access: 'vipPlat'
         },
-        component: () => import('@/view/business/vip/vipList.vue')
+        component: () => import('@/view/userManage/exclusiveMembership/index.vue')
       }
     ]
   },
@@ -221,7 +221,7 @@ export default [
           title: '充值套餐', // 修改
           access: 'packList'
         },
-        component: () => import('@/view/business/pack/packList.vue')
+        component: () => import('@/view/globalManage/packList/index.vue')
       },
       {
         path: 'sysConfig',
@@ -231,7 +231,7 @@ export default [
           title: '会员配置', // 修改
           access: 'sysConfig'
         },
-        component: () => import('@/view/business/user/sysConfig.vue')
+        component: () => import('@/view/globalManage/membershipSetting/index.vue')
       },
       {
         path: 'moneyLog',
@@ -241,7 +241,7 @@ export default [
           title: '流水记录',
           access: 'moneyLog'
         },
-        component: () => import('@/view/business/user/moneyLogList.vue')
+        component: () => import('@/view/globalManage/flowRecord/index.vue')
       }
     ]
   },
@@ -256,14 +256,14 @@ export default [
     component: Main,
     children: [
       {
-        path: 'packList',
+        path: 'applyList',
         name: '审核视频',
         meta: {
           icon: 'md-contact',
           title: '审核视频', // 新增
-          access: 'packList'
+          access: 'applyList'
         },
-        component: () => import('@/view/business/pack/packList.vue')
+        component: () => import('@/view/videoReview/reviewVideo/index.vue')
       },
       {
         path: 'sysConfig',
@@ -273,7 +273,7 @@ export default [
           title: '达人视频', // 新增
           access: 'sysConfig'
         },
-        component: () => import('@/view/business/user/sysConfig.vue')
+        component: () => import('@/view/videoReview/expertVideo/index.vue')
       }
     ]
   },
@@ -289,12 +289,12 @@ export default [
     children: [
       {
         path: '/materialLibrary',
-        name: 'home',
+        name: 'materialLibrary',
         meta: {
           title: '素材库', // 新增
           icon: 'md-home'
         },
-        component: () => import('@/view/single-page/home')
+        component: () => import('@/view/materialLibrary/index.vue')
       }
     ]
   },
@@ -316,7 +316,7 @@ export default [
           title: '对账信息', // 新增
           access: 'packList'
         },
-        component: () => import('@/view/business/pack/packList.vue')
+        component: () => import('@/view/financialManage/reconciliationInformation/index.vue')
       },
       {
         path: 'sysConfig',
@@ -326,7 +326,7 @@ export default [
           title: '提现信息', // 新增
           access: 'sysConfig'
         },
-        component: () => import('@/view/business/user/sysConfig.vue')
+        component: () => import('@/view/financialManage/withdrawalInformation/index.vue')
       }
     ]
   },
@@ -347,7 +347,7 @@ export default [
           title: '设置', // 修改
           icon: 'md-home'
         },
-        component: () => import('@/view/business/user/sysConfig.vue')
+        component: () => import('@/view/setting/index.vue')
       }
     ]
   },

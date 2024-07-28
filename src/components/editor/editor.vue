@@ -48,6 +48,10 @@ export default {
   methods: {
     setHtml (val) {
       this.editor.txt.html(val)
+    },
+    getHtml () {
+      const html = this.editor.txt.html()
+      console.log(html)
     }
   },
   mounted () {
@@ -69,7 +73,4 @@ export default {
 </script>
 
 <style lang="less">
-.editor-wrapper *{
-  z-index: 100 !important;
-}
 </style>
