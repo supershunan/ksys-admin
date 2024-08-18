@@ -50,12 +50,13 @@
             </Row>
         </Card>
         <detail ref="detail" @lastLoad="resetData"></detail>
-        <recharge ref="recharge" @lastLoad="getList"></recharge>
+        <!-- <recharge ref="recharge" @lastLoad="getList"></recharge> -->
     </div>
 </template>
 <script>
 import imgIcon from '@/assets/images/icon/img.png'
 import { pageData, delData, banData } from '@/api/user'
+import { getUserInfolistApi } from '@/api/userManage'
 import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
 import { userSexMap, userVipTypeMap, userStatusMap } from '@/libs/dict'
 import detail from './detail.vue'
@@ -179,20 +180,20 @@ export default {
           render: (h, params) => {
             let row = params.row
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.recharge(row)
-                  }
-                }
-              }, '充值'),
+              // h('Button', {
+              //   props: {
+              //     type: 'primary',
+              //     size: 'small'
+              //   },
+              //   style: {
+              //     marginRight: '5px'
+              //   },
+              //   on: {
+              //     click: () => {
+              //       this.recharge(row)
+              //     }
+              //   }
+              // }, '充值'),
               h('Button', {
                 props: {
                   type: 'warning',
@@ -298,7 +299,7 @@ export default {
       let ps = this.getParams()
       this.isLoading = true
       let _that = this
-      pageData(ps).then(res => {
+      getUserInfolistApi(ps).then(res => {
         _that.datas = res.rows
         _that.pageData.total = res.total
         _that.isLoading = false
@@ -328,9 +329,9 @@ export default {
       this.pageData.total = 0
       this.getList()
     },
-    recharge (row) {
-      this.$refs.recharge.open(row.id)
-    },
+    // recharge (row) {
+    //   this.$refs.recharge.open(row.id)
+    // },
     add () {
       this.$refs.detail.open()
     },

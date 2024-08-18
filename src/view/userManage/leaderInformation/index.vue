@@ -21,11 +21,11 @@
                             <Icon type="ios-color-filter" slot="prepend"></Icon>
                         </Input>
                     </FormItem>
-                    <FormItem prop="sex">
+                    <!-- <FormItem prop="sex">
                         <Select v-model="searchForm.sex" :style="selectStyle" placeholder="性别">
                             <Option v-for="item,i in sexList" :value="item.v">{{ item.k }}</Option>
                         </Select>
-                    </FormItem>
+                    </FormItem> -->
                     <FormItem prop="status">
                         <Select v-model="searchForm.status" :style="selectStyle" placeholder="状态">
                             <Option v-for="item,i in statusList" :value="item.v">{{ item.k }}</Option>
@@ -50,20 +50,19 @@
             </Row>
         </Card>
         <detail ref="detail" @lastLoad="resetData"></detail>
-        <recharge ref="recharge" @lastLoad="getList"></recharge>
     </div>
 </template>
 <script>
 import imgIcon from '@/assets/images/icon/img.png'
 import { pageData, delData, banData } from '@/api/user'
+import { getUserInfolistApi } from '@/api/userManage'
 import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
 import { userSexMap, userVipTypeMap, userStatusMap } from '@/libs/dict'
 import detail from './detail.vue'
-import recharge from './recharge.vue'
 export default {
   name: 'user-list',
   components: {
-    detail, recharge
+    detail
   },
   props: {
 
@@ -91,67 +90,62 @@ export default {
       },
       columns: [
         {
-          title: '用户头像',
+          title: '基本信息',
           key: 'avatar',
-          width: 100,
+          width: 200,
           render: (h, params) => {
             let d = params.row
             let url = d.avatar ? d.avatar : imgIcon
-            return h('div', { attrs: { class: 'table-img' } }, [h('img', { attrs: { src: url } }, '')])
+            return h('div', { attrs: { class: 'table-img' } }, [
+              h('img', { attrs: { src: url } }, ''),
+              h('div', { atrs: { class: 'nickname' } }, `${d.nickname}`)
+            ])
           }
         },
         {
-          title: '用户账号',
-          key: 'account'
-        },
-        {
-          title: '用户昵称',
-          key: 'nickname'
-        },
-        {
-          title: '性别',
-          key: 'type',
-          width: 80,
-          render: (h, params) => {
-            let d = params.row
-            let dict = userSexMap
-            let v = checkTxtDef(d.sex, '')
-            let sv = dict[v]
-            sv = checkTxtDef(sv, '未定义')
-            return h('div', sv)
-          }
-        },
-        {
-          title: '用户电话',
-          key: 'phone'
-        },
-        {
-          title: '用户余额（元）',
-          key: 'money'
-        },
-        {
-          title: '会员信息',
-          key: 'vipType',
-          width: 240,
-          render: (h, params) => {
-            let d = params.row
-            let hList = []
-            if (d.vipType) {
-              let vipList = d.vipType.split('、')
-              for (let i = 0; i < vipList.length; i++) {
-                const val = vipList[i]
-                let dict = userVipTypeMap
-                let v = checkTxtDef(val, '')
-                let sv = dict[v]
-                sv = sv == null ? { v: '未定义', c: 'red' } : sv
-                hList.push(h('Tag', { props: { color: sv.c } }, sv.v))
-              }
+          title: '个人信息',
+          align: 'center',
+          children: [
+            {
+              title: '姓名',
+              key: 'nickname',
+              align: 'center',
+              width: 100
+            },
+            {
+              title: '手机号',
+              key: 'phone',
+              align: 'center',
+              width: 100
+            },
+            {
+              title: '账号',
+              key: 'account',
+              align: 'center',
+              width: 100
             }
-            return h('div', hList)
-          }
+          ]
         },
         {
-          title: '入筑时间',
+          title: '佣金信息',
+          align: 'center',
+          children: [
+            {
+              title: '可提现佣金',
+              key: 'canWithdrawalBalance',
+              align: 'center',
+              width: 100
+            },
+            {
+              title: '累计佣金',
+              key: 'totalIncome',
+              align: 'center',
+              width: 100
+            }
+          ]
+        },
+        {
+          title: '入驻时间',
           key: 'type',
           render: (h, params) => {
             let d = params.row
@@ -179,20 +173,6 @@ export default {
           render: (h, params) => {
             let row = params.row
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.recharge(row)
-                  }
-                }
-              }, '充值'),
               h('Button', {
                 props: {
                   type: 'warning',
@@ -291,14 +271,15 @@ export default {
       for (let k in sf) {
         if (checkTxt(sf[k])) ps[k] = sf[k]
       }
-      ps.type = 'user'
+      // commander
+      ps.type = 'commander'
       return ps
     },
     getList () {
       let ps = this.getParams()
       this.isLoading = true
       let _that = this
-      pageData(ps).then(res => {
+      getUserInfolistApi(ps).then(res => {
         _that.datas = res.rows
         _that.pageData.total = res.total
         _that.isLoading = false
@@ -327,9 +308,6 @@ export default {
       this.pageData.rows = v
       this.pageData.total = 0
       this.getList()
-    },
-    recharge (row) {
-      this.$refs.recharge.open(row.id)
     },
     add () {
       this.$refs.detail.open()

@@ -36,6 +36,7 @@
 </template>
 <script>
 import { pageVipData } from '@/api/user'
+import { getExpertListApi } from '@/api/userManage'
 import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
 import { userSexMap, userVipTypeMap, userStatusMap } from '@/libs/dict'
 import VipAdd from './vipAdd.vue'
@@ -94,20 +95,15 @@ export default {
         },
         {
           title: '会员信息',
-          key: 'vipType',
+          key: 'evipList',
           width: 240,
           render: (h, params) => {
             let d = params.row
             let hList = []
-            if (d.vipType) {
-              let vipList = d.vipType.split('、')
-              for (let i = 0; i < vipList.length; i++) {
-                const val = vipList[i]
-                let dict = userVipTypeMap
-                let v = checkTxtDef(val, '')
-                let sv = dict[v]
-                sv = sv == null ? { v: '未定义', c: 'red' } : sv
-                hList.push(h('Tag', { props: { color: sv.c } }, sv.v))
+            if (d.evipList.length > 0) {
+              for (let i = 0; i < evipList.length; i++) {
+                const val = evipList[i]
+                hList.push(h('Tag', { props: { color: 'green' } }, `${val.expertName}专属会员`))
               }
             }
             return h('div', hList)
@@ -196,7 +192,7 @@ export default {
       let ps = this.getParams()
       this.isLoading = true
       let _that = this
-      pageVipData(ps).then(res => {
+      getExpertListApi(ps).then(res => {
         _that.datas = res.rows
         _that.pageData.total = res.total
         _that.isLoading = false

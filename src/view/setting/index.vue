@@ -4,20 +4,41 @@
             <template #title>
                 <span class="notice_title">员工账号</span>
             </template>
-            <Button type="primary" @click="modal1 = true">添加账号</Button>
-            <Table border :columns="columns1" :data="data1">
+            <Button type="primary" @click="addAdmin">添加账号</Button>
+            <Table border :columns="adminColumns" :data="adminData" style="margin: 10px 0">
                 <template slot-scope="{ row, index }" slot="action">
-                    <Button type="warning" size="small" @click="remove(index)">编辑</Button>
-                    <Button type="error" size="small" @click="remove(index)">删除</Button>
+                    <Button type="warning" size="small" @click="edit(row)">编辑</Button>
+                    <Button type="error" size="small" @click="remove(row)" style="margin-left: 10px;">删除</Button>
                 </template>
             </Table>
-            <Page :total="total" show-sizer @on-change="pageCange" @on-page-size-change="pageSizeChange" />
+            <Page :total="adminTotal" :page-size="5" show-sizer @on-change="pageCange" @on-page-size-change="pageSizeChange" :page-size-opts="[5, 10, 20, 40]" />
             <Modal
-                v-model="modal1"
-                title="公告内容"
-                @on-ok="ok"
-                @on-cancel="cancel">
-                <Input v-model="value5" type="textarea" placeholder="Enter something..." />
+                v-model="adminModal"
+                :title="currentTpe === 'add' ? '添加账号' : '编辑账号'"
+                @on-ok="handleOk"
+                @on-cancel="handleCancel">
+                <Form ref="formInlineRef" :model="formInline">
+                    <FormItem prop="account" label="用户账户">
+                        <Input type="text" v-model="formInline.account">
+                        </Input>
+                    </FormItem>
+                    <FormItem prop="password" label="用户密码">
+                        <Input type="password" v-model="formInline.password">
+                        </Input>
+                    </FormItem>
+                    <FormItem prop="nickname" label="姓名">
+                        <Input v-model="formInline.nickname">
+                        </Input>
+                    </FormItem>
+                    <FormItem prop="phone" label="电话">
+                        <Input v-model="formInline.phone">
+                        </Input>
+                    </FormItem>
+                    <FormItem prop="address" label="住址">
+                        <Input v-model="formInline.address">
+                        </Input>
+                    </FormItem>
+                </Form>
             </Modal>
         </Card>
         <Card :bordered="true">
@@ -176,7 +197,7 @@
                         </Row>
                         <Row :gutter="rowGutter">
                             <div class="my-item el-center">
-                                <Button class="my-btn" type="info" v-if="!isApplyCash && authMap['applyCash']" @click="applyCashSet">申请提现</Button>
+                                <Button class="my-btn" type="info" v-if="authMap['applyCash'] && !isApplyCash" @click="applyCashSet">申请提现</Button>
                                 <Button class="my-btn" type="info" v-if="isApplyCash" @click="applyCashSave">提交</Button>
                                 <Button class="my-btn" v-if="isApplyCash" @click="applyCashCancel">取消</Button>
                             </div>
@@ -221,7 +242,7 @@
                 </Row>
             </p>
         </Card>
-        <Card class="margin-top10" :bordered="true" v-if="authMap['myApply']">
+        <!-- <Card class="margin-top10" :bordered="true" v-if="authMap['myApply']">
             <p slot="title">我的申请</p>
             <p>
                 <Row :gutter="rowGutter">
@@ -251,12 +272,13 @@
                     show-sizer show-elevator show-total />
                 </Row>
             </p>
-        </Card>
+        </Card> -->
         <mediaSee ref="mediaSee"></mediaSee>
     </div>
 </template>
 <script>
 import { pageData, submitCashData } from '@/api/apply'
+import { getAdminListApi, addAdminApi, deleteAdminApi, updateAdminApi } from '@/api/setting'
 import { getMyInfo, updateMyInfo, updatePwd, shareUrlData } from '@/api/user'
 import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
 import { applyTypeMap, applyStatusMap, userSexMap } from '@/libs/dict'
@@ -347,17 +369,20 @@ export default {
       cashForm: {},
       myInfoLoading: false,
       authMap: {},
-      bulletinBoard: '公告栏',
-      columns1: [
+      adminParams: {
+        page: 1,
+        rows: 5
+      },
+      adminColumns: [
         {
           title: '用户账号',
           align: 'center',
-          key: 'userNum'
+          key: 'account'
         },
         {
           title: '姓名',
           align: 'center',
-          key: 'name'
+          key: 'nickname'
         },
         {
           title: '电话',
@@ -367,12 +392,12 @@ export default {
         {
           title: '住址',
           align: 'center',
-          key: 'adress'
+          key: 'address'
         },
         {
           title: '时间',
           align: 'center',
-          key: 'date'
+          key: 'createTime'
         },
         {
           title: '操作',
@@ -381,17 +406,17 @@ export default {
           align: 'center'
         }
       ],
-      data1: [
-        {
-          userNum: 11111111,
-          name: 'John Brown',
-          phone: 156999999999,
-          adress: '北京',
-          date: '2016-10-03'
-        }
-      ],
-      modal1: false,
-      total: 100
+      adminData: [],
+      adminModal: false,
+      adminTotal: 0,
+      formInline: {
+        account: '',
+        password: '',
+        nickname: '',
+        phone: '',
+        address: ''
+      },
+      currentTpe: ''
     }
   },
   computed: {
@@ -407,6 +432,7 @@ export default {
       this.initDictData()
       this.getMy()
       this.getList()
+      this.getAdminList()
     },
     initDictData () {
       let nList = []
@@ -564,31 +590,75 @@ export default {
         })
       })
     },
-    ok () {
-      this.$Message.info('Clicked ok')
+    getAdminList () {
+      getAdminListApi({
+        ...this.adminParams,
+        type: 'admin'
+      }).then(res => {
+        if (res.rows.length > 0) {
+          this.adminData = res.rows
+          this.adminTotal = res.total
+        }
+      })
     },
-    cancel () {
+    handleOk () {
+      if (this.currentTpe === 'add') {
+        addAdminApi({
+          ...this.formInline,
+          password: md5(this.formInline.password)
+        }).then(res => {
+          this.getAdminList()
+          this.adminModal = false
+          this.$Message.info('添加管理员成功')
+        })
+      }
+
+      if (this.currentTpe === 'edit') {
+        updateAdminApi({
+          ...this.formInline,
+          password: md5(this.formInline.password)
+        }).then(res => {
+          this.getAdminList()
+          this.adminModal = false
+          this.$Message.info('更新管理员成功')
+        })
+      }
+    },
+    handleCancel () {
       this.$Message.info('Clicked cancel')
     },
-    remove (index) {
-    //   this.data6.splice(index, 1)
+    addAdmin () {
+      this.currentTpe = 'add'
+      this.adminModal = true
+    },
+    edit (row) {
+      this.currentTpe = 'edit'
+      this.formInline = { ...row }
+      this.adminModal = true
+    },
+    remove (row) {
       this.$Modal.confirm({
         title: '是否删除？',
         okText: '是',
         cancelText: '否',
         onOk: () => {
-          this.$Message.info('Clicked ok')
+          deleteAdminApi({ ids: row.id }).then(() => {
+            this.getAdminList()
+            this.$Message.info('删除成功')
+          })
         },
         onCancel: () => {
-          this.$Message.info('Clicked cancel')
+          this.$Message.info('取消')
         }
       })
     },
     pageCange (index) {
-      console.log(index)
+      this.adminParams.rows = index
+      this.getAdminList()
     },
     pageSizeChange (index) {
-      console.log(index)
+      this.adminParams.rows = index
+      this.getAdminList()
     }
   }
 }

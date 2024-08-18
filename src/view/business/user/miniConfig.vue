@@ -78,7 +78,7 @@
             <Row :gutter="rowGutter" class="video-list">
                 <Col span="12" v-for="v,i in videoList">
                     <div class="video-item el-center-list">
-                        <uploadFile ref="homeVideoRef" :size="500 * 1024" item="ksys" module="home" type="videoSing" 
+                        <uploadFile ref="homeVideoRef" :size="500 * 1024" item="ksys" module="home" type="videoSing"
                         @fileResult="videoResult" @videoTimeResult="videoTimeResult" @filePro="videoProResult"></uploadFile>
                         <Progress v-if="videoPerShow" style="margin-top: 10px;" :percent="videoPer" :stroke-color="['#108ee9', '#87d068']" ></Progress>
                     </div>
@@ -104,132 +104,132 @@
     </div>
 </template>
 <script>
-import imgIcon from "@/assets/images/icon/img.png"
-import { getBanners,getHomeImgs,getHomeVideos,getVideoStatement,updateApi } from '@/api/gconfig';
-import uploadFile from "_c/upload/uploadFile.vue"
+import imgIcon from '@/assets/images/icon/img.png'
+import { getBanners, getHomeImgs, getHomeVideos, getVideoStatement, updateApi } from '@/api/gconfig'
+import uploadFile from '_c/upload/uploadFile.vue'
 export default {
   name: 'sysConfig',
   components: {
     uploadFile
   },
   props: {
-    
+
   },
-  data() {
+  data () {
     return {
-        authMap: {},
-        imgIcon,
-        rowGutter: 10,
-        bannerList: [],
-        nowBanner: -1,
-        homeList: [],
-        nowHome: -1,
-        videoList: [],
-        nowVideo: -1,
-        videoPer: 0,
-        videoPerShow: false,
-        videoStatement: {},
-    };
+      authMap: {},
+      imgIcon,
+      rowGutter: 10,
+      bannerList: [],
+      nowBanner: -1,
+      homeList: [],
+      nowHome: -1,
+      videoList: [],
+      nowVideo: -1,
+      videoPer: 0,
+      videoPerShow: false,
+      videoStatement: {}
+    }
   },
   computed: {
-    
+
   },
-  created() {},
-  mounted() {
+  created () {},
+  mounted () {
     this.authMap = this.$store.state.user.userInfo.authMap
-    this.init();
+    this.init()
   },
   methods: {
-    init() {
+    init () {
       this.getData()
     },
-    getData() {
-        let _that = this
-        getBanners().then(res => {
-            let d = res.data
-            _that.bannerList = d
-        })
-        getHomeImgs().then(res => {
-            let d = res.data
-            _that.homeList = d
-        })
-        getHomeVideos().then(res => {
-            let d = res.data
-            _that.videoList = d
-        })
-        getVideoStatement().then(res => {
-            let d = res.data
-            _that.videoStatement = d
-        })
+    getData () {
+      let _that = this
+      getBanners().then(res => {
+        let d = res.data
+        _that.bannerList = d
+      })
+      getHomeImgs().then(res => {
+        let d = res.data
+        _that.homeList = d
+      })
+      getHomeVideos().then(res => {
+        let d = res.data
+        _that.videoList = d
+      })
+      getVideoStatement().then(res => {
+        let d = res.data
+        _that.videoStatement = d
+      })
     },
-    openImg(url) {
-        if (!url) {
-            this.$Message.warning('未上传')
-            return
-        }
-        this.$refs.mediaSee.open(url)
+    openImg (url) {
+      if (!url) {
+        this.$Message.warning('未上传')
+        return
+      }
+      this.$refs.mediaSee.open(url)
     },
-    imgClickBanner(n) {
-        this.nowBanner = n
-        this.nowHome = -1
-        this.nowVideo = -1
-        this.$refs.uploadImg.clickFile()
+    imgClickBanner (n) {
+      this.nowBanner = n
+      this.nowHome = -1
+      this.nowVideo = -1
+      this.$refs.uploadImg.clickFile()
     },
-    imgClickHome(n) {
-        this.nowBanner = -1
-        this.nowHome = n
-        this.nowVideo = -1
-        this.$refs.uploadImg.clickFile()
+    imgClickHome (n) {
+      this.nowBanner = -1
+      this.nowHome = n
+      this.nowVideo = -1
+      this.$refs.uploadImg.clickFile()
     },
-    imgResult(v) {
-        this.updateData(v)
+    imgResult (v) {
+      this.updateData(v)
     },
-    videoResult(v) {
-        this.nowBanner = -1
-        this.nowHome = -1
-        this.nowVideo = 0
-        this.updateData(v)
+    videoResult (v) {
+      this.nowBanner = -1
+      this.nowHome = -1
+      this.nowVideo = 0
+      this.updateData(v)
     },
-    videoTimeResult(v) {
-        if (v != null) {
-            
-        }
+    videoTimeResult (v) {
+      if (v != null) {
+
+      }
     },
-    videoProResult(v) {
-        v = parseFloat(v)
-        this.videoPer = v
-        if (v < 100) {
-            this.videoPerShow = true
-        } else {
-            this.videoPerShow = false
-        }
+    videoProResult (v) {
+      v = parseFloat(v)
+      this.videoPer = v
+      if (v < 100) {
+        this.videoPerShow = true
+      } else {
+        this.videoPerShow = false
+      }
     },
-    updateData(url) {
-        let _that = this
-        let d = null
-        if (this.nowBanner > -1) {
-            d = {...this.bannerList[this.nowBanner]}
-        } else if (this.nowHome > -1) {
-            d = {...this.homeList[this.nowHome]}
-        } else if (this.nowVideo > -1) {
-            d = {...this.videoList[this.nowVideo]}
-        }
-        d.val = url
-        updateApi(d).then(res => {
-            _that.cashLoading = false
-            _that.$Message.success("修改成功")
-            _that.getData()
-        })
+    updateData (url) {
+      let _that = this
+      let d = null
+      if (this.nowBanner > -1) {
+        d = { ...this.bannerList[this.nowBanner] }
+      } else if (this.nowHome > -1) {
+        d = { ...this.homeList[this.nowHome] }
+      } else if (this.nowVideo > -1) {
+        d = { ...this.videoList[this.nowVideo] }
+      }
+      d.val = url
+      updateApi(d).then(res => {
+        _that.cashLoading = false
+        _that.$Message.success('修改成功')
+        _that.getData()
+      })
     },
-    saveVideoStatement() {
-        let _that = this
-        let d = {...this.videoStatement}
-        updateApi(d).then(res => {
-            _that.cashLoading = false
-            _that.$Message.success("修改成功")
-            _that.getData()
-        })
-    },
-  },
-};
+    saveVideoStatement () {
+      let _that = this
+      let d = { ...this.videoStatement }
+      updateApi(d).then(res => {
+        _that.cashLoading = false
+        _that.$Message.success('修改成功')
+        _that.getData()
+      })
+    }
+  }
+}
 </script>

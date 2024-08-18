@@ -13,18 +13,20 @@
 
 <script>
 import TabContent from './tabContent.vue'
+import axios from 'axios'
 export default {
   components: {
     TabContent
   },
   data () {
     return {
-      currentTabName: '图片'
+      currentTabName: '图片',
+      selectedFile: ''
     }
   },
   methods: {
     handleTabs (name) {
-      this.currentTabName = name
+      console.log(name)
     }
   }
 }

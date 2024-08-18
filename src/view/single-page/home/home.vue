@@ -40,6 +40,7 @@ import InforCard from '_c/info-card'
 import CountTo from '_c/count-to'
 import { ChartPie, ChartBar } from '_c/charts'
 import Example from './example.vue'
+import { getStatisticsData } from '@/api/home'
 export default {
   name: 'home',
   components: {
@@ -76,7 +77,12 @@ export default {
     }
   },
   mounted () {
-    //
+    this.getStatistic()
+  },
+  methods: {
+    async getStatistic () {
+      const res = await getStatisticsData()
+    }
   }
 }
 </script>

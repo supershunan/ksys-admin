@@ -9,15 +9,14 @@
           :rules="ruleValidate"
           :label-width="80"
         >
-          <FormItem label="视频声明" prop="videoDeclaration">
+          <FormItem label="视频声明" prop="val">
             <Input
               type="text"
-              v-model="videoForm.videoDeclaration"
-              number
+              v-model="videoForm.val"
             ></Input>
           </FormItem>
           <FormItem>
-            <Button type="primary" @click="handleSubmit('videoForm')"
+            <Button type="primary" @click="handlVideoSubmit('videoForm')"
               >保存</Button
             >
           </FormItem>
@@ -27,38 +26,29 @@
     <div class="video-bottom">
       <Card style="width: 45%">
         <template #title> 分类设置 </template>
-        <div>
-            <Form ref="formDynamic" :model="formDynamic" :label-width="80" style="width: 300px">
-        <template v-for="(item, index) in formDynamic.items">
-          <FormItem
-                  v-if="item.status"
-                  :key="index"
-                  :label="'分类 ' + item.index"
-                  :prop="'items.' + index + '.value'"
-                  :rules="{required: true, message: 'Item ' + item.index +' can not be empty', trigger: 'blur'}">
+        <div v-for="item in formDynamic" :key="item.id">
+            <div style="margin-bottom: 10px;">
               <Row>
-                  <Col span="18">
-                      <Input type="text" v-model="item.value" placeholder="输入分类名"></Input>
+                  <Col span="12">
+                      <Input type="text" v-model="item.name" placeholder="输入分类名"></Input>
                   </Col>
-                  <Col span="4" offset="1">
-                      <Button @click="handleRemove(index)">删除</Button>
+                  <Col span="3" offset="1" v-show="!item.code">
+                      <Button @click="saveClassify(item)">保存</Button>
+                  </Col>
+                  <Col span="3" offset="1" v-show="item.id >= 1">
+                      <Button @click="updateClassify(item)">更新</Button>
+                  </Col>
+                  <Col span="3" offset="1">
+                      <Button @click="deleteClassify(item)">删除</Button>
                   </Col>
               </Row>
-          </FormItem>
-        </template>
-        <FormItem>
-            <Row>
-                <Col span="12">
-                    <Button type="dashed" long @click="handleAdd" icon="md-add">添加分类</Button>
-                </Col>
-            </Row>
-        </FormItem>
-        <FormItem>
-            <Button type="primary" @click="handleClassifySubmit('formDynamic')">保存</Button>
-            <Button @click="handleReset('formDynamic')" style="margin-left: 8px">重置</Button>
-        </FormItem>
-    </Form>
+            </div>
         </div>
+        <Row type="flex" justify="center" align="middle" style="margin-top: 10px;">
+            <Col span="12">
+                <Button type="dashed" long @click="classifyStaticAdd" icon="md-add">添加分类</Button>
+            </Col>
+        </Row>
       </Card>
       <Card style="width: 53%">
         <template #title> 招募设置 </template>
@@ -74,66 +64,105 @@
 </template>
 <script>
 import Editor from '@/components/editor/editor.vue'
+import { updateApi, getVideoStatement, getClassify, updateClassify, addClassify, deleteClassify } from '@/api/manageSetting'
 export default {
   components: {
     Editor
   },
   data () {
     return {
-      videoForm: {
-        videoDeclaration: ''
-      },
+      videoForm: {},
       ruleValidate: {
-        videoDeclaration: [
+        val: [
           { required: true, message: '内容不能为空', trigger: 'blur' }
         ]
       },
-      index: 1,
-      formDynamic: {
-        items: [
-          {
-            value: '',
-            index: 1,
-            status: 1
-          }
-        ]
-      },
-      editorValue: 'hello world'
+      formDynamic: [],
+      editorValue: '暂不对接',
+      settingType: {
+        /** 视频声明 */
+        video_statement: 'video_statement',
+        /** 招募设置 */
+        recruit: 'recruit'
+      }
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
-    handleSubmit (name) {
+    init () {
+      this.getData()
+    },
+    getData () {
+      this.getVideoSetting()
+      this.getClassify()
+    },
+    handlVideoSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.success('Success!')
+          this.saveVideoStatement()
         } else {
           this.$Message.error('Fail!')
         }
       })
     },
-    handleClassifySubmit (name) {
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          console.log(this.formDynamic)
-          this.$Message.success('Success!')
-        } else {
-          this.$Message.error('Fail!')
-        }
+    getVideoSetting () {
+      getVideoStatement().then(res => {
+        let d = res.data
+        this.videoForm = d
       })
     },
-    handleReset (name) {
-      this.$refs[name].resetFields()
-    },
-    handleAdd () {
-      this.index++
-      this.formDynamic.items.push({
-        value: '',
-        index: this.index,
-        status: 1
+    saveVideoStatement () {
+      let d = { ...this.videoForm }
+      updateApi(d).then(res => {
+        this.$Message.success('修改成功')
+        this.getData()
       })
     },
-    handleRemove (index) {
-      this.formDynamic.items[index].status = 0
+    getClassify () {
+      getClassify().then(res => {
+        this.formDynamic = res.data
+      })
+    },
+    classifyStaticAdd () {
+      const filterAry = this.formDynamic.filter(res => res.id < 1)
+      if (filterAry.length > 0) {
+        this.$Message.warning('请完成上一次添加')
+        return
+      }
+      this.formDynamic.push({
+        id: Math.random(),
+        name: '',
+        label: `LABEL${this.formDynamic.length + 1}`,
+        sort: this.formDynamic.length + 1
+      })
+    },
+    saveClassify (item) {
+      const data = {
+        name: item.name,
+        type: 'video',
+        label: item.label,
+        sort: item.sort
+      }
+      addClassify(data).then(res => {
+        this.$Message.success('添加成功')
+        console.log(res)
+      })
+    },
+    updateClassify (item) {
+      updateClassify(item).then(res => {
+        this.$Message.success('修改成功')
+        this.getClassify()
+      })
+    },
+    deleteClassify (item) {
+      if (item.id < 1) {
+        this.getClassify()
+        return
+      }
+      deleteClassify({ ids: item.id })
+      this.getClassify()
     },
     editorSave () {
       this.$refs.EditorRef.getHtml()

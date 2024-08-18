@@ -46,154 +46,157 @@
     </Modal>
 </template>
 <script>
-import { addData,infoData,updateData,myUseList } from "@/api/pack"
-import { checkTxt,checkTxtDef,timeFmt,checkFieldTipReqs } from "@/libs/util"
+import { addData, infoData, updateData, myUseList } from '@/api/pack'
+import { getPackagelistApi, addPackageApi, updatePackageApi } from '@/api/globalManage'
+import { checkTxt, checkTxtDef, timeFmt, checkFieldTipReqs } from '@/libs/util'
 export default {
   name: '',
   components: {
-    
+
   },
   props: {
-    
+
   },
-  data() {
+  data () {
     return {
-        checkTxt,checkTxtDef,timeFmt,
-        modalShow: false,
-        modalType: 'add',
-        modalLoading: false,
-        modalTitle: "创建视频套餐",
-        infoTitle: '',
-        rowGutter: 10,
-        labelWidth: 80,
-        dataForm: {},
-        dataRules: {
-            
-        },
-        dataType: 'video',
-        videoList: [],
-        cVideoList: [],
-    };
+      checkTxt,
+      checkTxtDef,
+      timeFmt,
+      modalShow: false,
+      modalType: 'add',
+      modalLoading: false,
+      modalTitle: '创建视频套餐',
+      infoTitle: '',
+      rowGutter: 10,
+      labelWidth: 80,
+      dataForm: {},
+      dataRules: {
+
+      },
+      dataType: 'video',
+      videoList: [],
+      cVideoList: []
+    }
   },
   computed: {
-    
+
   },
-  created() {},
-  mounted() {
-    this.init();
+  created () {},
+  mounted () {
+    this.init()
   },
   methods: {
-    init() {
+    init () {
       this.getMyVideos()
     },
-    getMyVideos() {
-        let _that = this
-        myUseList().then(res => {
-            if (res.data) {
-                _that.videoList = res.data
-            }
-        })
-    },
-    open(dt,type,id) {
-        if (dt == 'recharge') {
-            this.modalTitle = '创建充值套餐'
-            this.infoTitle = '套餐内容'
-        } else {
-            this.modalTitle = '创建视频套餐'
-            this.infoTitle = '套餐内容'
+    getMyVideos () {
+      let _that = this
+      myUseList().then(res => {
+        if (res.data) {
+          _that.videoList = res.data
         }
-        this.cVideoList = []
-        this.modalLoading = false
-        this.modalShow = true
-        this.dataType = dt
-        this.dataForm = {  }
-        if (type == null || type == 'add') {
-            this.modalType = 'add'
-        } else {
-            this.modalType = type
-            this.getInfo(id)
+      })
+    },
+    open (dt, type, code) {
+      if (dt == 'recharge') {
+        this.modalTitle = '创建充值套餐'
+        this.infoTitle = '套餐内容'
+      } else {
+        this.modalTitle = '创建视频套餐'
+        this.infoTitle = '套餐内容'
+      }
+      this.cVideoList = []
+      this.modalLoading = false
+      this.modalShow = true
+      this.dataType = dt
+      this.dataForm = { }
+      if (type == null || type == 'add') {
+        this.modalType = 'add'
+      } else {
+        this.modalType = type
+        this.getInfo(code)
+      }
+    },
+    getInfo (code) {
+      let _that = this
+      _that.modalLoading = true
+      getPackagelistApi({ code: code }).then(res => {
+        _that.modalLoading = false
+        _that.dataForm = res.rows[0]
+        _that.dataForm.use = _that.dataForm.use + ''
+        let zList = _that.dataForm.pws
+        if (zList && zList.length > 0) {
+          let nList = []
+          for (let i = 0; i < zList.length; i++) {
+            const iObj = zList[i]
+            nList.push(parseInt(iObj.worksId))
+          }
+          _that.cVideoList = nList
         }
+      })
     },
-    getInfo(id) {
-        let _that = this
-        _that.modalLoading = true
-        infoData(id).then(res => {
-            _that.modalLoading = false
-            _that.dataForm = res.data
-            _that.dataForm.use = _that.dataForm.use+''
-            let zList = _that.dataForm.pws
-            if (zList && zList.length > 0) {
-                let nList = []
-                for (let i = 0; i < zList.length; i++) {
-                    const iObj = zList[i];
-                    nList.push(parseInt(iObj.worksId))
-                }
-                _that.cVideoList = nList
+    moduleClose () {
+      this.modalShow = false
+    },
+    submit () {
+      let _that = this
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          let d = _that.dataForm
+          if (this.cVideoList && this.cVideoList.length > 0) {
+            let nList = []
+            for (let i = 0; i < this.cVideoList.length; i++) {
+              const iObj = this.cVideoList[i]
+              nList.push({ worksId: iObj })
             }
-        })
-    },
-    moduleClose() {
-        this.modalShow = false
-    },
-    submit() {
-        let _that = this
-        this.$refs['dataForm'].validate((valid) => {
-            if (valid) {
-                let d = _that.dataForm
-                if (this.cVideoList && this.cVideoList.length > 0) {
-                    let nList = []
-                    for (let i = 0; i < this.cVideoList.length; i++) {
-                        const iObj = this.cVideoList[i];
-                        nList.push({ worksId: iObj })
-                    }
-                    d.pws = nList
-                }
-                if (_that.modalType == "add") {
-                    if (_that.dataType == 'video') {
-                        let fs = [ {f:"name",m:"套餐名称"},{f:"originMoney",m:"原价"},{f:"money",m:"优惠价"} ]
-                        if (!checkFieldTipReqs(d,fs)) {
-                            return
-                        }
-                        if (d.pws == null || d.pws.length == 0) {
-                            _that.$Message.warning("至少选择一个视频")
-                            return
-                        }
-                        d.type = 'video'
-                        _that.modalLoading = true
-                        addData(d).then(res => {
-                            _that.modalLoading = false
-                            _that.$Message.success("创建套餐成功")
-                            _that.$emit('lastLoad')
-                            _that.moduleClose()
-                        })
-                    } else {
-                        let fs = [ {f:"name",m:"套餐名称"},{f:"originMoney",m:"原价"},{f:"money",m:"优惠价"},{f:"res",m:"可获得平台币"},{f:"gifts",m:"赠送平台币"} ]
-                        if (!checkFieldTipReqs(d,fs)) {
-                            return
-                        }
-                        d.type = 'recharge'
-                        _that.modalLoading = true
-                        addData(d).then(res => {
-                            _that.modalLoading = false
-                            _that.$Message.success("创建套餐成功")
-                            _that.$emit('lastLoad')
-                            _that.moduleClose()
-                        })
-                    }
-                } else {
-                    _that.modalLoading = true
-                    updateData(d).then(res => {
-                        _that.modalLoading = false
-                        _that.$Message.success("修改成功")
-                        _that.$emit('lastLoad')
-                        _that.moduleClose()
-                    })
-                }
+            d.pws = nList
+          }
+          if (_that.modalType == 'add') {
+            if (_that.dataType == 'video') {
+              let fs = [ { f: 'name', m: '套餐名称' }, { f: 'originMoney', m: '原价' }, { f: 'money', m: '优惠价' } ]
+              if (!checkFieldTipReqs(d, fs)) {
+                return
+              }
+              if (d.pws == null || d.pws.length == 0) {
+                _that.$Message.warning('至少选择一个视频')
+                return
+              }
+              d.type = 'video'
+              _that.modalLoading = true
+              addPackageApi(d).then(res => {
+                _that.modalLoading = false
+                _that.$Message.success('创建套餐成功')
+                _that.$emit('lastLoad')
+                _that.moduleClose()
+              })
             } else {
-                this.$Message.error('请填写必要信息');
+              let fs = [ { f: 'name', m: '套餐名称' }, { f: 'originMoney', m: '原价' }, { f: 'money', m: '优惠价' }, { f: 'res', m: '可获得平台币' }, { f: 'gifts', m: '赠送平台币' } ]
+              if (!checkFieldTipReqs(d, fs)) {
+                return
+              }
+              d.type = 'recharge'
+              _that.modalLoading = true
+              addPackageApi(d).then(res => {
+                _that.modalLoading = false
+                _that.$Message.success('创建套餐成功')
+                _that.$emit('lastLoad')
+                _that.moduleClose()
+              })
             }
-        })
-    },
-  },
-};
+          } else {
+            _that.modalLoading = true
+            updatePackageApi(d).then(res => {
+              _that.modalLoading = false
+              _that.$Message.success('修改成功')
+              _that.$emit('lastLoad')
+              _that.moduleClose()
+            })
+          }
+        } else {
+          this.$Message.error('请填写必要信息')
+        }
+      })
+    }
+  }
+}
 </script>

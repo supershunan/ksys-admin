@@ -4,33 +4,38 @@
             <template #title>
                 <span class="notice_title">反馈</span>
             </template>
-            <Table border :columns="columns1" :data="data1">
+            <Table border :columns="feedbackColumns" :data="feedbackData">
                 <template slot-scope="{ row, index }" slot="action">
-                    <Button type="error" size="small" @click="remove(index)">删除</Button>
+                    <Button type="error" size="small" @click="feadbackRemove(row)">删除</Button>
                 </template>
             </Table>
-            <Page :total="total" show-sizer @on-change="pageCange" @on-page-size-change="pageSizeChange" />
+            <Page :total="feadbackTotal" :page-size="5" show-sizer @on-change="feadbackPageCange" @on-page-size-change="feadbackPageSizeChange" :page-size-opts="[5, 10, 20, 40]" />
         </Card>
         <Card style="margin-top: 30px;">
             <template #title>
                 <span class="notice_title">合作</span>
             </template>
+            <Table border :columns="cooperateColumns" :data="cooperateData">
+                <template slot-scope="{ row, index }" slot="action">
+                    <Button type="error" size="small" @click="cooperateRemove(row)">删除</Button>
+                </template>
+            </Table>
+            <Page :total="cooperateTotal" :page-size="5" show-sizer @on-change="cooperatePageCange" @on-page-size-change="cooperatePageSizeChange" :page-size-opts="[5, 10, 20, 40]" />
         </Card>
-        <Modal
-            v-model="modal1"
-            title="反馈合作"
-            @on-ok="ok"
-            @on-cancel="cancel">
-        </Modal>
     </div>
 </template>
 
 <script>
+import { getFeedbackListApi, deleteFeedbackApi } from '@/api/expertEnd'
 export default {
   data () {
     return {
-      total: 100,
-      columns1: [
+      feadbackParams: {
+        page: 1,
+        rows: 5
+      },
+      feadbackTotal: 0,
+      feedbackColumns: [
         {
           type: 'index',
           width: 60,
@@ -45,19 +50,19 @@ export default {
         {
           title: '内容',
           align: 'center',
-          key: 'content'
+          key: 'info'
         },
         {
           title: '手机号/微信号',
           align: 'center',
-          width: 100,
+          width: 150,
           key: 'phone'
         },
         {
           title: '时间',
           align: 'center',
           width: 100,
-          key: 'date'
+          key: 'createTime'
         },
         {
           title: '操作',
@@ -66,42 +71,115 @@ export default {
           align: 'center'
         }
       ],
-      data1: [
+      feedbackData: [],
+      cooperateParams: {
+        page: 1,
+        rows: 5
+      },
+      cooperateTotal: 0,
+      cooperateColumns: [
         {
-          name: 'John Brown',
-          content: 'sldkflskdlfjsldfjlsd',
-          phone: '15888888888',
-          date: '2016-10-03'
+          type: 'index',
+          width: 60,
+          align: 'center'
         },
         {
-          name: 'Jim Green',
-          content: 'sldkflskdlfjsldfjlsd',
-          phone: '15888888888',
-          date: '2016-10-01'
+          title: '称呼',
+          align: 'center',
+          width: 100,
+          key: 'name'
+        },
+        {
+          title: '内容',
+          align: 'center',
+          key: 'info'
+        },
+        {
+          title: '手机号/微信号',
+          align: 'center',
+          width: 150,
+          key: 'phone'
+        },
+        {
+          title: '时间',
+          align: 'center',
+          width: 100,
+          key: 'createTime'
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          width: 150,
+          align: 'center'
         }
-      ]
+      ],
+      cooperateData: []
     }
   },
+  mounted () {
+    this.getFeadbackList()
+    this.getCooperateList()
+  },
   methods: {
-    remove (index) {
-      this.data6.splice(index, 1)
+    getFeadbackList () {
+      getFeedbackListApi(this.feadbackParams).then(res => {
+        this.feedbackData = res.rows
+        this.feadbackTotal = res.total
+      })
+    },
+    feadbackRemove (item) {
       this.$Modal.confirm({
         title: '是否删除？',
         okText: '是',
         cancelText: '否',
         onOk: () => {
-          this.$Message.info('Clicked ok')
+          deleteFeedbackApi({ ids: item.id }).then(() => {
+            this.$Message.info('删除成功')
+            this.getFeadbackList()
+          })
         },
         onCancel: () => {
-          this.$Message.info('Clicked cancel')
+          this.$Message.info('取消')
         }
       })
     },
-    pageCange (index) {
-      console.log(index)
+    feadbackPageCange (index) {
+      this.feadbackParams.page = index
+      this.getFeadbackList()
     },
-    pageSizeChange (index) {
-      console.log(index)
+    feadbackPageSizeChange (index) {
+      this.feadbackParams.rows = index
+      this.getFeadbackList()
+    },
+    getCooperateList () {
+      getFeedbackListApi(this.feadbackParams).then(res => {
+        this.cooperateData = res.rows
+        this.cooperateTotal = res.total
+      })
+    },
+    cooperateRemove (item) {
+      this.$Modal.confirm({
+        title: '是否删除？',
+        okText: '是',
+        cancelText: '否',
+        onOk: () => {
+          deleteFeedbackApi({ ids: item.id }).then(() => {
+            this.$Message.info('删除成功')
+            this.getCooperateList()
+          })
+        },
+        onCancel: () => {
+          this.$Message.info('取消')
+        }
+      })
+    },
+    cooperatePageCange (index) {
+      this.cooperateParams.page = index
+      this.getCooperateList()
+    },
+    cooperatePageSizeChange (index) {
+      this.cooperateParams.rows = index
+      this.getCooperateList()
     }
   }
 }

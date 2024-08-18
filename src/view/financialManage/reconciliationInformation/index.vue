@@ -4,20 +4,21 @@
             <template #title>
                 <span class="notice_title">对账信息</span>
             </template>
-            <Table :columns="columns1" :data="data1"></Table>
+            <Table :columns="columns" :data="data"></Table>
         </Card>
     </div>
 </template>
 
 <script>
+import { getReconciliationApi } from '@/api/financialManage'
 export default {
   data () {
     return {
-      columns1: [
+      columns: [
         {
           title: '总收益（元）',
           align: 'center',
-          key: 'allMoney'
+          key: 'totalIncomeMoney'
         },
         {
           title: '—',
@@ -27,7 +28,7 @@ export default {
         {
           title: '提现支出（元）',
           align: 'center',
-          key: 'withdrawalMoney'
+          key: 'cashTotalMoney'
         },
         {
           title: '=',
@@ -37,17 +38,22 @@ export default {
         {
           title: '实际收益（元）',
           align: 'center',
-          key: 'realityMoney'
+          key: 'realIncomeMoney'
         }
       ],
-      data1: [
-        {
-          allMoney: 100,
-          age: '',
-          withdrawalMoney: 20,
-          realityMoney: 80
+      data: []
+    }
+  },
+  mounted () {
+    this.getReconciliation()
+  },
+  methods: {
+    getReconciliation () {
+      getReconciliationApi().then(res => {
+        if (res.data) {
+          this.data = [res.data]
         }
-      ]
+      })
     }
   }
 }

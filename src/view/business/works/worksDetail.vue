@@ -94,67 +94,71 @@
     </Modal>
 </template>
 <script>
-import { infoAllData } from "@/api/works"
-import { checkTxt,checkTxtDef,timeFmt } from "@/libs/util"
-import { worksTypeMap,worksStatusMap } from "@/libs/dict"
+import { infoAllData } from '@/api/works'
+import { checkTxt, checkTxtDef, timeFmt } from '@/libs/util'
+import { worksTypeMap, worksStatusMap } from '@/libs/dict'
 export default {
   name: '',
   components: {
 
   },
   props: {
-    
+
   },
-  data() {
+  data () {
     return {
-        checkTxt,checkTxtDef,timeFmt,worksTypeMap,worksStatusMap,
-        modalShow: false,
-        modalTitle: "视频详情",
-        rowGutter: 10,
-        dataForm: {},
-        videoName: '',
-        videoUrl: '',
-        videoCoverImg: '',
-        videoBgImg: '',
-        labelList: [],
-    };
+      checkTxt,
+      checkTxtDef,
+      timeFmt,
+      worksTypeMap,
+      worksStatusMap,
+      modalShow: false,
+      modalTitle: '视频详情',
+      rowGutter: 10,
+      dataForm: {},
+      videoName: '',
+      videoUrl: '',
+      videoCoverImg: '',
+      videoBgImg: '',
+      labelList: []
+    }
   },
   computed: {
-    
+
   },
-  created() {},
-  mounted() {
-    this.init();
+  created () {},
+  mounted () {
+    this.init()
   },
   methods: {
-    init() {
-      
+    init () {
+
     },
-    open(id) {
-        this.modalShow = true
-        this.videoName = ''
-        this.videoUrl = ''
-        this.videoCoverImg = ''
-        this.videoBgImg = ''
-        this.dataForm = {}
-        this.labelList = []
-        this.getInfo(id)
+    open (id) {
+      this.modalShow = true
+      this.videoName = ''
+      this.videoUrl = ''
+      this.videoCoverImg = ''
+      this.videoBgImg = ''
+      this.dataForm = {}
+      this.labelList = []
+      this.getInfo(id)
     },
-    getInfo(id) {
-        let _that = this
-        infoAllData(id).then(res => {
-          let d = res.data
-            _that.dataForm = d
-            _that.labelList = d.labelDataList
-            _that.videoName = d.title
-            _that.videoCoverImg = d.coverImg
-            _that.videoUrl = d.playUrl
-            _that.videoBgImg = d.bgImg
-        })
+    getInfo (id) {
+      let _that = this
+      infoAllData(id).then(res => {
+        let d = res.data
+        _that.dataForm = d
+        _that.labelList = d.labelDataList
+        _that.videoName = d.title
+        _that.videoCoverImg = d.coverImg
+        _that.videoUrl = d.playUrl
+        _that.videoBgImg = d.bgImg
+      })
     },
-    moduleClose() {
-        this.modalShow = false
-    },
-  },
-};
+    moduleClose () {
+      this.modalShow = false
+    }
+  }
+}
 </script>

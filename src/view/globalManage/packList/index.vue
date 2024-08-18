@@ -31,7 +31,7 @@
             </Row>
             <Row :gutter="rowGutter">
                 <Button type="primary" class="mg-btn" @click="add('recharge')" v-if="authMap['packAddRecharge']"><Icon type="md-add" size="16" /> 新增充值套餐</Button>
-                <Button type="primary" class="mg-btn" @click="add('video')" v-if="authMap['packAddVideo']"><Icon type="md-add" size="16" /> 新增视频套餐</Button>
+                <!-- <Button type="primary" class="mg-btn" @click="add('video')" v-if="authMap['packAddVideo']"><Icon type="md-add" size="16" /> 新增视频套餐</Button> -->
             </Row>
             <Row :gutter="rowGutter" class="margin-top10">
                 <Table border :columns="columns" :data="datas" :loading="isLoading"></Table>
@@ -47,6 +47,7 @@
 </template>
 <script>
 import { pageData, delData, changeUseData } from '@/api/pack'
+import { getPackagelistApi, setUpdatePackageStatusApi, deletePackageApi } from '@/api/globalManage'
 import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
 import { packTypeMap, packUseMap } from '@/libs/dict'
 import packEdit from './packEdit.vue'
@@ -189,7 +190,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.changeUse(row)
+                    this.changeUse(row, 1)
                   }
                 }
               }, '上架'),
@@ -204,7 +205,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.changeUse(row)
+                    this.changeUse(row, 2)
                   }
                 }
               }, '下架'),
@@ -292,7 +293,7 @@ export default {
       let ps = this.getParams()
       this.isLoading = true
       let _that = this
-      pageData(ps).then(res => {
+      getPackagelistApi(ps).then(res => {
         _that.datas = res.rows
         _that.pageData.total = res.total
         _that.isLoading = false
@@ -324,14 +325,17 @@ export default {
       this.pageData.total = 0
       this.getList()
     },
-    changeUse (row) {
+    changeUse (row, status) {
       let _that = this
       this.$Modal.confirm({
         title: '提示',
         content: '<p>确定执行该操作吗？</p>',
         onOk: () => {
           _that.isLoading = true
-          changeUseData(row.id).then(res => {
+          setUpdatePackageStatusApi({
+            id: row.id,
+            use: status
+          }).then(res => {
             _that.isLoading = false
             _that.$Message.success('执行成功')
             _that.getList()
@@ -346,7 +350,7 @@ export default {
       this.$refs.packEdit.open(dt, 'add', null)
     },
     update (row) {
-      this.$refs.packEdit.open(row.type, 'update', row.id)
+      this.$refs.packEdit.open(row.type, 'update', row.code)
     },
     del (row) {
       let _that = this
@@ -355,7 +359,7 @@ export default {
         content: '<p>确定删除该用户吗？</p>',
         onOk: () => {
           _that.isLoading = true
-          delData({ ids: row.id }).then(res => {
+          deletePackageApi({ ids: row.id }).then(res => {
             _that.isLoading = false
             _that.$Message.success('删除成功')
             _that.getList()

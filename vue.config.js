@@ -28,7 +28,7 @@ module.exports = {
   // sub-path here. For example, if your app is deployed at
   // https://www.foobar.com/my-app/
   // then change this to '/my-app/'
-  baseUrl: BASE_URL,
+  baseUrl: '',
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   // 如果你不需要使用eslint，把lintOnSave设为false即可
@@ -57,6 +57,14 @@ module.exports = {
         pathRewrite: {
           '^/api': ''
         },
+        secure: false
+      },
+      '/newApi': {
+        target: 'https://ksys.qfyingshi.cn',
+        changeOrigin: true,
+        // pathRewrite: {
+        //   '^/api': ''
+        // },
         secure: false
       }
     }

@@ -27,18 +27,18 @@ export default [
     },
     component: () => import('@/view/login/login.vue')
   },
-  {
-    path: '/reg',
-    name: 'reg',
-    meta: {
-      title: '达人入驻',
-      hideInMenu: true
-    },
-    component: () => import('@/view/reg/reg.vue')
-  },
+  // {
+  //   path: '/reg',
+  //   name: 'reg',
+  //   meta: {
+  //     title: '达人入驻',
+  //     hideInMenu: true
+  //   },
+  //   component: () => import('@/view/reg/reg.vue')
+  // },
   {
     path: '/home',
-    name: '_home',
+    name: 'home',
     redirect: '/home',
     component: Main,
     meta: {
@@ -58,32 +58,21 @@ export default [
     ]
   },
   {
-    path: '/userClient',
-    name: '用户端',
+    path: '/manageSetting',
+    name: '管理设置',
+    redirect: '/manageSetting',
     meta: {
       icon: 'logo-buffer',
-      title: '用户端',
-      access: 'my'
+      title: '管理设置'
     },
     component: Main,
     children: [
-      // {
-      //   path: 'packList',
-      //   name: '充值套餐',
-      //   meta: {
-      //     icon: 'md-contact',
-      //     title: '充值套餐', // 修改
-      //     access: 'packList'
-      //   },
-      //   component: () => import('@/view/userClient/packList/packList.vue')
-      // },
       {
-        path: 'moneyLog',
+        path: '/manageSetting',
         name: '管理设置',
         meta: {
           icon: 'md-medal',
-          title: '管理设置', // 新增
-          access: 'moneyLog'
+          title: '管理设置'
         },
         component: () => import('@/view/userClient/manageSetting/index.vue')
       }
@@ -94,58 +83,52 @@ export default [
     name: '达人端',
     meta: {
       icon: 'logo-buffer',
-      title: '达人端',
-      access: 'my'
+      title: '达人端'
     },
     component: Main,
     children: [
       {
-        path: 'packList',
+        path: '/notice',
         name: '公告',
         meta: {
           icon: 'md-contact',
-          title: '公告', // 新增
-          access: 'packList'
+          title: '公告' // 新增
         },
         component: () => import('@/view/expertEnd/notice/index.vue')
       },
       {
-        path: 'moneyLog',
+        path: '/tutorial',
         name: '教程',
         meta: {
           icon: 'md-medal',
-          title: '教程', // 新增
-          access: 'moneyLog'
+          title: '教程' // 新增
         },
         component: () => import('@/view/expertEnd/tutorial/index.vue')
       },
       {
-        path: 'moneyLog',
+        path: '/information',
         name: '信息',
         meta: {
           icon: 'md-medal',
-          title: '信息', // 新增
-          access: 'moneyLog'
+          title: '信息' // 新增
         },
         component: () => import('@/view/expertEnd/information/index.vue')
       },
       {
-        path: 'moneyLog',
+        path: '/promotiondetails',
         name: '推广详情',
         meta: {
           icon: 'md-medal',
-          title: '推广详情', // 新增
-          access: 'moneyLog'
+          title: '推广详情' // 新增
         },
         component: () => import('@/view/expertEnd/promotiondetails/index.vue')
       },
       {
-        path: 'moneyLog',
+        path: '/setUp',
         name: '设置',
         meta: {
           icon: 'md-medal',
-          title: '设置', // 新增
-          access: 'moneyLog'
+          title: '设置' // 新增
         },
         component: () => import('@/view/expertEnd/setUp/index.vue')
       }
@@ -156,48 +139,43 @@ export default [
     name: '用户管理',
     meta: {
       icon: 'logo-buffer',
-      title: '用户管理',
-      access: 'my'
+      title: '用户管理'
     },
     component: Main,
     children: [
       {
-        path: 'userList',
+        path: '/userInformation',
         name: '用户信息',
         meta: {
           icon: 'md-contact',
-          title: '用户信息',
-          access: 'userList'
+          title: '用户信息'
         },
         component: () => import('@/view/userManage/userInformation/index.vue')
       },
       {
-        path: 'moneyLog',
+        path: '/leaderInformation',
         name: '团长信息',
         meta: {
           icon: 'md-medal',
-          title: '团长信息', // 新增
-          access: 'moneyLog'
+          title: '团长信息' // 新增
         },
         component: () => import('@/view/userManage/leaderInformation/index.vue')
       },
       {
-        path: 'moneyLog',
+        path: '/expertInformation',
         name: '达人信息',
         meta: {
           icon: 'md-medal',
-          title: '达人信息', // 新增
-          access: 'moneyLog'
+          title: '达人信息' // 新增
         },
         component: () => import('@/view/userManage/expertInformation/index.vue')
       },
       {
-        path: 'vipPlat',
+        path: '/exclusiveMembership',
         name: '专属会员',
         meta: {
           icon: 'md-medal',
-          title: '专属会员', // 修改
-          access: 'vipPlat'
+          title: '专属会员' // 修改
         },
         component: () => import('@/view/userManage/exclusiveMembership/index.vue')
       }
@@ -208,38 +186,34 @@ export default [
     name: '全局管理',
     meta: {
       icon: 'logo-buffer',
-      title: '全局管理',
-      access: 'my'
+      title: '全局管理'
     },
     component: Main,
     children: [
       {
-        path: 'packList',
+        path: '/packList',
         name: '充值套餐',
         meta: {
           icon: 'md-contact',
-          title: '充值套餐', // 修改
-          access: 'packList'
+          title: '充值套餐' // 修改
         },
         component: () => import('@/view/globalManage/packList/index.vue')
       },
       {
-        path: 'sysConfig',
+        path: '/membershipSetting',
         name: '会员配置',
         meta: {
           icon: 'md-medal',
-          title: '会员配置', // 修改
-          access: 'sysConfig'
+          title: '会员配置' // 修改
         },
         component: () => import('@/view/globalManage/membershipSetting/index.vue')
       },
       {
-        path: 'moneyLog',
+        path: '/flowRecord',
         name: '流水记录',
         meta: {
           icon: 'md-medal',
-          title: '流水记录',
-          access: 'moneyLog'
+          title: '流水记录'
         },
         component: () => import('@/view/globalManage/flowRecord/index.vue')
       }
@@ -250,28 +224,25 @@ export default [
     name: '视频审核',
     meta: {
       icon: 'logo-buffer',
-      title: '视频审核',
-      access: 'my'
+      title: '视频审核'
     },
     component: Main,
     children: [
       {
-        path: 'applyList',
+        path: '/reviewVideo',
         name: '审核视频',
         meta: {
           icon: 'md-contact',
-          title: '审核视频', // 新增
-          access: 'applyList'
+          title: '审核视频' // 新增
         },
         component: () => import('@/view/videoReview/reviewVideo/index.vue')
       },
       {
-        path: 'sysConfig',
+        path: '/expertVideo',
         name: '达人视频',
         meta: {
           icon: 'md-medal',
-          title: '达人视频', // 新增
-          access: 'sysConfig'
+          title: '达人视频' // 新增
         },
         component: () => import('@/view/videoReview/expertVideo/index.vue')
       }
@@ -303,28 +274,25 @@ export default [
     name: '财务管理',
     meta: {
       icon: 'logo-buffer',
-      title: '财务管理',
-      access: 'my'
+      title: '财务管理'
     },
     component: Main,
     children: [
       {
-        path: 'packList',
+        path: '/reconciliationInformation',
         name: '对账信息',
         meta: {
           icon: 'md-contact',
-          title: '对账信息', // 新增
-          access: 'packList'
+          title: '对账信息' // 新增
         },
         component: () => import('@/view/financialManage/reconciliationInformation/index.vue')
       },
       {
-        path: 'sysConfig',
+        path: '/withdrawalInformation',
         name: '提现信息',
         meta: {
           icon: 'md-medal',
-          title: '提现信息', // 新增
-          access: 'sysConfig'
+          title: '提现信息' // 新增
         },
         component: () => import('@/view/financialManage/withdrawalInformation/index.vue')
       }
@@ -733,251 +701,253 @@ export default [
   //     }
   //   ]
   // },
-  {
-    path: '/pack',
-    name: '套餐管理',
-    meta: {
-      icon: 'logo-buffer',
-      title: '套餐管理',
-      access: 'pack'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'packList',
-        name: '套餐信息',
-        meta: {
-          icon: 'md-contact',
-          title: '套餐信息',
-          access: 'packList'
-        },
-        component: () => import('@/view/business/pack/packList.vue')
-      }
-    ]
-  },
-  {
-    path: '/works',
-    name: '作品管理',
-    meta: {
-      icon: 'logo-buffer',
-      title: '作品管理',
-      access: 'works'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'worksList',
-        name: '作品信息',
-        meta: {
-          icon: 'md-contact',
-          title: '作品信息',
-          access: 'worksList'
-        },
-        component: () => import('@/view/business/works/worksList.vue')
-      }
-    ]
-  },
-  {
-    path: '/order',
-    name: '订单管理',
-    meta: {
-      icon: 'logo-buffer',
-      title: '订单管理',
-      access: 'order'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'orderList',
-        name: '订单数据',
-        meta: {
-          icon: 'md-contact',
-          title: '订单数据',
-          access: 'orderList'
-        },
-        component: () => import('@/view/business/order/orderList.vue')
-      }
-    ]
-  },
-  {
-    path: '/apply',
-    name: '审核管理',
-    meta: {
-      icon: 'logo-buffer',
-      title: '审核管理',
-      access: 'apply'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'applyList',
-        name: '审核数据',
-        meta: {
-          icon: 'md-contact',
-          title: '审核数据',
-          access: 'applyList'
-        },
-        component: () => import('@/view/business/apply/applyList.vue')
-      }
-    ]
-  },
-  {
-    path: '/vip',
-    name: '会员服务',
-    meta: {
-      icon: 'logo-buffer',
-      title: '会员服务',
-      access: 'vip'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'vipExpert',
-        name: '专属会员',
-        meta: {
-          icon: 'md-contact',
-          title: '专属会员',
-          access: 'vipExpert'
-        },
-        component: () => import('@/view/business/vip/evipList.vue')
-      },
-      {
-        path: 'vipPlat',
-        name: '平台会员',
-        meta: {
-          icon: 'md-medal',
-          title: '平台会员',
-          access: 'vipPlat'
-        },
-        component: () => import('@/view/business/vip/vipList.vue')
-      }
-    ]
-  },
-  {
-    path: '/user',
-    name: '用户管理',
-    meta: {
-      icon: 'logo-buffer',
-      title: '用户管理',
-      access: 'user'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'userList',
-        name: '用户数据',
-        meta: {
-          icon: 'md-contact',
-          title: '用户数据',
-          access: 'userList'
-        },
-        component: () => import('@/view/business/user/list.vue')
-      },
-      {
-        path: 'expertList',
-        name: '达人管理',
-        meta: {
-          icon: 'md-medal',
-          title: '达人管理',
-          access: 'expertList'
-        },
-        component: () => import('@/view/business/user/expertList.vue')
-      },
-      {
-        path: 'pubList',
-        name: '推广人员',
-        meta: {
-          icon: 'md-medal',
-          title: '推广人员',
-          access: 'pubList'
-        },
-        component: () => import('@/view/business/user/pubList.vue')
-      }
-    ]
-  },
-  {
-    path: '/my',
-    name: '个人中心',
-    meta: {
-      icon: 'logo-buffer',
-      title: '个人中心',
-      access: 'my'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'myInfo',
-        name: '我的信息',
-        meta: {
-          icon: 'md-contact',
-          title: '我的信息',
-          access: 'myInfo'
-        },
-        component: () => import('@/view/business/user/myInfo.vue')
-      },
-      {
-        path: 'moneyLog',
-        name: '流水记录',
-        meta: {
-          icon: 'md-medal',
-          title: '流水记录',
-          access: 'moneyLog'
-        },
-        component: () => import('@/view/business/user/moneyLogList.vue')
-      },
-      {
-        path: 'miniConfig',
-        name: '小程序配置',
-        meta: {
-          icon: 'md-medal',
-          title: '小程序配置',
-          access: 'miniConfig'
-        },
-        component: () => import('@/view/business/user/miniConfig.vue')
-      },
-      {
-        path: 'sysConfig',
-        name: '系统设置',
-        meta: {
-          icon: 'md-medal',
-          title: '系统设置',
-          access: 'sysConfig'
-        },
-        component: () => import('@/view/business/user/sysConfig.vue')
-      }
-    ]
-  },
-  {
-    path: '/argu',
-    name: 'argu',
-    meta: {
-      hideInMenu: true
-    },
-    component: Main,
-    children: [
-      {
-        path: 'params/:id',
-        name: 'params',
-        meta: {
-          icon: 'md-flower',
-          title: route => `{{ params }}-${route.params.id}`,
-          notCache: true,
-          beforeCloseName: 'before_close_normal'
-        },
-        component: () => import('@/view/argu-page/params.vue')
-      },
-      {
-        path: 'query',
-        name: 'query',
-        meta: {
-          icon: 'md-flower',
-          title: route => `{{ query }}-${route.query.id}`,
-          notCache: true
-        },
-        component: () => import('@/view/argu-page/query.vue')
-      }
-    ]
-  },
+
+  // 原来的页面
+  // {
+  //   path: '/pack',
+  //   name: '套餐管理',
+  //   meta: {
+  //     icon: 'logo-buffer',
+  //     title: '套餐管理',
+  //     access: 'pack'
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'packList',
+  //       name: '套餐信息',
+  //       meta: {
+  //         icon: 'md-contact',
+  //         title: '套餐信息',
+  //         access: 'packList'
+  //       },
+  //       component: () => import('@/view/business/pack/packList.vue')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/works',
+  //   name: '作品管理',
+  //   meta: {
+  //     icon: 'logo-buffer',
+  //     title: '作品管理',
+  //     access: 'works'
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'worksList',
+  //       name: '作品信息',
+  //       meta: {
+  //         icon: 'md-contact',
+  //         title: '作品信息',
+  //         access: 'worksList'
+  //       },
+  //       component: () => import('@/view/business/works/worksList.vue')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/order',
+  //   name: '订单管理',
+  //   meta: {
+  //     icon: 'logo-buffer',
+  //     title: '订单管理',
+  //     access: 'order'
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'orderList',
+  //       name: '订单数据',
+  //       meta: {
+  //         icon: 'md-contact',
+  //         title: '订单数据',
+  //         access: 'orderList'
+  //       },
+  //       component: () => import('@/view/business/order/orderList.vue')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/apply',
+  //   name: '审核管理',
+  //   meta: {
+  //     icon: 'logo-buffer',
+  //     title: '审核管理',
+  //     access: 'apply'
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'applyList',
+  //       name: '审核数据',
+  //       meta: {
+  //         icon: 'md-contact',
+  //         title: '审核数据',
+  //         access: 'applyList'
+  //       },
+  //       component: () => import('@/view/business/apply/applyList.vue')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/vip',
+  //   name: '会员服务',
+  //   meta: {
+  //     icon: 'logo-buffer',
+  //     title: '会员服务',
+  //     access: 'vip'
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'vipExpert',
+  //       name: '专属会员',
+  //       meta: {
+  //         icon: 'md-contact',
+  //         title: '专属会员',
+  //         access: 'vipExpert'
+  //       },
+  //       component: () => import('@/view/business/vip/evipList.vue')
+  //     },
+  //     {
+  //       path: 'vipPlat',
+  //       name: '平台会员',
+  //       meta: {
+  //         icon: 'md-medal',
+  //         title: '平台会员',
+  //         access: 'vipPlat'
+  //       },
+  //       component: () => import('@/view/business/vip/vipList.vue')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/user',
+  //   name: '用户管理',
+  //   meta: {
+  //     icon: 'logo-buffer',
+  //     title: '用户管理',
+  //     access: 'user'
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'userList',
+  //       name: '用户数据',
+  //       meta: {
+  //         icon: 'md-contact',
+  //         title: '用户数据',
+  //         access: 'userList'
+  //       },
+  //       component: () => import('@/view/business/user/list.vue')
+  //     },
+  //     {
+  //       path: 'expertList',
+  //       name: '达人管理',
+  //       meta: {
+  //         icon: 'md-medal',
+  //         title: '达人管理',
+  //         access: 'expertList'
+  //       },
+  //       component: () => import('@/view/business/user/expertList.vue')
+  //     },
+  //     {
+  //       path: 'pubList',
+  //       name: '推广人员',
+  //       meta: {
+  //         icon: 'md-medal',
+  //         title: '推广人员',
+  //         access: 'pubList'
+  //       },
+  //       component: () => import('@/view/business/user/pubList.vue')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/my',
+  //   name: '个人中心',
+  //   meta: {
+  //     icon: 'logo-buffer',
+  //     title: '个人中心',
+  //     access: 'my'
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'myInfo',
+  //       name: '我的信息',
+  //       meta: {
+  //         icon: 'md-contact',
+  //         title: '我的信息',
+  //         access: 'myInfo'
+  //       },
+  //       component: () => import('@/view/business/user/myInfo.vue')
+  //     },
+  //     {
+  //       path: 'moneyLog',
+  //       name: '流水记录',
+  //       meta: {
+  //         icon: 'md-medal',
+  //         title: '流水记录',
+  //         access: 'moneyLog'
+  //       },
+  //       component: () => import('@/view/business/user/moneyLogList.vue')
+  //     },
+  //     {
+  //       path: 'miniConfig',
+  //       name: '小程序配置',
+  //       meta: {
+  //         icon: 'md-medal',
+  //         title: '小程序配置',
+  //         access: 'miniConfig'
+  //       },
+  //       component: () => import('@/view/business/user/miniConfig.vue')
+  //     },
+  //     {
+  //       path: 'sysConfig',
+  //       name: '系统设置',
+  //       meta: {
+  //         icon: 'md-medal',
+  //         title: '系统设置',
+  //         access: 'sysConfig'
+  //       },
+  //       component: () => import('@/view/business/user/sysConfig.vue')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/argu',
+  //   name: 'argu',
+  //   meta: {
+  //     hideInMenu: true
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'params/:id',
+  //       name: 'params',
+  //       meta: {
+  //         icon: 'md-flower',
+  //         title: route => `{{ params }}-${route.params.id}`,
+  //         notCache: true,
+  //         beforeCloseName: 'before_close_normal'
+  //       },
+  //       component: () => import('@/view/argu-page/params.vue')
+  //     },
+  //     {
+  //       path: 'query',
+  //       name: 'query',
+  //       meta: {
+  //         icon: 'md-flower',
+  //         title: route => `{{ query }}-${route.query.id}`,
+  //         notCache: true
+  //       },
+  //       component: () => import('@/view/argu-page/query.vue')
+  //     }
+  //   ]
+  // },
   {
     path: '/401',
     name: 'error_401',

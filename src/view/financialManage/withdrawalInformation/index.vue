@@ -38,6 +38,7 @@
 <script>
 import imgIcon from '@/assets/images/icon/img.png'
 import { pageData } from '@/api/user'
+import { getReconciliationApi } from '@/api/financialManage'
 import { checkTxt, checkTxtDef, timeFmt } from '@/libs/util'
 import { userSexMap, userVipTypeMap, userStatusMap } from '@/libs/dict'
 import detail from './detail.vue'
@@ -89,19 +90,6 @@ export default {
         {
           title: '用户昵称',
           key: 'nickname'
-        },
-        {
-          title: '提现类型',
-          key: 'type',
-          width: 100,
-          render: (h, params) => {
-            let d = params.row
-            let dict = userSexMap
-            let v = checkTxtDef(d.sex, '')
-            let sv = dict[v]
-            sv = checkTxtDef(sv, '未定义')
-            return h('div', sv)
-          }
         },
         {
           title: '提现方式',
