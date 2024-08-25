@@ -2,13 +2,13 @@ import Cookies from 'js-cookie'
 import moment from 'moment'
 // cookie保存的天数
 import config from '@/config'
-import { Message } from 'iview';
+import { Message } from 'iview'
 import { forEach, hasOneOf, objEqual } from '@/libs/tools'
 const { title, cookieExpires, useI18n } = config
 
-export const checkFieldReqs = (data,vs,t = '请填写必填项：') => {
+export const checkFieldReqs = (data, vs, t = '请填写必填项：') => {
   for (let i = 0; i < vs.length; i++) {
-    const v = vs[i];
+    const v = vs[i]
     if (data[v.f] == null || data[v.f].length == 0) {
       Message.warning(`${t}${v.m}`)
       return false
@@ -17,26 +17,26 @@ export const checkFieldReqs = (data,vs,t = '请填写必填项：') => {
   return true
 }
 
-export const checkFieldTipReqs = (data,vs) => {
+export const checkFieldTipReqs = (data, vs) => {
   for (let i = 0; i < vs.length; i++) {
-    const v = vs[i];
+    const v = vs[i]
     if (data[v.f] == null || data[v.f].length == 0) {
-      Message.warning(`${v.t?v.t:'请填写必填项：'}${v.m}`)
+      Message.warning(`${v.t ? v.t : '请填写必填项：'}${v.m}`)
       return false
     }
   }
   return true
 }
 
-export const timeFmt = (v,fmt = 'YYYY-MM-DD HH:mm:ss',isMs = false) => {
+export const timeFmt = (v, fmt = 'YYYY-MM-DD HH:mm:ss', isMs = false) => {
   let txt = ''
   if (!v) {
     return '-/-'
   }
   if (!isMs) {
-    txt = moment(v).format(fmt);
+    txt = moment(v).format(fmt)
   } else {
-    txt = moment.unix(v).format(fmt);
+    txt = moment.unix(v).format(fmt)
   }
   return txt
 }
@@ -48,7 +48,7 @@ export const checkTxt = (v) => {
   return true
 }
 
-export const checkTxtDef = (v,def = '-/-') => {
+export const checkTxtDef = (v, def = '-/-') => {
   if (v == null || v.length == 0) {
     return def
   }
@@ -72,13 +72,31 @@ export const hasChild = (item) => {
 }
 
 export const showThisMenuEle = (item, userInfo) => {
-  if (item.meta && item.meta.access && item.meta.access.length) {
-    let menus = userInfo.menus
-    if (menus && menus.length > 0 && menus.includes(item.meta.access)) {
-      return true
-    }
-    else return false
-  } else return true
+  // if (item.meta && item.meta.access && item.meta.access.length) {
+  //   let menus = userInfo.menus
+  //   if (menus && menus.length > 0 && menus.includes(item.meta.access)) {
+  //     return true
+  //   } else return false
+  // } else return true
+
+  if (userInfo.type === 'sadmin') {
+    return true
+  }
+
+  if (
+    userInfo.type === 'admin' &&
+    (
+      item.path === '/login' ||
+      item.path === '/' ||
+      item.path === '/home' ||
+      item.path === '/videoReview' ||
+      item.path === '/reviewVideo' ||
+      item.path === '/expertVideo' ||
+      item.path === '/expertVideoDetail'
+    )) {
+    return true
+  }
+  return false
 }
 /**
  * @param {Array} list 通过路由列表得到菜单列表
