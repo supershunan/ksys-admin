@@ -17,12 +17,21 @@
               </div>
             </div>
             <Modal
-                v-model="bannerVisibility"
-                :title="bannerBtnType === 'add' ? '添加轮播图' : '更新轮播图'"
-                @on-ok="bannerOk"
-                @on-cancel="cancelBanner">
+              v-model="bannerVisibility"
+              :title="bannerBtnType === 'add' ? '添加轮播图' : '更新轮播图'"
+              @on-ok="bannerOk"
+              @on-cancel="cancelBanner"
+            >
+              <div v-show="isChoose">
+                <chooseSourceMaterial @chooseSource="chooseSource" @goBack="goBack" />
+              </div>
+              <div  v-show="!isChoose">
+                <div>
+                  <Input v-model="currentUploadImg" placeholder="请选择图片地址" style="width: 300px" />
+                  <Button @click="goChoose">选择</Button>
+                </div>
                 <img v-if="currentUploadImg || currentBanner.val" width="200" height="150" :src="currentUploadImg  || currentBanner.val" />
-                <Button style="margin-top: 10px;" type="primary" size="small" @click="imgUploadBanner"><Icon type="md-cloud-upload" /> 上传图片</Button>
+              </div>
             </Modal>
         </Card>
         <Card>
@@ -32,10 +41,10 @@
             <div>
                 <div style="display: flex; align-items: center;">
                     <span style="min-width: 80px;">公告内容：</span>
-                    <Input v-model="bulletinBoard" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="输入公告"></Input>
+                    <Input v-model="bulletinBoard.val" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="输入公告"></Input>
                 </div>
                 <div style="display: flex; justify-content: end; margin-top: 5px;">
-                    <Button type="primary">保存</Button>
+                    <Button type="primary" @click="editAdvertisment">保存</Button>
                 </div>
             </div>
         </Card>
@@ -43,32 +52,26 @@
             <template #title>
                 <span class="notice_title">公告历史</span>
             </template>
-            <Button type="primary" @click="modal1 = true">添加公告</Button>
-            <Table border :columns="columns1" :data="data1">
+            <Table border :columns="advertismentHistoryColumns" :data="advertismentHistoryData">
                 <template slot-scope="{ row, index }" slot="action">
-                    <Button type="error" size="small" @click="remove(index)">删除</Button>
+                    <Button type="error" size="small" @click="remove(row)">删除</Button>
                 </template>
             </Table>
             <Page :total="total" show-sizer @on-change="pageCange" @on-page-size-change="pageSizeChange" />
-            <Modal
-                v-model="modal1"
-                title="公告内容"
-                @on-ok="ok"
-                @on-cancel="cancel">
-                <Input v-model="value5" type="textarea" placeholder="Enter something..." />
-            </Modal>
         </Card>
-        <uploadFile style="display: none;" ref="uploadImg" :size="5 * 1024" item="ksys" module="mini" type="imgSing" @fileResult="imgResult" ></uploadFile>
         <mediaSee ref="mediaSee"></mediaSee>
     </div>
 </template>
 
 <script>
 import uploadFile from '_c/upload/uploadFile.vue'
-import { getDeviceList, addDevice, updateDevice, deleteDevice } from '@/api/expertEnd'
+import chooseSourceMaterial from '_c/chooseSourceMaterial/chooseSourceMaterial.vue'
+import { getDeviceList, addDevice, updateDevice, deleteDevice, getDeviceListPage } from '@/api/expertEnd'
+import { timeFmt } from '@/libs/util'
 export default {
   components: {
-    uploadFile
+    uploadFile,
+    chooseSourceMaterial
   },
   data () {
     return {
@@ -77,8 +80,8 @@ export default {
       currentUploadImg: '',
       currentBanner: {},
       bannerBtnType: '',
-      bulletinBoard: '公告栏',
-      columns1: [
+      bulletinBoard: {},
+      advertismentHistoryColumns: [
         {
           type: 'index',
           width: 60,
@@ -87,13 +90,18 @@ export default {
         {
           title: '内容',
           align: 'center',
-          key: 'name'
+          key: 'val'
         },
         {
           title: '时间',
           align: 'center',
-          width: 100,
-          key: 'date'
+          width: 200,
+          key: 'createTime',
+          render: (h, params) => {
+            let d = params.row
+            let txt = timeFmt(d.createTime)
+            return h('div', txt)
+          }
         },
         {
           title: '操作',
@@ -102,27 +110,15 @@ export default {
           align: 'center'
         }
       ],
-      data1: [
-        {
-          name: 'John Brown',
-          date: '2016-10-03'
-        },
-        {
-          name: 'Jim Green',
-          date: '2016-10-01'
-        },
-        {
-          name: 'Joe Black',
-          date: '2016-10-02'
-        },
-        {
-          name: 'Jon Snow',
-          date: '2016-10-04'
-        }
-      ],
-      modal1: false,
-      value5: 'John',
-      total: 100
+      advertismentHistoryData: [],
+      advertismentHistoryParams: {
+        page: 1,
+        rows: 5,
+        type: 'advertisement'
+      },
+      advertismentModal: false,
+      advertismentHistoryTotal: 0,
+      isChoose: false
     }
   },
   mounted () {
@@ -134,9 +130,8 @@ export default {
     },
     getData () {
       this.getBannerList()
-    },
-    imgResult (v) {
-      this.currentUploadImg = v
+      this.getAdvertisement()
+      this.getAdvertismentHistoryList()
     },
     getBannerList () {
       getDeviceList('banner').then(res => {
@@ -219,14 +214,46 @@ export default {
     cancel () {
       this.$Message.info('Clicked cancel')
     },
-    remove (index) {
-    //   this.data6.splice(index, 1)
+    getAdvertisement () {
+      getDeviceList('advertisement').then(res => {
+        if (res.data.length) {
+          this.bulletinBoard = res.data[0]
+        }
+      })
+    },
+    editAdvertisment () {
+      const data = {
+        code: 'advertisement',
+        name: '公告栏',
+        val: this.bulletinBoard.val,
+        type: 'advertisement'
+      }
+      addDevice(data).then(() => {
+        this.getAdvertisement()
+        this.getAdvertismentHistoryList()
+        this.$Message.success('添加公告成功')
+      })
+    },
+    getAdvertismentHistoryList () {
+      getDeviceListPage(
+        this.advertismentHistoryParams.type,
+        this.advertismentHistoryParams.page,
+        this.advertismentHistoryParams.rows
+      ).then(res => {
+        this.advertismentHistoryData = res.rows.slice(1)
+        this.advertismentHistoryTotal = res.total
+      })
+    },
+    remove (item) {
       this.$Modal.confirm({
         title: '是否删除？',
         okText: '是',
         cancelText: '否',
         onOk: () => {
-          this.$Message.info('Clicked ok')
+          deleteDevice(item.id).then(res => {
+            this.getAdvertismentHistoryList()
+            this.$Message.info('删除成功')
+          })
         },
         onCancel: () => {
           this.$Message.info('Clicked cancel')
@@ -234,10 +261,21 @@ export default {
       })
     },
     pageCange (index) {
-      console.log(index)
+      this.advertismentHistoryParams.rows = index
+      this.getAdvertismentHistoryList()
     },
     pageSizeChange (index) {
-      console.log(index)
+      this.advertismentHistoryParams.rows = index
+      this.getAdvertismentHistoryList()
+    },
+    chooseSource (item) {
+      this.currentUploadImg = item.url
+    },
+    goBack () {
+      this.isChoose = false
+    },
+    goChoose () {
+      this.isChoose = true
     }
   }
 }

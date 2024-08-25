@@ -18,28 +18,34 @@
             @on-ok="handleOk"
             @on-cancel="handleCancel">
             <div>
-                <uploadFile ref="uploadVideo" :size="500 * 1024" item="ksys" module="works" type="videoSing"
-                    @fileResult="videoResult" @videoTimeResult="videoTimeResult" @filePro="videoProResult"></uploadFile>
-                <Progress v-if="videoPerShow" style="margin-top: 10px;" :percent="videoPer" :stroke-color="['#108ee9', '#87d068']" ></Progress>
+              <div v-show="isChoose">
+                <chooseSourceMaterial @chooseSource="chooseSource" @goBack="goBack" />
+              </div>
+              <div  v-show="!isChoose">
+                <div>
+                  <Input v-model="playUrl" placeholder="请选择视频地址" style="width: 300px" />
+                  <Button @click="goChoose">选择</Button>
+                </div>
+                <video v-if="playUrl" width="200" height="150" :src="playUrl" />
+              </div>
             </div>
         </Modal>
     </div>
 </template>
 
 <script>
-import uploadFile from '_c/upload/uploadFile.vue'
+import chooseSourceMaterial from '_c/chooseSourceMaterial/chooseSourceMaterial.vue'
 import { getDeviceList, addDevice, deleteDevice } from '@/api/expertEnd'
 export default {
   components: {
-    uploadFile
+    chooseSourceMaterial
   },
   data () {
     return {
       videoModal: false,
       playUrl: '',
-      videoPer: 0,
-      videoPerShow: false,
-      videoData: []
+      videoData: [],
+      isChoose: false
     }
   },
   mounted () {
@@ -72,23 +78,6 @@ export default {
       this.playUrl = ''
       this.videoModal = false
     },
-    videoResult (v) {
-      this.playUrl = v
-    },
-    videoTimeResult (v) {
-      if (v != null) {
-        this.playTime = v
-      }
-    },
-    videoProResult (v) {
-      v = parseFloat(v)
-      this.videoPer = v
-      if (v < 100) {
-        this.videoPerShow = true
-      } else {
-        this.videoPerShow = false
-      }
-    },
     remove (item) {
       this.$Modal.confirm({
         title: '是否删除？',
@@ -104,6 +93,15 @@ export default {
           this.$Message.info('取消')
         }
       })
+    },
+    chooseSource (item) {
+      this.playUrl = item.url
+    },
+    goBack () {
+      this.isChoose = false
+    },
+    goChoose () {
+      this.isChoose = true
     }
   }
 }

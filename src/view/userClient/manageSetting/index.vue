@@ -142,12 +142,12 @@ export default {
       const data = {
         name: item.name,
         type: 'video',
-        label: item.label,
-        sort: item.sort
+        code: item.label
+        // sort: item.sort
       }
       addClassify(data).then(res => {
         this.$Message.success('添加成功')
-        console.log(res)
+        this.getClassify()
       })
     },
     updateClassify (item) {
@@ -157,12 +157,22 @@ export default {
       })
     },
     deleteClassify (item) {
-      if (item.id < 1) {
-        this.getClassify()
-        return
-      }
-      deleteClassify({ ids: item.id })
-      this.getClassify()
+      this.$Modal.confirm({
+        title: '是否删除？',
+        okText: '是',
+        cancelText: '否',
+        onOk: () => {
+          if (item.id < 1) {
+            this.getClassify()
+            return
+          }
+          deleteClassify({ ids: item.id })
+          this.getClassify()
+        },
+        onCancel: () => {
+          this.$Message.info('取消')
+        }
+      })
     },
     editorSave () {
       this.$refs.EditorRef.getHtml()

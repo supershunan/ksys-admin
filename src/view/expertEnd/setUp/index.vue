@@ -8,9 +8,8 @@
                 <div>
                     <img style="width: 200px;" @click="openImg" :src="customerimgUrl" />
                 </div>
-                <Button style="margin-top: 5px;" type="primary" size="small" @click="imgClick"><Icon type="md-cloud-upload" /> 上传图片</Button>
+                <Button style="margin-top: 5px;" type="primary" size="small" @click="customerModal = true">上传图片</Button>
             </div>
-            <uploadFile style="display: none;" ref="uploadImg" :size="5 * 1024" item="ksys" module="works" type="imgSing" @fileResult="imgResult" ></uploadFile>
             <mediaSee ref="mediaSee"></mediaSee>
             <div class="btn-save">
                 <Button type="primary" @click="handleSubmit(configurationType.customerimgUrl)">保存</Button>
@@ -64,20 +63,41 @@
                 </div>
             </Card>
         </div>
+
+        <Modal
+            v-model="customerModal"
+            title="添加图片"
+            @on-ok="handleOk"
+            @on-cancel="handleCancel">
+            <div>
+              <div v-show="isChoose">
+                <chooseSourceMaterial @chooseSource="chooseSource" @goBack="goBack" />
+              </div>
+              <div  v-show="!isChoose">
+                <div>
+                  <Input v-model="customerimgUrl" placeholder="请选择图片地址" style="width: 300px" />
+                  <Button @click="goChoose">选择</Button>
+                </div>
+                <img v-if="customerimgUrl" width="200" height="150" :src="customerimgUrl" />
+              </div>
+            </div>
+        </Modal>
     </div>
 </template>
 
 <script>
-import uploadFile from '_c/upload/uploadFile.vue'
+import chooseSourceMaterial from '_c/chooseSourceMaterial/chooseSourceMaterial.vue'
 import Editor from '@/components/editor/editor.vue'
 import { addDevice, getDeviceList, updateDevice } from '@/api/expertEnd'
 export default {
   components: {
-    uploadFile,
-    Editor
+    Editor,
+    chooseSourceMaterial
   },
   data () {
     return {
+      isChoose: false,
+      customerModal: false,
       customerimgUrl: '',
       toolboxValue: '',
       userAgreementValue: '',
@@ -121,12 +141,6 @@ export default {
       }
       this.$refs.mediaSee.open(url)
     },
-    imgClick () {
-      this.$refs.uploadImg.clickFile()
-    },
-    imgResult (v) {
-      this.customerimgUrl = v
-    },
     editorSave (type) {
       const html = this.$refs[type].getHtml()
       const data = {
@@ -141,15 +155,16 @@ export default {
           ...data
         }).then(() => {
           this.getSetting()
+          this.$Message.success('保存成功')
         })
       } else {
         addDevice(data).then(() => {
           this.getSetting()
+          this.$Message.success('保存成功')
         })
       }
     },
     handleSubmit (type) {
-      console.log(this.customerimgUrl)
       const data = {
         code: type,
         name: type,
@@ -162,12 +177,29 @@ export default {
           ...data
         }).then(() => {
           this.getSetting()
+          this.$Message.success('保存成功')
         })
       } else {
         addDevice(data).then(() => {
           this.getSetting()
+          this.$Message.success('保存成功')
         })
       }
+    },
+    handleOk () {
+      this.customerModal = false
+    },
+    handleCancel () {
+      this.customerModal = false
+    },
+    chooseSource (item) {
+      this.customerimgUrl = item.url
+    },
+    goBack () {
+      this.isChoose = false
+    },
+    goChoose () {
+      this.isChoose = true
     }
   }
 }

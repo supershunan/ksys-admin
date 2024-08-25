@@ -38,7 +38,7 @@
 <script>
 import imgIcon from '@/assets/images/icon/img.png'
 import { pageData } from '@/api/user'
-import { getReconciliationApi } from '@/api/financialManage'
+import { getMoneyListApi } from '@/api/financialManage'
 import { checkTxt, checkTxtDef, timeFmt } from '@/libs/util'
 import { userSexMap, userVipTypeMap, userStatusMap } from '@/libs/dict'
 import detail from './detail.vue'
@@ -73,19 +73,19 @@ export default {
 
       },
       columns: [
+        // {
+        //   title: '用户头像',
+        //   key: 'avatar',
+        //   width: 100,
+        //   render: (h, params) => {
+        //     let d = params.row
+        //     let url = d.avatar ? d.avatar : imgIcon
+        //     return h('div', { attrs: { class: 'table-img' } }, [h('img', { attrs: { src: url } }, '')])
+        //   }
+        // },
         {
-          title: '用户头像',
-          key: 'avatar',
-          width: 100,
-          render: (h, params) => {
-            let d = params.row
-            let url = d.avatar ? d.avatar : imgIcon
-            return h('div', { attrs: { class: 'table-img' } }, [h('img', { attrs: { src: url } }, '')])
-          }
-        },
-        {
-          title: '用户账号',
-          key: 'account'
+          title: '用户编码',
+          key: 'code'
         },
         {
           title: '用户昵称',
@@ -93,33 +93,33 @@ export default {
         },
         {
           title: '提现方式',
-          key: 'phone'
+          key: 'type'
         },
         {
           title: '提现信息',
-          key: 'money'
+          key: 'info'
         },
-        {
-          title: '状态',
-          key: 'vipType',
-          width: 240,
-          render: (h, params) => {
-            let d = params.row
-            let hList = []
-            if (d.vipType) {
-              let vipList = d.vipType.split('、')
-              for (let i = 0; i < vipList.length; i++) {
-                const val = vipList[i]
-                let dict = userVipTypeMap
-                let v = checkTxtDef(val, '')
-                let sv = dict[v]
-                sv = sv == null ? { v: '未定义', c: 'red' } : sv
-                hList.push(h('Tag', { props: { color: sv.c } }, sv.v))
-              }
-            }
-            return h('div', hList)
-          }
-        },
+        // {
+        //   title: '状态',
+        //   key: 'vipType',
+        //   width: 240,
+        //   render: (h, params) => {
+        //     let d = params.row
+        //     let hList = []
+        //     if (d.vipType) {
+        //       let vipList = d.vipType.split('、')
+        //       for (let i = 0; i < vipList.length; i++) {
+        //         const val = vipList[i]
+        //         let dict = userVipTypeMap
+        //         let v = checkTxtDef(val, '')
+        //         let sv = dict[v]
+        //         sv = sv == null ? { v: '未定义', c: 'red' } : sv
+        //         hList.push(h('Tag', { props: { color: sv.c } }, sv.v))
+        //       }
+        //     }
+        //     return h('div', hList)
+        //   }
+        // },
         {
           title: '时间',
           key: 'type',
@@ -175,14 +175,14 @@ export default {
       for (let k in sf) {
         if (checkTxt(sf[k])) ps[k] = sf[k]
       }
-      ps.type = 'user'
+      ps.type = 'cash'
       return ps
     },
     getList () {
       let ps = this.getParams()
       this.isLoading = true
       let _that = this
-      pageData(ps).then(res => {
+      getMoneyListApi(ps).then(res => {
         _that.datas = res.rows
         _that.pageData.total = res.total
         _that.isLoading = false

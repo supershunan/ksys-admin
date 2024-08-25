@@ -32,7 +32,8 @@ export default {
     return {
       feadbackParams: {
         page: 1,
-        rows: 5
+        rows: 5,
+        type: '1'
       },
       feadbackTotal: 0,
       feedbackColumns: [
@@ -74,7 +75,8 @@ export default {
       feedbackData: [],
       cooperateParams: {
         page: 1,
-        rows: 5
+        rows: 5,
+        type: '2'
       },
       cooperateTotal: 0,
       cooperateColumns: [
@@ -152,7 +154,7 @@ export default {
       this.getFeadbackList()
     },
     getCooperateList () {
-      getFeedbackListApi(this.feadbackParams).then(res => {
+      getFeedbackListApi(this.cooperateParams).then(res => {
         this.cooperateData = res.rows
         this.cooperateTotal = res.total
       })

@@ -256,6 +256,7 @@ export default {
       let size = file.size
       if (size < this.bigMax) {
         this.isLoading = true
+        this.fileName = `${file.name}`
         return true
       } else {
         this.isLoading = true
@@ -277,7 +278,7 @@ export default {
         this.imgSingSrc = res.data
       }
       this.isLoading = false
-      this.$emit('fileResult', res.data)
+      this.$emit('fileResult', res.data, this.fileName)
     },
     uploadError (e) {
       console.log(e)

@@ -1,41 +1,50 @@
-<style lang="less">
-@import "./apply.less";
-</style>
 <template>
-    <div class="order-list">
-        <Card :bordered="true">
+  <div class="order-list">
+      <Card :bordered="true">
+        <div class="user-video">
+          <div class="user-left">
+            <Button type="primary" @click="goBack">返回</Button>
+            <div class="useInfo">
+              <List>
+                <ListItem>
+                    <ListItemMeta :avatar="currentUserInfo.avatar" :title="currentUserInfo.nickname" :description="'账号' + currentUserInfo.account" />
+                </ListItem>
+              </List>
+            </div>
+          </div>
+          <div class="user-right">
             <Row :gutter="rowGutter">
-                <Form ref="searchForm" :model="searchForm" :rules="searchRules" inline>
-                    <FormItem prop="code">
-                        <Input type="text" v-model="searchForm.code" placeholder="申请编号">
-                            <Icon type="ios-color-filter" slot="prepend"></Icon>
-                        </Input>
-                    </FormItem>
-                    <FormItem prop="name">
-                        <Input type="text" v-model="searchForm.name" placeholder="申请名称">
-                            <Icon type="ios-color-filter" slot="prepend"></Icon>
-                        </Input>
-                    </FormItem>
-                    <FormItem prop="info">
-                        <Input type="text" v-model="searchForm.info" placeholder="申请内容">
-                            <Icon type="ios-color-filter" slot="prepend"></Icon>
-                        </Input>
-                    </FormItem>
-                    <FormItem prop="type">
-                        <Select v-model="searchForm.type" :style="selectStyle" placeholder="申请类型">
-                            <Option v-for="item,i in typeList" :value="item.v">{{ item.k }}</Option>
-                        </Select>
-                    </FormItem>
-                    <FormItem prop="status">
-                        <Select v-model="searchForm.status" :style="selectStyle" placeholder="申请状态">
-                            <Option v-for="item,i in statusList" :value="item.v">{{ item.k }}</Option>
-                        </Select>
-                    </FormItem>
-                    <FormItem>
-                        <Button type="primary" class="mg-btn" @click="searchData">查询</Button>
-                        <Button class="mg-btn" @click="resetData">重置</Button>
-                    </FormItem>
-                </Form>
+              <Form ref="searchForm" :model="searchForm" :rules="searchRules" inline>
+                  <FormItem prop="code">
+                      <Input type="text" v-model="searchForm.code" placeholder="申请编号">
+                          <Icon type="ios-color-filter" slot="prepend"></Icon>
+                      </Input>
+                  </FormItem>
+                  <FormItem prop="name">
+                      <Input type="text" v-model="searchForm.name" placeholder="申请名称">
+                          <Icon type="ios-color-filter" slot="prepend"></Icon>
+                      </Input>
+                  </FormItem>
+                  <FormItem prop="info">
+                      <Input type="text" v-model="searchForm.info" placeholder="申请内容">
+                          <Icon type="ios-color-filter" slot="prepend"></Icon>
+                      </Input>
+                  </FormItem>
+                  <FormItem prop="type">
+                      <Select v-model="searchForm.type" :style="selectStyle" placeholder="申请类型">
+                          <Option v-for="item,i in typeList" :value="item.v">{{ item.k }}</Option>
+                      </Select>
+                  </FormItem>
+                  <FormItem prop="status">
+                      <Select v-model="searchForm.status" :style="selectStyle" placeholder="申请状态">
+                          <Option v-for="item,i in statusList" :value="item.v">{{ item.k }}</Option>
+                      </Select>
+                  </FormItem>
+                  <FormItem>
+                      <Button type="primary" class="mg-btn" @click="searchData">查询</Button>
+                      <Button class="mg-btn" @click="resetData">重置</Button>
+                  </FormItem>
+              </Form>
             </Row>
             <Row :gutter="rowGutter" class="margin-top10">
                 <Table border :columns="columns" :data="datas" :loading="isLoading"></Table>
@@ -45,15 +54,18 @@
                 :page-size-opts="pageOpts" @on-page-size-change="pageOptChange"
                 show-sizer show-elevator show-total />
             </Row>
-        </Card>
-        <worksDetail ref="worksDetail"></worksDetail>
-    </div>
+          </div>
+        </div>
+      </Card>
+      <worksDetail ref="worksDetail"></worksDetail>
+  </div>
 </template>
 <script>
 import { pageData, audData } from '@/api/apply'
-import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
+import { getUserVideolistApi, getUserItemApi } from '@/api/videoReview'
+import { checkTxt, checkTxtDef, timeFmt } from '@/libs/util'
 import { applyTypeMap, applyStatusMap } from '@/libs/dict'
-import worksDetail from '../works/worksDetail.vue'
+import worksDetail from './worksDetail.vue'
 export default {
   name: 'apply-list',
   components: {
@@ -76,7 +88,7 @@ export default {
       },
       pageOpts: [10, 20, 50, 100],
       isLoading: false,
-      rowGutter: 10,
+      rowGutter: 7,
       selectStyle: { width: '189px' },
       searchForm: {},
       searchRules: {
@@ -187,7 +199,18 @@ export default {
       ],
       datas: [],
       typeList: [],
-      statusList: []
+      statusList: [],
+      currentUserInfo: {}
+    }
+  },
+  watch: {
+    '$route.query.id': {
+      handler (newVal, oldVal) {
+        console.log(newVal, oldVal)
+        this.getUserVideolist()
+        this.getUserItem()
+      },
+      immediate: true
     }
   },
   computed: {
@@ -280,7 +303,41 @@ export default {
     },
     info (row) {
       this.$refs.worksDetail.open(row.corId)
+    },
+    goBack () {
+      this.$router.push('/expertVideo')
+    },
+    getUserVideolist () {
+      getUserVideolistApi({
+        ...this.params,
+        type: 'video',
+        id: this.$route.query.id
+      })
+    },
+    getUserItem () {
+      getUserItemApi(this.$route.query.id).then(res => {
+        if (res.data) {
+          this.currentUserInfo = res.data
+        }
+      })
     }
   }
 }
 </script>
+<style lang="less" scoped>
+.user-video {
+  display: flex;
+  justify-content: space-between;
+  .user-left {
+    flex: 1;
+    .useInfo {
+      background: #f8f8f9;
+      padding: 5px;
+      margin-top: 10px
+    }
+  }
+  .user-right {
+    flex: 6;
+  }
+}
+</style>

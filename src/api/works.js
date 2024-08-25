@@ -2,7 +2,7 @@ import axios from '@/libs/api.request'
 
 export const pageData = (data) => {
   return axios.request({
-    url: '/works/page',
+    url: '/api/works/page',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -10,28 +10,28 @@ export const pageData = (data) => {
 
 export const listFolderApi = () => {
   return axios.request({
-    url: '/works/listFolder',
+    url: '/api/works/listFolder',
     method: 'get'
   })
 }
 
 export const upVideoApi = (id) => {
   return axios.request({
-    url: '/works/upVideo/'+id,
+    url: '/api/works/upVideo/' + id,
     method: 'get'
   })
 }
 
 export const downVideoApi = (id) => {
   return axios.request({
-    url: '/works/downVideo/'+id,
+    url: '/api/works/downVideo/' + id,
     method: 'get'
   })
 }
 
 export const addVideoData = (data) => {
   return axios.request({
-    url: '/works/addVideo',
+    url: '/api/works/addVideo',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -39,7 +39,7 @@ export const addVideoData = (data) => {
 
 export const addFolderData = (data) => {
   return axios.request({
-    url: '/works/addFolder',
+    url: '/api/works/addFolder',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -47,7 +47,7 @@ export const addFolderData = (data) => {
 
 export const updateData = (data) => {
   return axios.request({
-    url: '/works/update',
+    url: '/api/works/update',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -55,14 +55,14 @@ export const updateData = (data) => {
 
 export const infoData = (id) => {
   return axios.request({
-    url: '/works/info/'+id,
+    url: '/api/works/info/' + id,
     method: 'get'
   })
 }
 
 export const infoAllData = (id) => {
   return axios.request({
-    url: '/works/infoAll/'+id,
+    url: '/api/works/infoAll/' + id,
     method: 'get'
   })
 }

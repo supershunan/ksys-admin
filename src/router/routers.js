@@ -37,7 +37,7 @@ export default [
   //   component: () => import('@/view/reg/reg.vue')
   // },
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     redirect: '/home',
     component: Main,
@@ -245,6 +245,16 @@ export default [
           title: '达人视频' // 新增
         },
         component: () => import('@/view/videoReview/expertVideo/index.vue')
+      },
+      {
+        path: '/expertVideoDetail',
+        name: 'expertVideoDetail',
+        meta: {
+          icon: 'md-medal',
+          title: '达人视频详情', // 新增
+          hideInMenu: true
+        },
+        component: () => import('@/view/videoReview/expertVideo/manageVideo.vue')
       }
     ]
   },

@@ -10,9 +10,10 @@ export const getReconciliationApi = () => {
 }
 
 // 提现信息
-export const getMoneyListApi = () => {
+export const getMoneyListApi = (data) => {
   return axios.request({
     url: '/newApi/moneyLog/page',
-    method: 'get'
+    data: JSON.stringify(data),
+    method: 'post'
   })
 }

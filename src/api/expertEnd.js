@@ -9,6 +9,13 @@ export const getDeviceList = (type) => {
   })
 }
 
+export const getDeviceListPage = (type, page, rows) => {
+  return axios.request({
+    url: `/newApi/gconfig/pages/${type}?page=${page}&rows=${rows}`,
+    method: 'get'
+  })
+}
+
 export const addDevice = (data) => {
   return axios.request({
     url: '/newApi/gconfig/add',

@@ -11,24 +11,24 @@
       <Row :gutter="20" style="margin-top: 10px;">
         <i-col :md="24" :lg="12" style="margin-bottom: 20px;">
           <Card shadow>
-            <chart-bar style="height: 300px;" :value="barData" text="访问量"/>
+            <chart-bar style="height: 300px;" :value="barData.oneWeekVisitCount" text="访问量"/>
           </Card>
         </i-col>
         <i-col :md="24" :lg="12" style="margin-bottom: 20px;">
           <Card shadow>
-            <chart-bar style="height: 300px;" :value="barData" text="收益"/>
+            <chart-bar style="height: 300px;" :value="barData.oneWeekMoney" text="收益"/>
           </Card>
         </i-col>
       </Row>
       <Row :gutter="20" style="margin-top: 10px;">
         <i-col :md="24" :lg="12" style="margin-bottom: 20px;">
           <Card shadow>
-            <chart-bar style="height: 300px;" :value="barData" text="新增用户"/>
+            <chart-bar style="height: 300px;" :value="barData.newUserCount" text="新增用户"/>
           </Card>
         </i-col>
         <i-col :md="24" :lg="12" style="margin-bottom: 20px;">
           <Card shadow>
-            <chart-bar style="height: 300px;" :value="barData" text="新增达人"/>
+            <chart-bar style="height: 300px;" :value="barData.newExpertCount" text="新增达人"/>
           </Card>
         </i-col>
       </Row>
@@ -53,26 +53,16 @@ export default {
   data () {
     return {
       inforCardData: [
-        { title: '总访问量', icon: 'md-person-add', count: 803, color: '#2d8cf0' },
-        { title: '总收益', icon: 'md-map', count: 14, color: '#9A66E4' },
-        { title: '总用户', icon: 'md-locate', count: 232, color: '#19be6b' },
-        { title: '总达人', icon: 'md-help-circle', count: 142, color: '#ff9900' }
-      ],
-      pieData: [
-        { value: 335, name: '用户注册' },
-        { value: 310, name: '达人入筑' },
-        { value: 234, name: 'VIP订单' },
-        { value: 135, name: '视频订单' },
-        { value: 1548, name: '收益情况' }
+        { title: '总访问量', icon: 'md-person-add', count: 803, color: '#2d8cf0', key: 'visitCount' },
+        { title: '总收益', icon: 'md-map', count: 14, color: '#9A66E4', key: 'totalMoney' },
+        { title: '总用户', icon: 'md-locate', count: 232, color: '#19be6b', key: 'totalUserCount' },
+        { title: '总达人', icon: 'md-help-circle', count: 142, color: '#ff9900', key: 'totalExpertCount' }
       ],
       barData: {
-        Mon: 13253,
-        Tue: 34235,
-        Wed: 26321,
-        Thu: 12340,
-        Fri: 24643,
-        Sat: 1322,
-        Sun: 1324
+        oneWeekVisitCount: {},
+        oneWeekMoney: {},
+        newUserCount: {},
+        newExpertCount: {}
       }
     }
   },
@@ -82,6 +72,15 @@ export default {
   methods: {
     async getStatistic () {
       const res = await getStatisticsData()
+      if (Object.keys(res.data).length > 0) {
+        this.inforCardData.forEach(item => {
+          item.count = res.data[item.key]
+        })
+
+        Object.keys(this.barData).forEach(item => {
+          this.barData[item] = res.data[item]
+        })
+      }
     }
   }
 }
