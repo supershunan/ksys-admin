@@ -143,6 +143,7 @@ export default {
       this.bannerVisibility = true
     },
     updateBannerImg (item, btnType) {
+      this.currentUploadImg = item.val
       this.currentBanner = item
       this.bannerBtnType = btnType
       this.bannerVisibility = true
