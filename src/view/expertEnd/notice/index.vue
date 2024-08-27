@@ -41,7 +41,7 @@
             <div>
                 <div style="display: flex; align-items: center;">
                     <span style="min-width: 80px;">公告内容：</span>
-                    <Input v-model="bulletinBoard.val" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="输入公告"></Input>
+                    <Input v-model="bulletinBoard.content" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="输入公告"></Input>
                 </div>
                 <div style="display: flex; justify-content: end; margin-top: 5px;">
                     <Button type="primary" @click="editAdvertisment">保存</Button>
@@ -66,7 +66,7 @@
 <script>
 import uploadFile from '_c/upload/uploadFile.vue'
 import chooseSourceMaterial from '_c/chooseSourceMaterial/chooseSourceMaterial.vue'
-import { getDeviceList, addDevice, updateDevice, deleteDevice, getDeviceListPage } from '@/api/expertEnd'
+import { getDeviceList, addDevice, updateDevice, deleteDevice, getNoticeListApi, addNoticeApi, deleteNoticeApi } from '@/api/expertEnd'
 import { timeFmt } from '@/libs/util'
 export default {
   components: {
@@ -90,7 +90,7 @@ export default {
         {
           title: '内容',
           align: 'center',
-          key: 'val'
+          key: 'content'
         },
         {
           title: '时间',
@@ -216,31 +216,25 @@ export default {
       this.$Message.info('Clicked cancel')
     },
     getAdvertisement () {
-      getDeviceList('advertisement').then(res => {
-        if (res.data.length) {
-          this.bulletinBoard = res.data[0]
+      getNoticeListApi({ page: 1, rows: 5 }).then(res => {
+        if (res.rows.length) {
+          this.bulletinBoard = res.rows[0]
         }
       })
     },
     editAdvertisment () {
       const data = {
-        code: 'advertisement',
-        name: '公告栏',
-        val: this.bulletinBoard.val,
-        type: 'advertisement'
+        title: '公告栏',
+        content: this.bulletinBoard.content
       }
-      addDevice(data).then(() => {
+      addNoticeApi(data).then(() => {
         this.getAdvertisement()
         this.getAdvertismentHistoryList()
         this.$Message.success('添加公告成功')
       })
     },
     getAdvertismentHistoryList () {
-      getDeviceListPage(
-        this.advertismentHistoryParams.type,
-        this.advertismentHistoryParams.page,
-        this.advertismentHistoryParams.rows
-      ).then(res => {
+      getNoticeListApi(this.advertismentHistoryParams).then(res => {
         this.advertismentHistoryData = res.rows.slice(1)
         this.advertismentHistoryTotal = res.total
       })
@@ -251,7 +245,7 @@ export default {
         okText: '是',
         cancelText: '否',
         onOk: () => {
-          deleteDevice(item.id).then(res => {
+          deleteNoticeApi({ ids: item.id }).then(res => {
             this.getAdvertismentHistoryList()
             this.$Message.info('删除成功')
           })

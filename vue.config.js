@@ -62,9 +62,6 @@ module.exports = {
       '/newApi': {
         target: 'https://ksys.qfyingshi.cn',
         changeOrigin: true,
-        // pathRewrite: {
-        //   '^/api': ''
-        // },
         secure: false
       }
     }

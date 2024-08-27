@@ -39,6 +39,30 @@ export const deleteDevice = (id) => {
   })
 }
 
+export const getNoticeListApi = (data) => {
+  return axios.request({
+    url: '/newApi/noticeList/page',
+    data: JSON.stringify(data),
+    method: 'post'
+  })
+}
+
+export const addNoticeApi = (data) => {
+  return axios.request({
+    url: '/newApi/noticeList/add',
+    data: JSON.stringify(data),
+    method: 'post'
+  })
+}
+
+export const deleteNoticeApi = (data) => {
+  return axios.request({
+    url: '/newApi/noticeList/del',
+    data: JSON.stringify(data),
+    method: 'post'
+  })
+}
+
 // 信息
 export const getFeedbackListApi = (data) => {
   return axios.request({
