@@ -7,7 +7,7 @@ export const login = ({ userName, password }) => {
   }
   data = JSON.stringify(data)
   return axios.request({
-    url: '/api/auth/login',
+    url: '/newApi/auth/login',
     data,
     method: 'post'
   })
@@ -15,7 +15,7 @@ export const login = ({ userName, password }) => {
 
 export const regExpert = (data) => {
   return axios.request({
-    url: '/api/auth/regExpert',
+    url: '/newApi/auth/regExpert',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -23,7 +23,7 @@ export const regExpert = (data) => {
 
 export const getUserInfo = (token) => {
   return axios.request({
-    url: '/api/auth/info',
+    url: '/newApi/auth/info',
     params: {
       token
     },
@@ -33,14 +33,14 @@ export const getUserInfo = (token) => {
 
 export const getMyInfo = () => {
   return axios.request({
-    url: '/api/user/myInfo',
+    url: '/newApi/user/myInfo',
     method: 'get'
   })
 }
 
 export const updateMyInfo = (data) => {
   return axios.request({
-    url: '/api/user/updateMyInfo',
+    url: '/newApi/user/updateMyInfo',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -48,7 +48,7 @@ export const updateMyInfo = (data) => {
 
 export const updatePwd = (data) => {
   return axios.request({
-    url: '/api/user/updatePwd',
+    url: '/newApi/user/updatePwd',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -56,7 +56,7 @@ export const updatePwd = (data) => {
 
 export const pageData = (data) => {
   return axios.request({
-    url: '/api/user/page',
+    url: '/newApi/user/page',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -64,7 +64,7 @@ export const pageData = (data) => {
 
 export const delData = (data) => {
   return axios.request({
-    url: '/api/user/del',
+    url: '/newApi/user/del',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -72,14 +72,14 @@ export const delData = (data) => {
 
 export const banData = (id) => {
   return axios.request({
-    url: '/api/user/ban/' + id,
+    url: '/newApi/user/ban/' + id,
     method: 'get'
   })
 }
 
 export const addUserData = (data) => {
   return axios.request({
-    url: '/api/user/addUser',
+    url: '/newApi/user/addUser',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -87,7 +87,7 @@ export const addUserData = (data) => {
 
 export const addPubData = (data) => {
   return axios.request({
-    url: '/api/user/addPub',
+    url: '/newApi/user/addPub',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -95,7 +95,7 @@ export const addPubData = (data) => {
 
 export const addExpertData = (data) => {
   return axios.request({
-    url: '/api/user/addExpert',
+    url: '/newApi/user/addExpert',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -103,14 +103,14 @@ export const addExpertData = (data) => {
 
 export const infoData = (id) => {
   return axios.request({
-    url: '/api/user/info/' + id,
+    url: '/newApi/user/info/' + id,
     method: 'get'
   })
 }
 
 export const updateData = (data) => {
   return axios.request({
-    url: '/api/user/update',
+    url: '/newApi/user/update',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -118,7 +118,7 @@ export const updateData = (data) => {
 
 export const rechargeData = (data) => {
   return axios.request({
-    url: '/api/user/recharge',
+    url: '/newApi/user/recharge',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -126,14 +126,14 @@ export const rechargeData = (data) => {
 
 export const shareUrlData = () => {
   return axios.request({
-    url: '/api/user/shareUrl',
+    url: '/newApi/user/shareUrl',
     method: 'get'
   })
 }
 
 export const pageEvipData = (data) => {
   return axios.request({
-    url: '/api/user/pageEvip',
+    url: '/newApi/user/pageEvip',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -141,7 +141,7 @@ export const pageEvipData = (data) => {
 
 export const pageVipData = (data) => {
   return axios.request({
-    url: '/api/user/pageVip',
+    url: '/newApi/user/pageVip',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -149,7 +149,7 @@ export const pageVipData = (data) => {
 
 export const pageMoneyLog = (data) => {
   return axios.request({
-    url: '/api/moneyLog/pageMy',
+    url: '/newApi/moneyLog/page',
     data: JSON.stringify(data),
     method: 'post'
   })

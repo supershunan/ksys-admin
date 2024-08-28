@@ -2,14 +2,14 @@ import axios from '@/libs/api.request'
 
 export const getVipConfig = () => {
   return axios.request({
-    url: '/api/vip/getVipConfig',
+    url: '/newApi/vip/getVipConfig',
     method: 'get'
   })
 }
 
 export const updateVipConfig = (data) => {
   return axios.request({
-    url: '/api/vip/updateVipConfig',
+    url: '/newApi/vip/updateVipConfig',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -17,21 +17,21 @@ export const updateVipConfig = (data) => {
 
 export const expertListApi = () => {
   return axios.request({
-    url: '/api/vip/expertList',
+    url: '/newApi/vip/expertList',
     method: 'get'
   })
 }
 
 export const platListApi = () => {
   return axios.request({
-    url: '/api/vip/platList',
+    url: '/newApi/vip/platList',
     method: 'get'
   })
 }
 
 export const addEvipTimeApi = (data) => {
   return axios.request({
-    url: '/api/userVip/addEvipTime',
+    url: '/newApi/userVip/addEvipTime',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -39,7 +39,7 @@ export const addEvipTimeApi = (data) => {
 
 export const addVipTimeApi = (data) => {
   return axios.request({
-    url: '/api/userVip/addVipTime',
+    url: '/newApi/userVip/addVipTime',
     data: JSON.stringify(data),
     method: 'post'
   })

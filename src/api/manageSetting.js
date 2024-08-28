@@ -3,7 +3,7 @@ import axios from '@/libs/api.request'
 
 export const updateApi = (data) => {
   return axios.request({
-    url: '/api/gconfig/update',
+    url: '/newApi/gconfig/update',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -11,7 +11,7 @@ export const updateApi = (data) => {
 
 export const getVideoStatement = () => {
   return axios.request({
-    url: '/api/gconfig/getVideoStatement',
+    url: '/newApi/gconfig/getVideoStatement',
     method: 'get'
   })
 }

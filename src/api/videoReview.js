@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 // 达人视频
 export const getUserVideolistApi = (data) => {
   return axios.request({
-    url: '/newApi/works/page',
+    url: '/newnewApi/works/page',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -12,7 +12,7 @@ export const getUserVideolistApi = (data) => {
 
 export const getUserItemApi = (id) => {
   return axios.request({
-    url: '/api/user/info/' + id,
+    url: '/newApi/user/info/' + id,
     method: 'get'
   })
 }

@@ -2,7 +2,7 @@ import axios from '@/libs/api.request'
 
 export const pageData = (data) => {
   return axios.request({
-    url: '/api/pack/page',
+    url: '/newApi/pack/page',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -10,7 +10,7 @@ export const pageData = (data) => {
 
 export const addData = (data) => {
   return axios.request({
-    url: '/api/pack/add',
+    url: '/newApi/pack/add',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -18,7 +18,7 @@ export const addData = (data) => {
 
 export const updateData = (data) => {
   return axios.request({
-    url: '/api/pack/update',
+    url: '/newApi/pack/update',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -26,21 +26,21 @@ export const updateData = (data) => {
 
 export const changeUseData = (id) => {
   return axios.request({
-    url: '/api/pack/changeUse/' + id,
+    url: '/newApi/pack/changeUse/' + id,
     method: 'get'
   })
 }
 
 export const infoData = (id) => {
   return axios.request({
-    url: '/api/pack/info/' + id,
+    url: '/newApi/pack/info/' + id,
     method: 'get'
   })
 }
 
 export const delData = (data) => {
   return axios.request({
-    url: '/api/pack/del',
+    url: '/newApi/pack/del',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -48,7 +48,7 @@ export const delData = (data) => {
 
 export const myUseList = (id) => {
   return axios.request({
-    url: '/api/pack/myUseList',
+    url: '/newApi/pack/myUseList',
     method: 'get'
   })
 }
