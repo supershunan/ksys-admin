@@ -18,8 +18,8 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: '',
-    pro: '/api'
+    dev: '/newApi',
+    pro: '/newApi'
   },
   shardSize: 2,
   shardMax: 1024 * 1024 * 10,

@@ -3,7 +3,7 @@ import axios from '@/libs/api.request'
 
 export const getClassifyListApi = (data) => {
   return axios.request({
-    url: '/newApi/source/page',
+    url: '/source/page',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -12,7 +12,7 @@ export const getClassifyListApi = (data) => {
 // folder 文件夹  video 视频 pic 图片
 export const addClassifyApi = (data) => {
   return axios.request({
-    url: '/newApi/source/add',
+    url: '/source/add',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -20,7 +20,7 @@ export const addClassifyApi = (data) => {
 
 export const deleteClassifyApi = (data) => {
   return axios.request({
-    url: '/newApi/source/del',
+    url: '/source/del',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -28,7 +28,7 @@ export const deleteClassifyApi = (data) => {
 
 export const emptyRecycleBinApi = (data) => {
   return axios.request({
-    url: '/newApi/source/delRecycle',
+    url: '/source/delRecycle',
     data: JSON.stringify(data),
     method: 'delete'
   })
@@ -36,7 +36,7 @@ export const emptyRecycleBinApi = (data) => {
 
 export const updateClassifyApi = (data) => {
   return axios.request({
-    url: '/newApi/source/update',
+    url: '/source/update',
     data: JSON.stringify(data),
     method: 'post'
   })

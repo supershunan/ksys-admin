@@ -2,7 +2,7 @@ import axios from '@/libs/api.request'
 
 export const pageData = (data) => {
   return axios.request({
-    url: '/newApi/apply/page',
+    url: '/apply/page',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -10,7 +10,7 @@ export const pageData = (data) => {
 
 export const listData = (data) => {
   return axios.request({
-    url: '/newApi/apply/list',
+    url: '/apply/list',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -18,14 +18,14 @@ export const listData = (data) => {
 
 export const infoData = (id) => {
   return axios.request({
-    url: '/newApi/apply/info/' + id,
+    url: '/apply/info/' + id,
     method: 'get'
   })
 }
 
 export const submitCashData = (data) => {
   return axios.request({
-    url: '/newApi/apply/submitCash',
+    url: '/apply/submitCash',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -33,7 +33,7 @@ export const submitCashData = (data) => {
 
 export const audData = (data) => {
   return axios.request({
-    url: '/newApi/apply/aud',
+    url: '/apply/aud',
     data: JSON.stringify(data),
     method: 'post'
   })

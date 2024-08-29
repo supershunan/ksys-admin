@@ -3,7 +3,7 @@ import axios from '@/libs/api.request'
 
 export const getAdminListApi = (data) => {
   return axios.request({
-    url: '/newApi/user/page',
+    url: '/user/page',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -11,7 +11,7 @@ export const getAdminListApi = (data) => {
 
 export const addAdminApi = (data) => {
   return axios.request({
-    url: '/newApi/user/addAdmin',
+    url: '/user/addAdmin',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -19,7 +19,7 @@ export const addAdminApi = (data) => {
 
 export const deleteAdminApi = (data) => {
   return axios.request({
-    url: '/newApi/user/del',
+    url: '/user/del',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -27,7 +27,7 @@ export const deleteAdminApi = (data) => {
 
 export const updateAdminApi = (data) => {
   return axios.request({
-    url: '/newApi/user/updateBySadmin',
+    url: '/user/updateBySadmin',
     data: JSON.stringify(data),
     method: 'post'
   })

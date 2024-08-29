@@ -12,7 +12,7 @@ export const getUserVideolistApi = (data) => {
 
 export const getUserItemApi = (id) => {
   return axios.request({
-    url: '/newApi/user/info/' + id,
+    url: '/user/info/' + id,
     method: 'get'
   })
 }

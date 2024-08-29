@@ -3,7 +3,7 @@ import axios from '@/libs/api.request'
 
 export const updateApi = (data) => {
   return axios.request({
-    url: '/newApi/gconfig/update',
+    url: '/gconfig/update',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -11,21 +11,21 @@ export const updateApi = (data) => {
 
 export const getVideoStatement = () => {
   return axios.request({
-    url: '/newApi/gconfig/getVideoStatement',
+    url: '/gconfig/getVideoStatement',
     method: 'get'
   })
 }
 
 export const getClassify = () => {
   return axios.request({
-    url: '/newApi/label/videoList',
+    url: '/label/videoList',
     method: 'get'
   })
 }
 
 export const addClassify = (data) => {
   return axios.request({
-    url: '/newApi/label/add',
+    url: '/label/add',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -33,7 +33,7 @@ export const addClassify = (data) => {
 
 export const updateClassify = (data) => {
   return axios.request({
-    url: '/newApi/label/update',
+    url: '/label/update',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -41,7 +41,7 @@ export const updateClassify = (data) => {
 
 export const deleteClassify = (data) => {
   return axios.request({
-    url: '/newApi/label/del',
+    url: '/label/del',
     data: JSON.stringify(data),
     method: 'post'
   })

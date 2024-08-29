@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 // 对账信息
 export const getReconciliationApi = () => {
   return axios.request({
-    url: '/newApi/moneyLog/reconciliation',
+    url: '/moneyLog/reconciliation',
     method: 'get'
   })
 }
@@ -12,7 +12,7 @@ export const getReconciliationApi = () => {
 // 提现信息
 export const getMoneyListApi = (data) => {
   return axios.request({
-    url: '/newApi/moneyLog/page',
+    url: '/moneyLog/page',
     data: JSON.stringify(data),
     method: 'post'
   })

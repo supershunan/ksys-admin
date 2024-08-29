@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 // 用户信息 达人信息
 export const getUserInfolistApi = (data) => {
   return axios.request({
-    url: '/newApi/user/page',
+    url: '/user/page',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -13,7 +13,7 @@ export const getUserInfolistApi = (data) => {
 // 达人信息
 export const UpgradeToleaderApi = (data) => {
   return axios.request({
-    url: '/newApi/user/setCommander',
+    url: '/user/setCommander',
     data: JSON.stringify(data),
     method: 'put'
   })
@@ -22,7 +22,7 @@ export const UpgradeToleaderApi = (data) => {
 // 专属会员
 export const getExpertListApi = (data) => {
   return axios.request({
-    url: '/newApi/user/pageEvip',
+    url: '/user/pageEvip',
     data: JSON.stringify(data),
     method: 'post'
   })

@@ -4,21 +4,21 @@ import axios from '@/libs/api.request'
 // 公告 教程 推广详情 设置
 export const getDeviceList = (type) => {
   return axios.request({
-    url: `/newApi/gconfig/getByType/${type}`,
+    url: `/gconfig/getByType/${type}`,
     method: 'get'
   })
 }
 
 export const getDeviceListPage = (type, page, rows) => {
   return axios.request({
-    url: `/newApi/gconfig/pages/${type}?page=${page}&rows=${rows}`,
+    url: `/gconfig/pages/${type}?page=${page}&rows=${rows}`,
     method: 'get'
   })
 }
 
 export const addDevice = (data) => {
   return axios.request({
-    url: '/newApi/gconfig/add',
+    url: '/gconfig/add',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -26,7 +26,7 @@ export const addDevice = (data) => {
 
 export const updateDevice = (data) => {
   return axios.request({
-    url: '/newApi/gconfig/update',
+    url: '/gconfig/update',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -34,14 +34,14 @@ export const updateDevice = (data) => {
 
 export const deleteDevice = (id) => {
   return axios.request({
-    url: `/newApi/gconfig/delete/${id}`,
+    url: `/gconfig/delete/${id}`,
     method: 'delete'
   })
 }
 
 export const getNoticeListApi = (data) => {
   return axios.request({
-    url: '/newApi/noticeList/page',
+    url: '/noticeList/page',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -49,7 +49,7 @@ export const getNoticeListApi = (data) => {
 
 export const addNoticeApi = (data) => {
   return axios.request({
-    url: '/newApi/noticeList/add',
+    url: '/noticeList/add',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -57,7 +57,7 @@ export const addNoticeApi = (data) => {
 
 export const deleteNoticeApi = (data) => {
   return axios.request({
-    url: '/newApi/noticeList/del',
+    url: '/noticeList/del',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -66,7 +66,7 @@ export const deleteNoticeApi = (data) => {
 // 信息
 export const getFeedbackListApi = (data) => {
   return axios.request({
-    url: '/newApi/feedback/page',
+    url: '/feedback/page',
     data: JSON.stringify(data),
     method: 'post'
   })
@@ -74,7 +74,7 @@ export const getFeedbackListApi = (data) => {
 
 export const deleteFeedbackApi = (data) => {
   return axios.request({
-    url: '/newApi/feedback/del',
+    url: '/feedback/del',
     data: JSON.stringify(data),
     method: 'post'
   })
