@@ -49,10 +49,12 @@ export default {
           ...data
         }).then(() => {
           this.getEditHtml()
+          this.$Message.success('更新成功')
         })
       } else {
         addDevice(data).then(() => {
           this.getEditHtml()
+          this.$Message.success('更新成功')
         })
       }
     }

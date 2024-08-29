@@ -54,7 +54,7 @@
 </template>
 <script>
 import imgIcon from '@/assets/images/icon/img.png'
-import { pageData, delData, banData } from '@/api/user'
+import { pageData, delData, banData, updateMyInfo } from '@/api/user'
 import { getUserInfolistApi, UpgradeToleaderApi } from '@/api/userManage'
 import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
 import { userSexMap, userVipTypeMap, userStatusMap, customerTypeMap } from '@/libs/dict'
@@ -182,8 +182,8 @@ export default {
               h('Button', {
                 props: {
                   type: 'success',
-                  size: 'small',
-                  disabled: row.type.split(',').includes('commander')
+                  size: 'small'
+                  // disabled: row.type.split(',').includes('commander')
                 },
                 style: {
                   marginRight: '5px'
@@ -374,7 +374,7 @@ export default {
     },
     upgradeToleader (row) {
       this.$Modal.confirm({
-        title: '是否删除？',
+        title: '是否升级为团长？',
         okText: '是',
         cancelText: '否',
         onOk: () => {

@@ -8,7 +8,7 @@
             <div class="video_list">
               <div class="video_item" v-for="item in videoData" :key="item.id">
                 <video :src="item.val" height="200" width="200" controls></video>
-                <Button type="error" size="small" @click="remove(row)" style="margin-top: 10px;">删除</Button>
+                <Button type="error" size="small" @click="remove(item)" style="margin-top: 10px;">删除</Button>
               </div>
             </div>
         </Card>

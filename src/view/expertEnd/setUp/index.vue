@@ -65,6 +65,7 @@
         </div>
 
         <Modal
+        style="z-index: 99999999;"
             v-model="customerModal"
             title="添加图片"
             @on-ok="handleOk"
@@ -218,5 +219,11 @@ export default {
 .content {
     display: flex;
     justify-content: space-between;
+}
+/deep/ .w-e-text-container {
+  z-index: 990 !important;
+}
+/deep/ .w-e-menu {
+  z-index: 990 !important;
 }
 </style>
