@@ -395,9 +395,13 @@ export default {
           key: 'address'
         },
         {
-          title: '时间',
-          align: 'center',
-          key: 'createTime'
+          title: '申请时间',
+          key: 'createTime',
+          render: (h, params) => {
+            let d = params.row
+            let txt = timeFmt(d.createTime)
+            return h('div', txt)
+          }
         },
         {
           title: '操作',

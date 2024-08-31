@@ -34,7 +34,7 @@ export const removeVideosApi = (id) => {
 // 达人视频
 export const getUserVideolistApi = (data) => {
   return axios.request({
-    url: '/newnewApi/works/page',
+    url: '/works/page',
     data: JSON.stringify(data),
     method: 'post'
   })

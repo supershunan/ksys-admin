@@ -1,6 +1,18 @@
 <template>
   <div class="order-list">
       <Card :bordered="true">
+        <div class="user-video">
+          <div class="user-left">
+            <Button type="primary" @click="goBack">返回</Button>
+            <div class="useInfo">
+              <List>
+                <ListItem>
+                    <ListItemMeta :avatar="currentUserInfo.avatar" :title="currentUserInfo.nickname" :description="'账号' + currentUserInfo.account" />
+                </ListItem>
+              </List>
+            </div>
+          </div>
+          <div class="user-right">
           <Row :gutter="rowGutter">
               <Form ref="searchForm" :model="searchForm" :rules="searchRules" inline>
                   <FormItem prop="code">
@@ -42,13 +54,15 @@
               :page-size-opts="pageOpts" @on-page-size-change="pageOptChange"
               show-sizer show-elevator show-total />
           </Row>
+        </div>
+      </div>
       </Card>
       <worksDetail ref="worksDetail"></worksDetail>
   </div>
 </template>
 <script>
 import { pageData, audData } from '@/api/apply'
-import { checkWorkListtApi, applyPassApi, applyNotPassApi, removeVideosApi } from '@/api/videoReview'
+import { getUserVideolistApi, getUserItemApi, checkWorkListtApi, applyPassApi, applyNotPassApi, removeVideosApi } from '@/api/videoReview'
 import { checkTxt, checkTxtDef, timeFmt } from '@/libs/util'
 import { applyTypeMap, videoStatusMap } from '@/libs/dict'
 import worksDetail from './worksDetail.vue'
@@ -75,7 +89,7 @@ export default {
       },
       pageOpts: [10, 20, 50, 100],
       isLoading: false,
-      rowGutter: 10,
+      rowGutter: 7,
       selectStyle: { width: '189px' },
       searchForm: {},
       searchRules: {
@@ -201,7 +215,18 @@ export default {
       ],
       datas: [],
       typeList: [],
-      statusList: []
+      statusList: [],
+      currentUserInfo: {}
+    }
+  },
+  watch: {
+    '$route.query.id': {
+      handler (newVal, oldVal) {
+        console.log(newVal, oldVal)
+        this.getUserVideolist()
+        this.getUserItem()
+      },
+      immediate: true
     }
   },
   computed: {
@@ -311,7 +336,41 @@ export default {
     },
     info (row) {
       this.$refs.worksDetail.open(row.code)
+    },
+    goBack () {
+      this.$router.push('/expertVideo')
+    },
+    getUserVideolist () {
+      getUserVideolistApi({
+        ...this.params,
+        type: 'video',
+        id: this.$route.query.id
+      })
+    },
+    getUserItem () {
+      getUserItemApi(this.$route.query.id).then(res => {
+        if (res.data) {
+          this.currentUserInfo = res.data
+        }
+      })
     }
   }
 }
 </script>
+<style lang="less" scoped>
+.user-video {
+  display: flex;
+  justify-content: space-between;
+  .user-left {
+    flex: 1;
+    .useInfo {
+      background: #f8f8f9;
+      padding: 5px;
+      margin-top: 10px
+    }
+  }
+  .user-right {
+    flex: 6;
+  }
+}
+</style>
