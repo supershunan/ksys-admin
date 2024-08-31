@@ -68,7 +68,7 @@ export default {
         type: 'use_video'
       }
       addDevice(data).then(res => {
-        this.$Message.info('添加成功')
+        this.$Message.success('添加成功')
         this.playUrl = ''
         this.getVideoList()
         this.videoModal = false
@@ -86,7 +86,7 @@ export default {
         onOk: () => {
           deleteDevice(item.id).then(() => {
             this.getVideoList()
-            this.$Message.info('删除成功')
+            this.$Message.success('删除成功')
           })
         },
         onCancel: () => {

@@ -72,31 +72,31 @@ export const hasChild = (item) => {
 }
 
 export const showThisMenuEle = (item, userInfo) => {
-  // if (item.meta && item.meta.access && item.meta.access.length) {
-  //   let menus = userInfo.menus
-  //   if (menus && menus.length > 0 && menus.includes(item.meta.access)) {
-  //     return true
-  //   } else return false
-  // } else return true
+  if (item.meta && item.meta.access && item.meta.access.length) {
+    let menus = userInfo.menus
+    if (menus && menus.length > 0 && menus.includes(item.meta.access)) {
+      return true
+    } else return false
+  } else return true
 
-  if (userInfo.type === 'sadmin') {
-    return true
-  }
+  // if (userInfo.type === 'sadmin') {
+  //   return true
+  // }
 
-  if (
-    userInfo.type === 'admin' &&
-    (
-      item.path === '/login' ||
-      item.path === '/' ||
-      item.path === '/home' ||
-      item.path === '/videoReview' ||
-      item.path === '/reviewVideo' ||
-      item.path === '/expertVideo' ||
-      item.path === '/expertVideoDetail'
-    )) {
-    return true
-  }
-  return false
+  // if (
+  //   userInfo.type === 'admin' &&
+  //   (
+  //     item.path === '/login' ||
+  //     item.path === '/' ||
+  //     item.path === '/home' ||
+  //     item.path === '/videoReview' ||
+  //     item.path === '/reviewVideo' ||
+  //     item.path === '/expertVideo' ||
+  //     item.path === '/expertVideoDetail'
+  //   )) {
+  //   return true
+  // }
+  // return false
 }
 /**
  * @param {Array} list 通过路由列表得到菜单列表

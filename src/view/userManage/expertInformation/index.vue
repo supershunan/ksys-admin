@@ -55,7 +55,7 @@
 <script>
 import imgIcon from '@/assets/images/icon/img.png'
 import { pageData, delData, banData, updateMyInfo } from '@/api/user'
-import { getUserInfolistApi, UpgradeToleaderApi } from '@/api/userManage'
+import { getUserInfolistApi, UpgradeToleaderApi, cancelCommanderApi } from '@/api/userManage'
 import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
 import { userSexMap, userVipTypeMap, userStatusMap, customerTypeMap } from '@/libs/dict'
 import detail from './detail.vue'
@@ -181,19 +181,22 @@ export default {
             return h('div', [
               h('Button', {
                 props: {
-                  type: 'success',
+                  type: row.type.split(',').includes('commander') ? 'warning' : 'success',
                   size: 'small'
-                  // disabled: row.type.split(',').includes('commander')
                 },
                 style: {
                   marginRight: '5px'
                 },
                 on: {
                   click: () => {
-                    this.upgradeToleader(row)
+                    if (row.type.split(',').includes('commander')) {
+                      this.cancelCommander(row)
+                    } else {
+                      this.upgradeToleader(row)
+                    }
                   }
                 }
-              }, '升级团长'),
+              }, row.type.split(',').includes('commander') ? '撤销团长' : '升级团长'),
               h('Button', {
                 props: {
                   type: 'warning',
@@ -380,6 +383,23 @@ export default {
         onOk: () => {
           UpgradeToleaderApi({ id: row.id }).then(() => {
             this.$Message.info('升级成功')
+            this.getList()
+          })
+        },
+        onCancel: () => {
+          this.$Message.info('取消')
+        }
+      })
+    },
+    cancelCommander (row) {
+      this.$Modal.confirm({
+        title: '是否撤销团长？',
+        okText: '是',
+        cancelText: '否',
+        onOk: () => {
+          cancelCommanderApi({ id: row.id }).then(() => {
+            this.$Message.info('撤销成功')
+            this.getList()
           })
         },
         onCancel: () => {

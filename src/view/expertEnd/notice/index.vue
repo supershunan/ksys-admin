@@ -247,11 +247,11 @@ export default {
         onOk: () => {
           deleteNoticeApi({ ids: item.id }).then(res => {
             this.getAdvertismentHistoryList()
-            this.$Message.info('删除成功')
+            this.$Message.success('删除成功')
           })
         },
         onCancel: () => {
-          this.$Message.info('Clicked cancel')
+          this.$Message.info('取消')
         }
       })
     },

@@ -18,11 +18,11 @@
                             <Icon type="ios-color-filter" slot="prepend"></Icon>
                         </Input>
                     </FormItem>
-                    <FormItem prop="type">
+                    <!-- <FormItem prop="type">
                         <Select v-model="searchForm.type" :style="selectStyle" placeholder="申请类型">
                             <Option v-for="item,i in typeList" :value="item.v">{{ item.k }}</Option>
                         </Select>
-                    </FormItem>
+                    </FormItem> -->
                     <FormItem prop="status">
                         <Select v-model="searchForm.status" :style="selectStyle" placeholder="申请状态">
                             <Option v-for="item,i in statusList" :value="item.v">{{ item.k }}</Option>
@@ -48,8 +48,9 @@
 </template>
 <script>
 import { pageData, audData } from '@/api/apply'
+import { checkWorkListtApi, applyPassApi, applyNotPassApi, removeVideosApi } from '@/api/videoReview'
 import { checkTxt, checkTxtDef, timeFmt } from '@/libs/util'
-import { applyTypeMap, applyStatusMap } from '@/libs/dict'
+import { applyTypeMap, videoStatusMap } from '@/libs/dict'
 import worksDetail from './worksDetail.vue'
 export default {
   name: 'apply-list',
@@ -65,11 +66,12 @@ export default {
       checkTxtDef,
       timeFmt,
       applyTypeMap,
-      applyStatusMap,
+      videoStatusMap,
       pageData: {
         page: 1,
         rows: 10,
-        total: 0
+        total: 0,
+        type: 'video'
       },
       pageOpts: [10, 20, 50, 100],
       isLoading: false,
@@ -110,7 +112,7 @@ export default {
           key: 'status',
           render: (h, params) => {
             let d = params.row
-            let dict = applyStatusMap
+            let dict = videoStatusMap
             let v = checkTxtDef(d.status, '')
             let sv = dict[v]
             sv = sv == null ? { v: '未定义', c: 'error' } : sv
@@ -156,28 +158,43 @@ export default {
                 },
                 style: {
                   marginRight: '5px',
-                  display: row.status == 1 ? '' : 'none'
+                  display: (row.status === 2 || row.status === 4 || row.status === 5) ? '' : 'none'
                 },
                 on: {
                   click: () => {
-                    this.aud(row, 9)
+                    this.aud(row, 1)
                   }
                 }
               }, '通过'),
               h('Button', {
                 props: {
-                  type: 'error',
+                  type: 'warning',
                   size: 'small'
                 },
                 style: {
-                  display: row.status == 1 ? '' : 'none'
+                  marginRight: '5px',
+                  display: row.status === 1 ? '' : 'none'
                 },
                 on: {
                   click: () => {
                     this.aud(row, 2)
                   }
                 }
-              }, '打回')
+              }, '打回'),
+              h('Button', {
+                props: {
+                  type: 'error',
+                  size: 'small'
+                },
+                style: {
+                  display: (row.status === 1 || row.status === 2) ? '' : 'none'
+                },
+                on: {
+                  click: () => {
+                    this.aud(row, 3)
+                  }
+                }
+              }, '下架')
             ])
           }
         }
@@ -206,8 +223,8 @@ export default {
       }
       this.typeList = typeList
       let statusList = []
-      for (let k in applyStatusMap) {
-        statusList.push({ k: applyStatusMap[k].v, v: k })
+      for (let k in videoStatusMap) {
+        statusList.push({ k: videoStatusMap[k].v, v: k })
       }
       this.statusList = statusList
     },
@@ -215,7 +232,8 @@ export default {
       let pd = this.pageData
       let ps = {
         page: pd.page,
-        rows: pd.rows
+        rows: pd.rows,
+        type: pd.type
       }
       let sf = this.searchForm
       for (let k in sf) {
@@ -227,7 +245,7 @@ export default {
       let ps = this.getParams()
       this.isLoading = true
       let _that = this
-      pageData(ps).then(res => {
+      checkWorkListtApi(ps).then(res => {
         _that.datas = res.rows
         _that.pageData.total = res.total
         _that.isLoading = false
@@ -258,17 +276,33 @@ export default {
       this.getList()
     },
     aud (row, status) {
-      let _that = this
+      console.log(row)
       this.$Modal.confirm({
         title: '提示',
         content: '<p>确定进行该操作吗？</p>',
         onOk: () => {
-          _that.isLoading = true
-          audData({ id: row.id, status: status }).then(res => {
-            _that.isLoading = false
-            _that.$Message.success('审核成功')
-            _that.getList()
-          })
+          this.isLoading = true
+          if (status === 1) {
+            applyPassApi(row.id).then(res => {
+              this.isLoading = false
+              this.$Message.success('审核成功')
+              this.getList()
+            })
+          }
+          if (status === 2) {
+            applyNotPassApi(row.id).then(res => {
+              this.isLoading = false
+              this.$Message.success('打回成功')
+              this.getList()
+            })
+          }
+          if (status === 3) {
+            removeVideosApi(row.id).then(res => {
+              this.isLoading = false
+              this.$Message.success('下架成功')
+              this.getList()
+            })
+          }
         },
         onCancel: () => {
 
@@ -276,7 +310,7 @@ export default {
       })
     },
     info (row) {
-      this.$refs.worksDetail.open(row.corId)
+      this.$refs.worksDetail.open(row.code)
     }
   }
 }

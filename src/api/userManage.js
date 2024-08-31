@@ -19,6 +19,14 @@ export const UpgradeToleaderApi = (data) => {
   })
 }
 
+export const cancelCommanderApi = (data) => {
+  return axios.request({
+    url: '/user/cancelCommander',
+    data: JSON.stringify(data),
+    method: 'put'
+  })
+}
+
 // 专属会员
 export const getExpertListApi = (data) => {
   return axios.request({

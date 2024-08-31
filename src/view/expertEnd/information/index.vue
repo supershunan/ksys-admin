@@ -136,7 +136,7 @@ export default {
         cancelText: '否',
         onOk: () => {
           deleteFeedbackApi({ ids: item.id }).then(() => {
-            this.$Message.info('删除成功')
+            this.$Message.success('删除成功')
             this.getFeadbackList()
           })
         },
@@ -166,7 +166,7 @@ export default {
         cancelText: '否',
         onOk: () => {
           deleteFeedbackApi({ ids: item.id }).then(() => {
-            this.$Message.info('删除成功')
+            this.$Message.success('删除成功')
             this.getCooperateList()
           })
         },

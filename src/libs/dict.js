@@ -1,5 +1,12 @@
 export const applyTypeMap = { 'exp': '达人入筑申请', 'video': '视频上架申请', 'cash': '提现申请', 'refund': '退款申请' }
 export const applyStatusMap = { 1: { v: '审核中', c: 'primary' }, 2: { v: '未通过', c: 'error' }, 9: { v: '已通过', c: 'success' } }
+export const videoStatusMap = {
+  1: { v: '正常', c: 'success' },
+  2: { v: '审核中', c: 'primary' },
+  3: { v: '打回', c: 'error' },
+  4: { v: '强制下架', c: 'error' },
+  5: { v: '自行下架', c: 'error' }
+}
 
 export const userSexMap = { 1: '男', 2: '女' }
 export const userTypeMap = { 'sadmin': { v: '超级管理员', c: 'blue' },
