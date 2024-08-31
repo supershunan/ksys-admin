@@ -85,7 +85,8 @@ export default {
         page: 1,
         rows: 10,
         total: 0,
-        type: 'video'
+        type: 'video',
+        createBy: this.$route.query.id
       },
       pageOpts: [10, 20, 50, 100],
       isLoading: false,
@@ -222,8 +223,7 @@ export default {
   watch: {
     '$route.query.id': {
       handler (newVal, oldVal) {
-        console.log(newVal, oldVal)
-        this.getUserVideolist()
+        this.init()
         this.getUserItem()
       },
       immediate: true
@@ -234,7 +234,7 @@ export default {
   },
   created () {},
   mounted () {
-    this.init()
+
   },
   methods: {
     init () {
@@ -258,7 +258,8 @@ export default {
       let ps = {
         page: pd.page,
         rows: pd.rows,
-        type: pd.type
+        type: pd.type,
+        createBy: pd.createBy
       }
       let sf = this.searchForm
       for (let k in sf) {
@@ -344,7 +345,7 @@ export default {
       getUserVideolistApi({
         ...this.params,
         type: 'video',
-        id: this.$route.query.id
+        createBy: this.$route.query.id
       })
     },
     getUserItem () {
