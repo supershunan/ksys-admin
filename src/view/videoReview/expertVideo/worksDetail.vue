@@ -63,7 +63,7 @@
                      排序：{{ checkTxtDef(dataForm.sort) }}
                   </Col>
                   <Col span="6">
-                    状态：<Tag :color="worksStatusMap[dataForm.status].c">{{ worksStatusMap[dataForm.status].v }}</Tag>
+                    状态：<Tag :color="videoStatusMap[dataForm.status].c">{{ videoStatusMap[dataForm.status].v }}</Tag>
                   </Col>
                   <Col span="24">
                      简介：{{ checkTxtDef(dataForm.info) }}
@@ -95,8 +95,9 @@
 </template>
 <script>
 import { infoAllData } from '@/api/works'
+import { checkWorkListtApi } from '@/api/videoReview'
 import { checkTxt, checkTxtDef, timeFmt } from '@/libs/util'
-import { worksTypeMap, worksStatusMap } from '@/libs/dict'
+import { worksTypeMap, videoStatusMap } from '@/libs/dict'
 export default {
   name: '',
   components: {
@@ -111,7 +112,7 @@ export default {
       checkTxtDef,
       timeFmt,
       worksTypeMap,
-      worksStatusMap,
+      videoStatusMap,
       modalShow: false,
       modalTitle: '视频详情',
       rowGutter: 10,
@@ -134,7 +135,7 @@ export default {
     init () {
 
     },
-    open (id) {
+    open (code) {
       this.modalShow = true
       this.videoName = ''
       this.videoUrl = ''
@@ -142,12 +143,17 @@ export default {
       this.videoBgImg = ''
       this.dataForm = {}
       this.labelList = []
-      this.getInfo(id)
+      this.getInfo(code)
     },
-    getInfo (id) {
+    getInfo (code) {
       let _that = this
-      infoAllData(id).then(res => {
-        let d = res.data
+      checkWorkListtApi({
+        code: code,
+        type: 'video',
+        page: 1,
+        rows: 1
+      }).then(res => {
+        let d = res.rows[0]
         _that.dataForm = d
         _that.labelList = d.labelDataList
         _that.videoName = d.title
