@@ -1,5 +1,4 @@
 import Main from '@/components/main'
-import parentView from '@/components/parent-view'
 
 /**
  * iview-admin中meta除了原生参数外可配置的参数:
@@ -83,7 +82,7 @@ export default [
         name: '公告',
         meta: {
           icon: 'md-contact',
-          title: '公告' // 新增
+          title: '公告'
         },
         component: () => import('@/view/expertEnd/notice/index.vue')
       },
@@ -92,7 +91,7 @@ export default [
         name: '教程',
         meta: {
           icon: 'md-medal',
-          title: '教程' // 新增
+          title: '教程'
         },
         component: () => import('@/view/expertEnd/tutorial/index.vue')
       },
@@ -101,7 +100,7 @@ export default [
         name: '信息',
         meta: {
           icon: 'md-medal',
-          title: '信息' // 新增
+          title: '信息'
         },
         component: () => import('@/view/expertEnd/information/index.vue')
       },
@@ -110,7 +109,7 @@ export default [
         name: '推广详情',
         meta: {
           icon: 'md-medal',
-          title: '推广详情' // 新增
+          title: '推广详情'
         },
         component: () => import('@/view/expertEnd/promotiondetails/index.vue')
       },
@@ -119,9 +118,18 @@ export default [
         name: '设置',
         meta: {
           icon: 'md-medal',
-          title: '设置' // 新增
+          title: '设置'
         },
         component: () => import('@/view/expertEnd/setUp/index.vue')
+      },
+      {
+        path: '/initSetting',
+        name: 'markdown配置',
+        meta: {
+          icon: 'md-medal',
+          title: 'markdown配置'
+        },
+        component: () => import('@/view/expertEnd/markdownSetting/index.vue')
       }
     ]
   },
@@ -148,7 +156,7 @@ export default [
         name: '团长信息',
         meta: {
           icon: 'md-medal',
-          title: '团长信息' // 新增
+          title: '团长信息'
         },
         component: () => import('@/view/userManage/leaderInformation/index.vue')
       },
@@ -157,7 +165,7 @@ export default [
         name: '达人信息',
         meta: {
           icon: 'md-medal',
-          title: '达人信息' // 新增
+          title: '达人信息'
         },
         component: () => import('@/view/userManage/expertInformation/index.vue')
       },
@@ -224,7 +232,7 @@ export default [
         name: '审核视频',
         meta: {
           icon: 'md-contact',
-          title: '审核视频' // 新增
+          title: '审核视频'
         },
         component: () => import('@/view/videoReview/reviewVideo/index.vue')
       },
@@ -233,7 +241,7 @@ export default [
         name: '达人视频',
         meta: {
           icon: 'md-medal',
-          title: '达人视频' // 新增
+          title: '达人视频'
         },
         component: () => import('@/view/videoReview/expertVideo/index.vue')
       },
@@ -242,7 +250,7 @@ export default [
         name: 'expertVideoDetail',
         meta: {
           icon: 'md-medal',
-          title: '达人视频详情', // 新增
+          title: '达人视频详情',
           hideInMenu: true
         },
         component: () => import('@/view/videoReview/expertVideo/manageVideo.vue')
@@ -263,7 +271,7 @@ export default [
         path: '/materialLibrary',
         name: 'materialLibrary',
         meta: {
-          title: '素材库', // 新增
+          title: '素材库',
           icon: 'md-home'
         },
         component: () => import('@/view/materialLibrary/index.vue')
@@ -284,7 +292,7 @@ export default [
         name: '对账信息',
         meta: {
           icon: 'md-contact',
-          title: '对账信息' // 新增
+          title: '对账信息'
         },
         component: () => import('@/view/financialManage/reconciliationInformation/index.vue')
       },
@@ -293,7 +301,7 @@ export default [
         name: '提现信息',
         meta: {
           icon: 'md-medal',
-          title: '提现信息' // 新增
+          title: '提现信息'
         },
         component: () => import('@/view/financialManage/withdrawalInformation/index.vue')
       }

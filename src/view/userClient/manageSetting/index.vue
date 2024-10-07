@@ -53,9 +53,9 @@
       <Card style="width: 53%">
         <template #title> 招募设置 </template>
         <div>
-          <Editor :value="editorValue" ref="EditorRef" />
+          <Editor :value="recruitValue" ref="recruit" />
           <div style="display: flex; justify-content: end; margin-top: 5px;">
-            <Button type="primary" @click="editorSave">保存</Button>
+            <Button type="primary" @click="editorSave(configurationType.recruitValue)">保存</Button>
           </div>
         </div>
       </Card>
@@ -65,6 +65,7 @@
 <script>
 import Editor from '@/components/editor/editor.vue'
 import { updateApi, getVideoStatement, getClassify, updateClassify, addClassify, deleteClassify } from '@/api/manageSetting'
+import { addDevice, updateDevice, getDeviceList } from '@/api/expertEnd'
 export default {
   components: {
     Editor
@@ -79,12 +80,14 @@ export default {
       },
       formDynamic: [],
       editorValue: '暂不对接',
-      settingType: {
+      configurationType: {
         /** 视频声明 */
         video_statement: 'video_statement',
         /** 招募设置 */
-        recruit: 'recruit'
-      }
+        recruitValue: 'recruit'
+      },
+      recruitValue: '',
+      recruit: {}
     }
   },
   mounted () {
@@ -97,6 +100,19 @@ export default {
     getData () {
       this.getVideoSetting()
       this.getClassify()
+      this.getSetting()
+    },
+    getSetting () {
+      Object.keys(this.configurationType).forEach(key => {
+        getDeviceList(this.configurationType[key]).then(res => {
+          if (res.data.length > 0) {
+            this[this.configurationType[key]] = res.data[0]
+            this[key] = res.data[0].val
+            this.$refs[this.configurationType[key]].setHtml(res.data[0].val)
+          }
+        })
+      })
+      console.log(this.tools)
     },
     handlVideoSubmit (name) {
       this.$refs[name].validate((valid) => {
@@ -174,8 +190,29 @@ export default {
         }
       })
     },
-    editorSave () {
-      this.$refs.EditorRef.getHtml()
+    editorSave (type) {
+      const html = this.$refs.recruit.getHtml()
+      const data = {
+        code: type,
+        name: type,
+        val: html,
+        type: type
+      }
+
+      if (this[type].val) {
+        updateDevice({
+          ...this[type],
+          ...data
+        }).then(() => {
+          this.getSetting()
+          this.$Message.success('更新成功')
+        })
+      } else {
+        addDevice(data).then(() => {
+          this.getSetting()
+          this.$Message.success('保存成功')
+        })
+      }
     }
   }
 }
