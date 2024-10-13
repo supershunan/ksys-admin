@@ -1,27 +1,28 @@
 <template>
   <div class="markdown-setting">
-    <Select
-      v-model="curMarkdown"
-      :label-in-value="true"
-      placeholder="请选择"
-      style="width: 200px; margin-bottom: 10px; z-index: 1001"
-      @on-change="selectChange"
-    >
-      <Option
-        v-for="item in markdownList"
-        :value="item.value"
-        :key="item.value"
-        >{{ item.label }}</Option
+    <Card :bordered="true">
+      <Select
+        v-model="curMarkdown"
+        :label-in-value="true"
+        placeholder="请选择"
+        style="width: 200px; margin-bottom: 10px; z-index: 1001"
+        @on-change="selectChange"
       >
-    </Select>
-    <Editor :value="markdownType[curMarkdown].value" :ref="`${markdownType[curMarkdown].ref}`" />
-    <div style="display: flex; justify-content: end; margin-top: 5px">
-      <Button
-        type="primary"
-        @click="editorSave(curMarkdown)"
-        >保存</Button
-      >
-    </div>
+        <Option
+          v-for="item in markdownList"
+          :value="item.value"
+          :key="item.value"
+          >{{ item.label }}</Option
+        >
+      </Select>
+      <Editor
+        :value="markdownType[curMarkdown].value"
+        :ref="`${markdownType[curMarkdown].ref}`"
+      />
+      <div style="display: flex; justify-content: end; margin-top: 5px">
+        <Button type="primary" @click="editorSave(curMarkdown)">保存</Button>
+      </div>
+    </Card>
   </div>
 </template>
 <script>
@@ -154,11 +155,13 @@ export default {
       console.log(value, label)
     },
     getMarkdownContent () {
-      getDeviceList(this.curMarkdown).then(res => {
+      getDeviceList(this.curMarkdown).then((res) => {
         if (res.data.length > 0) {
           this.markdownType[this.curMarkdown][this.curMarkdown] = res.data[0]
           this.markdownType[this.curMarkdown].value = res.data[0].val
-          this.$refs[this.markdownType[this.curMarkdown].ref].setHtml(res.data[0].val)
+          this.$refs[this.markdownType[this.curMarkdown].ref].setHtml(
+            res.data[0].val
+          )
         } else {
           this.markdownType[this.curMarkdown][this.curMarkdown] = {}
           this.markdownType[this.curMarkdown].value = ''
