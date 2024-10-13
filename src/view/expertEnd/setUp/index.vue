@@ -15,55 +15,6 @@
                 <Button type="primary" @click="handleSubmit(configurationType.customerimgUrl)">保存</Button>
             </div>
         </Card>
-        <div class="content">
-            <Card style="width: 49%">
-                <template #title>
-                    <span class="notice_title ">工具箱</span>
-                </template>
-                <div>
-                    <Editor :value="toolboxValue" ref="tools" />
-                    <div style="display: flex; justify-content: end; margin-top: 5px;">
-                        <Button type="primary" @click="editorSave(configurationType.toolboxValue)">保存</Button>
-                    </div>
-                </div>
-            </Card>
-            <Card style="width: 49%">
-                <template #title>
-                    <span class="notice_title ">用户协议</span>
-                </template>
-                <div>
-                    <Editor :value="userAgreementValue" ref="h5_user_protocol" />
-                    <div style="display: flex; justify-content: end; margin-top: 5px;">
-                        <Button type="primary" @click="editorSave(configurationType.userAgreementValue)">保存</Button>
-                    </div>
-                </div>
-            </Card>
-        </div>
-        <div class="content">
-            <Card style="width: 49%">
-                <template #title>
-                    <span class="notice_title ">隐私政策</span>
-                </template>
-                <div>
-                    <Editor :value="privacyPolicyValue" ref="h5_private_strategy" />
-                    <div style="display: flex; justify-content: end; margin-top: 5px;">
-                        <Button type="primary" @click="editorSave(configurationType.privacyPolicyValue)">保存</Button>
-                    </div>
-                </div>
-            </Card>
-            <Card style="width: 49%">
-                <template #title>
-                    <span class="notice_title ">提现规则</span>
-                </template>
-                <div>
-                    <Editor :value="withdrawalRulesValue" ref="withdrawal" />
-                    <div style="display: flex; justify-content: end; margin-top: 5px;">
-                        <Button type="primary" @click="editorSave(configurationType.withdrawalRulesValue)">保存</Button>
-                    </div>
-                </div>
-            </Card>
-        </div>
-
         <Modal
         style="z-index: 99999999;"
             v-model="customerModal"
@@ -88,11 +39,9 @@
 
 <script>
 import chooseSourceMaterial from '_c/chooseSourceMaterial/chooseSourceMaterial.vue'
-import Editor from '@/components/editor/editor.vue'
 import { addDevice, getDeviceList, updateDevice } from '@/api/expertEnd'
 export default {
   components: {
-    Editor,
     chooseSourceMaterial
   },
   data () {
@@ -100,22 +49,10 @@ export default {
       isChoose: false,
       customerModal: false,
       customerimgUrl: '',
-      toolboxValue: '',
-      userAgreementValue: '',
-      privacyPolicyValue: '',
-      withdrawalRulesValue: '',
       configurationType: {
-        customerimgUrl: 'customer_service',
-        toolboxValue: 'tools',
-        userAgreementValue: 'h5_user_protocol',
-        privacyPolicyValue: 'h5_private_strategy',
-        withdrawalRulesValue: 'withdrawal'
+        customerimgUrl: 'customer_service'
       },
-      customer_service: {},
-      tools: {},
-      h5_user_protocol: {},
-      h5_private_strategy: {},
-      withdrawal: {}
+      customer_service: {}
     }
   },
   mounted () {
@@ -128,7 +65,6 @@ export default {
           if (res.data.length > 0) {
             this[this.configurationType[key]] = res.data[0]
             this[key] = res.data[0].val
-            this.$refs[this.configurationType[key]].setHtml(res.data[0].val)
           }
         })
       })
@@ -141,29 +77,6 @@ export default {
         return
       }
       this.$refs.mediaSee.open(url)
-    },
-    editorSave (type) {
-      const html = this.$refs[type].getHtml()
-      const data = {
-        code: type,
-        name: type,
-        val: html,
-        type: type
-      }
-      if (this[type].val) {
-        updateDevice({
-          ...this[type],
-          ...data
-        }).then(() => {
-          this.getSetting()
-          this.$Message.success('保存成功')
-        })
-      } else {
-        addDevice(data).then(() => {
-          this.getSetting()
-          this.$Message.success('保存成功')
-        })
-      }
     },
     handleSubmit (type) {
       const data = {
@@ -183,7 +96,7 @@ export default {
       } else {
         addDevice(data).then(() => {
           this.getSetting()
-          this.$Message.success('保存成功')
+          this.$Message.success('更新成功')
         })
       }
     },
@@ -215,15 +128,5 @@ export default {
     display: flex;
     justify-content: end;
     margin-top: 10px;
-}
-.content {
-    display: flex;
-    justify-content: space-between;
-}
-/deep/ .w-e-text-container {
-  z-index: 990 !important;
-}
-/deep/ .w-e-menu {
-  z-index: 990 !important;
 }
 </style>

@@ -105,15 +105,6 @@ export default [
         component: () => import('@/view/expertEnd/information/index.vue')
       },
       {
-        path: '/promotiondetails',
-        name: '推广详情',
-        meta: {
-          icon: 'md-medal',
-          title: '推广详情'
-        },
-        component: () => import('@/view/expertEnd/promotiondetails/index.vue')
-      },
-      {
         path: '/setUp',
         name: '设置',
         meta: {
