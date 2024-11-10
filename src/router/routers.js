@@ -269,6 +269,27 @@ export default [
       }
     ]
   },
+  // {
+  //   path: '/goldStore',
+  //   name: 'goldStore',
+  //   redirect: '/goldStore',
+  //   component: Main,
+  //   meta: {
+  //     icon: 'logo-buffer',
+  //     title: '金币商城'
+  //   },
+  //   children: [
+  //     {
+  //       path: '/goldStore',
+  //       name: 'goldStore',
+  //       meta: {
+  //         title: '金币商城',
+  //         icon: 'md-home'
+  //       },
+  //       component: () => import('@/view/goldStore/index.vue')
+  //     }
+  //   ]
+  // },
   {
     path: '/financialManage',
     name: '财务管理',

@@ -78,6 +78,46 @@ export default {
         {
           value: 'cancellationNotice',
           label: '注销需知'
+        },
+        {
+          value: 'licensingCenter',
+          label: '证照中心'
+        },
+        {
+          value: 'icpFilingInformation',
+          label: '备案信息'
+        },
+        {
+          value: 'cancellationOfTheAgreement',
+          label: '注销协议'
+        },
+        {
+          value: 'purchasingNotice',
+          label: '购买须知'
+        },
+        {
+          value: 'withdrawalInstructionsH5',
+          label: '提现说明（h5）'
+        },
+        {
+          value: 'withdrawalInstructionsAPP',
+          label: '提现说明（APP）'
+        },
+        {
+          value: 'protectionOfPersonalInformation',
+          label: '个人信息保护指引'
+        },
+        {
+          value: 'sharingPersonalInformation',
+          label: '与第三方共享个人信息清单'
+        },
+        {
+          value: 'listOfPermissions',
+          label: '权限列表'
+        },
+        {
+          value: 'recruit',
+          label: '招募设置'
         }
       ],
       curMarkdown: 'h5_user_protocol',
@@ -136,6 +176,56 @@ export default {
           value: '',
           ref: 'cancellationNotice',
           cancellationNotice: {}
+        },
+        licensingCenter: {
+          value: '',
+          ref: 'licensingCenter',
+          licensingCenter: {}
+        },
+        icpFilingInformation: {
+          value: '',
+          ref: 'icpFilingInformation',
+          icpFilingInformation: {}
+        },
+        cancellationOfTheAgreement: {
+          value: '',
+          ref: 'cancellationOfTheAgreement',
+          cancellationOfTheAgreement: {}
+        },
+        purchasingNotice: {
+          value: '',
+          ref: 'purchasingNotice',
+          purchasingNotice: {}
+        },
+        withdrawalInstructionsH5: {
+          value: '',
+          ref: 'withdrawalInstructionsH5',
+          withdrawalInstructionsH5: {}
+        },
+        withdrawalInstructionsAPP: {
+          value: '',
+          ref: 'withdrawalInstructionsAPP',
+          withdrawalInstructionsAPP: {}
+        },
+        protectionOfPersonalInformation: {
+          value: '',
+          ref: 'protectionOfPersonalInformation',
+          protectionOfPersonalInformation: {}
+        },
+        sharingPersonalInformation: {
+          value: '',
+          ref: 'sharingPersonalInformation',
+          sharingPersonalInformation: {}
+        },
+        listOfPermissions: {
+          value: '',
+          ref: 'listOfPermissions',
+          listOfPermissions: {}
+        },
+        recruit: {
+          value: '',
+          ref: 'recruit',
+          recruit: {}
         }
       }
     }

@@ -24,7 +24,7 @@
       </div>
     </Card>
     <div class="video-bottom">
-      <Card style="width: 45%">
+      <Card style="width: 100%">
         <template #title> 分类设置 </template>
         <div v-for="item in formDynamic" :key="item.id">
             <div style="margin-bottom: 10px;">
@@ -50,26 +50,13 @@
             </Col>
         </Row>
       </Card>
-      <Card style="width: 53%">
-        <template #title> 招募设置 </template>
-        <div>
-          <Editor :value="recruitValue" ref="recruit" />
-          <div style="display: flex; justify-content: end; margin-top: 5px;">
-            <Button type="primary" @click="editorSave(configurationType.recruitValue)">保存</Button>
-          </div>
-        </div>
-      </Card>
     </div>
   </div>
 </template>
 <script>
-import Editor from '@/components/editor/editor.vue'
 import { updateApi, getVideoStatement, getClassify, updateClassify, addClassify, deleteClassify } from '@/api/manageSetting'
-import { addDevice, updateDevice, getDeviceList } from '@/api/expertEnd'
+import { getDeviceList } from '@/api/expertEnd'
 export default {
-  components: {
-    Editor
-  },
   data () {
     return {
       videoForm: {},
@@ -82,12 +69,8 @@ export default {
       editorValue: '暂不对接',
       configurationType: {
         /** 视频声明 */
-        video_statement: 'video_statement',
-        /** 招募设置 */
-        recruitValue: 'recruit'
-      },
-      recruitValue: '',
-      recruit: {}
+        video_statement: 'video_statement'
+      }
     }
   },
   mounted () {
@@ -190,30 +173,6 @@ export default {
         }
       })
     },
-    editorSave (type) {
-      const html = this.$refs.recruit.getHtml()
-      const data = {
-        code: type,
-        name: type,
-        val: html,
-        type: type
-      }
-
-      if (this[type].val) {
-        updateDevice({
-          ...this[type],
-          ...data
-        }).then(() => {
-          this.getSetting()
-          this.$Message.success('更新成功')
-        })
-      } else {
-        addDevice(data).then(() => {
-          this.getSetting()
-          this.$Message.success('保存成功')
-        })
-      }
-    }
   }
 }
 </script>
