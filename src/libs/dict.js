@@ -53,3 +53,8 @@ export const customerTypeMap = {
   user: '普通用户',
   commander: '团长'
 }
+
+export const storeStatusMap = {
+  1: { v: '上架', c: 'shelves' },
+  0: { v: '未上架', c: 'notAvailable' }
+}
