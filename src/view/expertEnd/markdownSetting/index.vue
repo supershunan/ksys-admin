@@ -112,7 +112,7 @@ export default {
           label: '与第三方共享个人信息清单'
         },
         {
-          value: 'listOfPermissions',
+          value: 'permission',
           label: '权限列表'
         },
         {
@@ -253,10 +253,10 @@ export default {
           ref: 'shared_third_info',
           shared_third_info: {}
         },
-        listOfPermissions: {
+        permission: {
           value: '',
-          ref: 'listOfPermissions',
-          listOfPermissions: {}
+          ref: 'permission',
+          permission: {}
         },
         recruit: {
           value: '',
