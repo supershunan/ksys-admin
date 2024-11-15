@@ -76,15 +76,15 @@ export default {
           label: '关于我们'
         },
         {
-          value: 'cancellationNotice',
+          value: 'log_off',
           label: '注销需知'
         },
         {
-          value: 'licensingCenter',
+          value: 'license_center',
           label: '证照中心'
         },
         {
-          value: 'icpFilingInformation',
+          value: 'beian_info',
           label: '备案信息'
         },
         {
@@ -104,11 +104,11 @@ export default {
           label: '提现说明（APP）'
         },
         {
-          value: 'protectionOfPersonalInformation',
+          value: 'protect_personal_info_notice',
           label: '个人信息保护指引'
         },
         {
-          value: 'sharingPersonalInformation',
+          value: 'shared_third_info',
           label: '与第三方共享个人信息清单'
         },
         {
@@ -118,6 +118,42 @@ export default {
         {
           value: 'recruit',
           label: '招募设置'
+        },
+        {
+          value: 'video',
+          label: '视频声明'
+        },
+        {
+          value: 'advertisement',
+          label: '广告栏'
+        },
+        {
+          value: 'privacy_policy',
+          label: '隐私政策'
+        },
+        {
+          value: 'use_video',
+          label: '使用教程'
+        },
+        {
+          value: 'customer_service',
+          label: '平台客服'
+        },
+        {
+          value: 'customer_service_hotline',
+          label: '客服热线'
+        },
+        {
+          value: 'download_person_info',
+          label: '个人信息下载'
+        },
+        {
+          value: 'permission_list',
+          label: '权限列表'
+        },
+        {
+          value: 'qiandao_rule',
+          label: '签到规则'
         }
       ],
       curMarkdown: 'h5_user_protocol',
@@ -172,20 +208,20 @@ export default {
           ref: 'aboutUs',
           aboutUs: {}
         },
-        cancellationNotice: {
+        log_off: {
           value: '',
-          ref: 'cancellationNotice',
-          cancellationNotice: {}
+          ref: 'log_off',
+          log_off: {}
         },
-        licensingCenter: {
+        license_center: {
           value: '',
-          ref: 'licensingCenter',
-          licensingCenter: {}
+          ref: 'license_center',
+          license_center: {}
         },
-        icpFilingInformation: {
+        beian_info: {
           value: '',
-          ref: 'icpFilingInformation',
-          icpFilingInformation: {}
+          ref: 'beian_info',
+          beian_info: {}
         },
         cancellationOfTheAgreement: {
           value: '',
@@ -207,15 +243,15 @@ export default {
           ref: 'withdrawalInstructionsAPP',
           withdrawalInstructionsAPP: {}
         },
-        protectionOfPersonalInformation: {
+        protect_personal_info_notice: {
           value: '',
-          ref: 'protectionOfPersonalInformation',
-          protectionOfPersonalInformation: {}
+          ref: 'protect_personal_info_notice',
+          protect_personal_info_notice: {}
         },
-        sharingPersonalInformation: {
+        shared_third_info: {
           value: '',
-          ref: 'sharingPersonalInformation',
-          sharingPersonalInformation: {}
+          ref: 'shared_third_info',
+          shared_third_info: {}
         },
         listOfPermissions: {
           value: '',
@@ -226,6 +262,41 @@ export default {
           value: '',
           ref: 'recruit',
           recruit: {}
+        },
+        privacy_policy: {
+          value: '',
+          ref: 'privacy_policy',
+          privacy_policy: {}
+        },
+        use_video: {
+          value: '',
+          ref: 'use_video',
+          use_video: {}
+        },
+        customer_service: {
+          value: '',
+          ref: 'customer_service',
+          customer_service: {}
+        },
+        customer_service_hotline: {
+          value: '',
+          ref: 'customer_service_hotline',
+          customer_service_hotline: {}
+        },
+        download_person_info: {
+          value: '',
+          ref: 'download_person_info',
+          download_person_info: {}
+        },
+        permission_list: {
+          value: '',
+          ref: 'permission_list',
+          permission_list: {}
+        },
+        qiandao_rule: {
+          value: '',
+          ref: 'qiandao_rule',
+          qiandao_rule: {}
         }
       }
     }
