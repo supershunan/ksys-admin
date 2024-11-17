@@ -140,16 +140,8 @@ export default {
           label: '平台客服'
         },
         {
-          value: 'customer_service_hotline',
-          label: '客服热线'
-        },
-        {
           value: 'download_person_info',
           label: '个人信息下载'
-        },
-        {
-          value: 'permission_list',
-          label: '权限列表'
         },
         {
           value: 'qiandao_rule',
@@ -278,20 +270,10 @@ export default {
           ref: 'customer_service',
           customer_service: {}
         },
-        customer_service_hotline: {
-          value: '',
-          ref: 'customer_service_hotline',
-          customer_service_hotline: {}
-        },
         download_person_info: {
           value: '',
           ref: 'download_person_info',
           download_person_info: {}
-        },
-        permission_list: {
-          value: '',
-          ref: 'permission_list',
-          permission_list: {}
         },
         qiandao_rule: {
           value: '',

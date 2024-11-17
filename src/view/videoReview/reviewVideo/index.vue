@@ -143,7 +143,7 @@ export default {
                 },
                 style: {
                   marginRight: '5px',
-                  display: row.type == 'video' ? '' : 'none'
+                  // display: row.type == 'video' ? '' : 'none'
                 },
                 on: {
                   click: () => {
@@ -158,7 +158,7 @@ export default {
                 },
                 style: {
                   marginRight: '5px',
-                  display: (row.status === 2 || row.status === 4 || row.status === 5) ? '' : 'none'
+                  // display: (row.status === 2 || row.status === 4 || row.status === 5) ? '' : 'none'
                 },
                 on: {
                   click: () => {
@@ -173,7 +173,7 @@ export default {
                 },
                 style: {
                   marginRight: '5px',
-                  display: row.status === 1 ? '' : 'none'
+                  // display: row.status === 1 ? '' : 'none'
                 },
                 on: {
                   click: () => {
@@ -186,9 +186,9 @@ export default {
                   type: 'error',
                   size: 'small'
                 },
-                style: {
-                  display: (row.status === 1 || row.status === 2) ? '' : 'none'
-                },
+                // style: {
+                //   display: (row.status === 1 || row.status === 2) ? '' : 'none'
+                // },
                 on: {
                   click: () => {
                     this.aud(row, 3)

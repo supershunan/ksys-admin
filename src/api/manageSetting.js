@@ -46,3 +46,27 @@ export const deleteClassify = (data) => {
     method: 'post'
   })
 }
+
+export const getAppAboutUsApi = () => {
+  return axios.request({
+    url: '/appConfig/list',
+    data: JSON.stringify({}),
+    method: 'post'
+  })
+}
+
+export const addAppAboutUsApi = (data) => {
+  return axios.request({
+    url: '/appConfig/add',
+    data: JSON.stringify(data),
+    method: 'post'
+  })
+}
+
+export const updateAppAboutUsApi = (data) => {
+  return axios.request({
+    url: '/appConfig/update',
+    data: JSON.stringify(data),
+    method: 'post'
+  })
+}
