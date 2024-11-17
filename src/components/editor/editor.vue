@@ -52,6 +52,9 @@ export default {
     getHtml () {
       const html = this.editor.txt.html()
       return html
+    },
+    insertImg (url) {
+      this.editor.cmd.do('insertHTML', `<img src="${url}" />`)
     }
   },
   mounted () {

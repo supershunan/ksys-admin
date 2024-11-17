@@ -1,20 +1,23 @@
 <template>
   <div class="markdown-setting">
     <Card :bordered="true">
-      <Select
-        v-model="curMarkdown"
-        :label-in-value="true"
-        placeholder="请选择"
-        style="width: 200px; margin-bottom: 10px; z-index: 1001"
-        @on-change="selectChange"
-      >
-        <Option
-          v-for="item in markdownList"
-          :value="item.value"
-          :key="item.value"
-          >{{ item.label }}</Option
-        >
-      </Select>
+      <div class="top-tools" style="display: flex; align-items: center; margin-bottom: 10px;">
+        <Select
+          v-model="curMarkdown"
+          :label-in-value="true"
+          placeholder="请选择"
+            style="width: 200px; z-index: 1001; margin-right: 10px;"
+            @on-change="selectChange"
+          >
+            <Option
+              v-for="item in markdownList"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+          >
+        </Select>
+        <Button type="primary" @click="insertImg">插入图片</Button>
+      </div>
       <Editor
         :value="markdownType[curMarkdown].value"
         :ref="`${markdownType[curMarkdown].ref}`"
@@ -23,14 +26,35 @@
         <Button type="primary" @click="editorSave(curMarkdown)">保存</Button>
       </div>
     </Card>
+    <Modal
+        style="z-index: 99999999;"
+            v-model="customerModal"
+            title="添加图片"
+            @on-ok="handleOk"
+            @on-cancel="handleCancel">
+            <div>
+              <div v-show="isChoose">
+                <chooseSourceMaterial @chooseSource="chooseSource" @goBack="goBack" />
+              </div>
+              <div  v-show="!isChoose">
+                <div>
+                  <Input v-model="customerimgUrl" placeholder="请选择图片地址" style="width: 300px" />
+                  <Button @click="goChoose">选择</Button>
+                </div>
+                <img v-if="customerimgUrl" width="200" height="150" :src="customerimgUrl" />
+              </div>
+            </div>
+        </Modal>
   </div>
 </template>
 <script>
 import Editor from '@/components/editor/editor.vue'
+import chooseSourceMaterial from '_c/chooseSourceMaterial/chooseSourceMaterial.vue'
 import { addDevice, getDeviceList, updateDevice } from '@/api/expertEnd'
 export default {
   components: {
-    Editor
+    Editor,
+    chooseSourceMaterial
   },
   data () {
     return {
@@ -280,7 +304,10 @@ export default {
           ref: 'qiandao_rule',
           qiandao_rule: {}
         }
-      }
+      },
+      isChoose: false,
+      customerModal: false,
+      customerimgUrl: ''
     }
   },
   watch: {
@@ -314,7 +341,6 @@ export default {
     },
     editorSave (type) {
       const html = this.$refs[type].getHtml()
-      console.log(html)
       const data = {
         code: type,
         name: type,
@@ -335,6 +361,33 @@ export default {
           this.$Message.success('保存成功')
         })
       }
+    },
+    insertImg () {
+      this.customerModal = true
+    },
+    openImg () {
+      let url = this.customerimgUrl
+      if (!url) {
+        this.$Message.warning('未上传')
+        return
+      }
+      this.$refs.mediaSee.open(url)
+    },
+    handleOk () {
+      this.$refs[this.curMarkdown].insertImg(this.customerimgUrl)
+      this.customerModal = false
+    },
+    handleCancel () {
+      this.customerModal = false
+    },
+    chooseSource (item) {
+      this.customerimgUrl = item.url
+    },
+    goBack () {
+      this.isChoose = false
+    },
+    goChoose () {
+      this.isChoose = true
     }
   }
 }
@@ -344,9 +397,13 @@ export default {
   z-index: 1001;
 }
 :deep(.w-e-text-container) {
-  z-index: 1 !important;
+  z-index: 1000 !important;
 }
 :deep(.w-e-menu) {
-  z-index: 1 !important;
+  z-index: 1000 !important;
+}
+:deep(.w-e-text-container) {
+  z-index: 999 !important;
+  height: 500px !important;
 }
 </style>

@@ -70,14 +70,6 @@ export default {
       })
       console.log(this.tools)
     },
-    openImg () {
-      let url = this.customerimgUrl
-      if (!url) {
-        this.$Message.warning('未上传')
-        return
-      }
-      this.$refs.mediaSee.open(url)
-    },
     handleSubmit (type) {
       const data = {
         code: type,
@@ -99,6 +91,14 @@ export default {
           this.$Message.success('更新成功')
         })
       }
+    },
+    openImg () {
+      let url = this.customerimgUrl
+      if (!url) {
+        this.$Message.warning('未上传')
+        return
+      }
+      this.$refs.mediaSee.open(url)
     },
     handleOk () {
       this.customerModal = false
