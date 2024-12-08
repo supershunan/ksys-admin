@@ -2,14 +2,14 @@
   @import './reg.less';
 </style>
 <style lang="less" scoped>
-    
+
 </style>
 
 <template>
   <div class="reg">
     <div class="reg-module">
         <div class="title el-center-list">
-            欢迎入驻蔚来视界
+            欢迎入驻次元世界
         </div>
         <div class="form-module">
             <Divider orientation="left">填写您的信息吧</Divider>
@@ -42,7 +42,7 @@ import { checkFieldReqs } from '@/libs/util.js'
 import { regExpert } from '@/api/user.js'
 export default {
   components: {
-    
+
   },
   data:() => {
     return {

@@ -2,7 +2,7 @@ export default {
   /**
    * @description 配置显示在浏览器标签的title
    */
-  title: '蔚来视界',
+  title: '次元世界',
   vs: '1.0.1',
   /**
    * @description token在Cookie中存储的天数，默认1天

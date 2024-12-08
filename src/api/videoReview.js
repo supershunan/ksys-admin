@@ -46,3 +46,13 @@ export const getUserItemApi = (id) => {
     method: 'get'
   })
 }
+
+// 客服
+
+export const historyChatApi = (data) => {
+  return axios.request({
+    url: '/chatRecord/page',
+    data: JSON.stringify(data),
+    method: 'post'
+  })
+}

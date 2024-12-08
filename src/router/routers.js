@@ -245,6 +245,15 @@ export default [
           hideInMenu: true
         },
         component: () => import('@/view/videoReview/expertVideo/manageVideo.vue')
+      },
+      {
+        path: '/customer',
+        name: 'customer',
+        meta: {
+          icon: 'md-medal',
+          title: '客服'
+        },
+        component: () => import('@/view/videoReview/customer/index.vue')
       }
     ]
   },
