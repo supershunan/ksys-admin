@@ -69,7 +69,7 @@ export default {
         },
         {
           value: 'withdrawal',
-          label: '提现说明'
+          label: '提现说明(H5)'
         },
         {
           value: 'tools',
@@ -83,10 +83,10 @@ export default {
           value: 'membershipAgreement',
           label: '会员协议'
         },
-        {
-          value: 'rulesForReceivingCoins',
-          label: '领取金币规则'
-        },
+        // {
+        //   value: 'rulesForReceivingCoins',
+        //   label: '领取金币规则'
+        // },
         {
           value: 'earningsDescription',
           label: '收益说明'
@@ -95,10 +95,10 @@ export default {
           value: 'depositProtocol',
           label: '充值协议'
         },
-        {
-          value: 'aboutUs',
-          label: '关于我们'
-        },
+        // {
+        //   value: 'aboutUs',
+        //   label: '关于我们'
+        // },
         {
           value: 'log_off',
           label: '注销需知'
@@ -143,22 +143,22 @@ export default {
           value: 'recruit',
           label: '招募设置'
         },
-        {
-          value: 'video',
-          label: '视频声明'
-        },
-        {
-          value: 'advertisement',
-          label: '广告栏'
-        },
+        // {
+        //   value: 'video',
+        //   label: '视频声明'
+        // },
+        // {
+        //   value: 'advertisement',
+        //   label: '广告栏'
+        // },
         {
           value: 'privacy_policy',
           label: '隐私政策'
         },
-        {
-          value: 'use_video',
-          label: '使用教程'
-        },
+        // {
+        //   value: 'use_video',
+        //   label: '使用教程'
+        // },
         {
           value: 'customer_service',
           label: '平台客服'
@@ -204,11 +204,11 @@ export default {
           ref: 'membershipAgreement',
           membershipAgreement: {}
         },
-        rulesForReceivingCoins: {
-          value: '',
-          ref: 'rulesForReceivingCoins',
-          rulesForReceivingCoins: {}
-        },
+        // rulesForReceivingCoins: {
+        //   value: '',
+        //   ref: 'rulesForReceivingCoins',
+        //   rulesForReceivingCoins: {}
+        // },
         earningsDescription: {
           value: '',
           ref: 'earningsDescription',
@@ -219,11 +219,11 @@ export default {
           ref: 'depositProtocol',
           depositProtocol: {}
         },
-        aboutUs: {
-          value: '',
-          ref: 'aboutUs',
-          aboutUs: {}
-        },
+        // aboutUs: {
+        //   value: '',
+        //   ref: 'aboutUs',
+        //   aboutUs: {}
+        // },
         log_off: {
           value: '',
           ref: 'log_off',
@@ -284,11 +284,11 @@ export default {
           ref: 'privacy_policy',
           privacy_policy: {}
         },
-        use_video: {
-          value: '',
-          ref: 'use_video',
-          use_video: {}
-        },
+        // use_video: {
+        //   value: '',
+        //   ref: 'use_video',
+        //   use_video: {}
+        // },
         customer_service: {
           value: '',
           ref: 'customer_service',
