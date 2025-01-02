@@ -17,8 +17,8 @@ const BASE_URL = process.env.NODE_ENV === 'production'
   : '/'
 
 // let API_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:10001'
-let API_URL = process.env.NODE_ENV === 'production' ? 'https://pro.qfyingshi.cn' : 'https://pro.qfyingshi.cn'
-let UPLOAD_FILE_URL = process.env.NODE_ENV === 'production' ? 'http://upload.qfyingshi.cn' : 'http://upload.qfyingshi.cn'
+let API_URL = process.env.NODE_ENV === 'production' ? 'https://qingfeng.qfydkj.cn' : 'https://qingfeng.qfydkj.cn'
+let UPLOAD_FILE_URL = process.env.NODE_ENV === 'production' ? 'https://qingfeng.qfydkj.cn' : 'https://qingfeng.qfydkj.cn'
 
 module.exports = {
   // Project deployment base
@@ -44,15 +44,15 @@ module.exports = {
   devServer: {
     proxy: {
       '/apiFile': {
-        target: UPLOAD_FILE_URL,
+        target: 'https://qingfeng.qfydkj.cn',
         changeOrigin: true,
-        pathRewrite: {
-          '^/apiFile': ''
-        },
+        // pathRewrite: {
+        //   '^/apiFile': ''
+        // },
         secure: false
       },
       '/api': {
-        target: API_URL,
+        target: 'https://qingfeng.qfydkj.cn',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -60,7 +60,7 @@ module.exports = {
         secure: false
       },
       '/newApi': {
-        target: 'https://ksys.qfyingshi.cn',
+        target: 'https://qingfeng.qfydkj.cn',
         changeOrigin: true,
         secure: false
       }

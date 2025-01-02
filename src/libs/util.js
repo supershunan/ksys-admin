@@ -85,7 +85,6 @@ export const showThisMenuEle = (item, userInfo) => {
 
   if (
     userInfo.type === 'admin' &&
-    userInfo.nickname === '客服' &&
     (
       item.path === '/login' ||
       item.path === '/' ||
