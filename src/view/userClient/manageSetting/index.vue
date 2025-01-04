@@ -62,7 +62,7 @@
     <div class="app-setting">
       <Card style="width: 100%">
         <template #title> APP设置 </template>
-        <div style="width: 500px;">
+        <div style="width: 500px">
           <Form
             ref="aboutForm"
             :model="aboutForm"
@@ -93,6 +93,39 @@
                 type="text"
                 v-model="aboutForm.customerServiceHotline"
               ></Input>
+            </FormItem>
+            <FormItem label="更新内容" prop="descr">
+              <Input type="textarea" v-model="aboutForm.descr"></Input>
+            </FormItem>
+            <FormItem label="下载地址" prop="editionUrl">
+              <Input type="text" v-model="aboutForm.editionUrl"></Input>
+              <Upload
+                :action="uploadUrl"
+                :multiple="false"
+                :headers="headers"
+                :on-success="uploadSuccess"
+                :show-upload-list="false"
+              >
+                <Button icon="ios-cloud-upload-outline">上传文件</Button>
+              </Upload>
+            </FormItem>
+            <FormItem label="强制更新" prop="editionForce">
+              <Select v-model="aboutForm.editionForce">
+                <Option :value="0">否</Option>
+                <Option :value="1">是</Option>
+              </Select>
+            </FormItem>
+            <FormItem label="更新方式" prop="packageType">
+              <Select v-model="aboutForm.packageType">
+                <Option :value="0">整包升级</Option>
+                <Option :value="1">WGT升级</Option>
+              </Select>
+            </FormItem>
+            <FormItem label="是否发行" prop="editionIssue">
+              <Select v-model="aboutForm.editionIssue">
+                <Option :value="0">否</Option>
+                <Option :value="1">是</Option>
+              </Select>
             </FormItem>
             <FormItem>
               <Button type="primary" @click="handlAboutUsSubmit">保存</Button>
@@ -158,7 +191,11 @@ export default {
       formDynamic: [],
       aboutForm: {},
       customerModal: false,
-      isChoose: false
+      isChoose: false,
+      headers: {
+        [this.$store.state.user.tokenHeader]: this.$store.state.user.token
+      },
+      uploadUrl: '/apiFile/file/upload'
     }
   },
   mounted () {
@@ -294,6 +331,13 @@ export default {
     },
     goChoose () {
       this.isChoose = true
+    },
+    uploadSuccess (res) {
+      console.log(res)
+      if (res.code === 10001) {
+        this.aboutForm.editionUrl = res.data
+        this.$Message.success('上传成功')
+      }
     }
   }
 }
