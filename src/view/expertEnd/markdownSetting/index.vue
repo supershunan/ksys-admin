@@ -159,10 +159,10 @@ export default {
         //   value: 'use_video',
         //   label: '使用教程'
         // },
-        {
-          value: 'customer_service',
-          label: '平台客服'
-        },
+        // {
+        //   value: 'customer_service',
+        //   label: '平台客服'
+        // },
         {
           value: 'download_person_info',
           label: '个人信息下载'
@@ -289,16 +289,16 @@ export default {
         //   ref: 'use_video',
         //   use_video: {}
         // },
-        customer_service: {
-          value: '',
-          ref: 'customer_service',
-          customer_service: {}
-        },
-        download_person_info: {
-          value: '',
-          ref: 'download_person_info',
-          download_person_info: {}
-        },
+        // customer_service: {
+        //   value: '',
+        //   ref: 'customer_service',
+        //   customer_service: {}
+        // },
+        // download_person_info: {
+        // value: '',
+        // ref: 'download_person_info',
+        //  download_person_info: {}
+        // },
         qiandao_rule: {
           value: '',
           ref: 'qiandao_rule',

@@ -2,7 +2,7 @@
 
 </style>
 <template>
-    <Modal class="pack-edit" v-model="modalShow" :title="modalTitle" width="600" :styles="{ top:'20px' }">
+    <Modal class="pack-edit" v-model="modalShow" :title="modalTitle" width="800" :styles="{ top:'20px' }">
         <Form ref="dataForm" :model="dataForm" :label-width="labelWidth" :rules="dataRules">
             <Divider orientation="left">{{ modalTitle }}</Divider>
             <FormItem prop="goodsName" label="商品名称">
@@ -11,7 +11,7 @@
             <FormItem prop="img" label="商品图片">
                 <div style="display: flex; align-items: center;">
                     <img style="width: 200px;" @click="openImg" :src="dataForm.img" />
-                    <Button style="margin-left: 5px;" type="primary" size="small" @click="customerModal = true">上传图片</Button>
+                    <Button style="margin-left: 5px;" type="primary" size="small" @click="uploadFileImg">上传图片</Button>
                 </div>
                 <mediaSee ref="mediaSee"></mediaSee>
             </FormItem>
@@ -38,6 +38,7 @@
             </RadioGroup>
             </FormItem>
             <FormItem prop="goodsDetail" label="商品描述">
+              <Button type="primary" @click="insertImg">插入图片</Button>
                 <Editor
                   :value="dataForm.goodsDetail"
                   ref="editorRef"
@@ -64,7 +65,7 @@
                   <Input v-model="dataForm.img" placeholder="请选择图片地址" style="width: 300px" />
                   <Button @click="goChoose">选择</Button>
                 </div>
-                <img v-if="dataForm.img" width="200" height="150" :src="dataForm.img" />
+                <img v-if="currentTypeUrl" width="200" height="150" :src="currentTypeUrl" />
               </div>
             </div>
         </Modal>
@@ -104,7 +105,10 @@ export default {
         goodsDetail: [{ required: true, message: '请输入商品描述', trigger: 'blur' }]
       },
       isChoose: false,
-      customerModal: false
+      customerModal: false,
+      currentType: 'storeImg', // storeImg: 商品图片 insertImg: 插入图片
+      insertImgUrl: '',
+      currentTypeUrl: ''
     }
   },
   methods: {
@@ -178,13 +182,21 @@ export default {
       this.$refs.mediaSee.open(url)
     },
     handleOk () {
+      if (this.currentType === 'insertImg') {
+        this.$refs.editorRef.insertImg(this.insertImgUrl)
+      }
       this.customerModal = false
     },
     handleCancel () {
       this.customerModal = false
     },
     chooseSource (item) {
-      this.dataForm.img = item.url
+      if (this.currentType === 'insertImg') {
+        this.insertImgUrl = item.url
+      } else {
+        this.dataForm.img = item.url
+      }
+      this.currentTypeUrl = item.url
     },
     goBack () {
       this.isChoose = false
@@ -195,6 +207,16 @@ export default {
     editorSave () {
       const html = this.$refs.editorRef.getHtml()
       this.dataForm.goodsDetail = html
+    },
+    uploadFileImg () {
+      this.customerModal = true
+      this.currentType = 'storeImg'
+      this.currentTypeUrl = this.dataForm.img
+    },
+    insertImg () {
+      this.customerModal = true
+      this.currentType = 'insertImg'
+      this.currentTypeUrl = this.insertImgUrl
     }
   }
 }
