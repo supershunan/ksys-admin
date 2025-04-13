@@ -26,6 +26,9 @@
             <keep-alive :include="cacheList">
               <router-view/>
             </keep-alive>
+            <keep-alive>
+              <Customer />
+            </keep-alive>
             <ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>
           </Content>
         </Layout>
@@ -48,6 +51,7 @@ import routers from '@/router/routers'
 import minLogo from '@/assets/images/logo-min.jpg'
 import maxLogo from '@/assets/images/logo.png'
 import './main.less'
+import Customer from '@/view/videoReview/customer/realCustomer.vue'
 export default {
   name: 'Main',
   components: {
@@ -58,7 +62,8 @@ export default {
     Fullscreen,
     ErrorStore,
     User,
-    ABackTop
+    ABackTop,
+    Customer
   },
   data () {
     return {
