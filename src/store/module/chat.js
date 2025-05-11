@@ -22,7 +22,7 @@ export default {
       }
 
       const token = window.localStorage.getItem('token')
-      const ws = new WebSocket(`https://qingfeng.qfydkj.cn/ws?token=${token}`)
+      const ws = new WebSocket(`https://kzt.ciyuansj.com/ws?token=${token}`)
 
       ws.onopen = () => {
         console.log('WebSocket连接已建立')
