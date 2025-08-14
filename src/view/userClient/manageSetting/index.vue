@@ -53,12 +53,29 @@
         >
           <Col span="12">
             <Button type="dashed" long @click="classifyStaticAdd" icon="md-add"
-              >添加分类</Button
-            >
+              >添加分类</Button>
           </Col>
         </Row>
       </Card>
     </div>
+    <Card style="width: 100%">
+      <template #title> 单价设置 </template>
+      <div>
+        <Form ref="priceForm" :model="priceForm" :label-width="80">
+            <FormItem label="最大值" prop="val" :rules="[{ required: true, message: '内容不能为空', trigger: 'blur' }]">
+              <Input type="number" v-model="priceForm.val"></Input>
+            </FormItem>
+            <FormItem label="最小值" prop="valOther" :rules="[{ required: true, message: '内容不能为空', trigger: 'blur' }]">
+              <Input type="number" v-model="priceForm.valOther"></Input>
+            </FormItem>
+            <FormItem>
+            <Button type="primary" @click="handlPriceSubmit('priceForm')"
+              >保存</Button
+            >
+          </FormItem>
+        </Form>
+      </div>
+    </Card>
     <div class="app-setting">
       <Card style="width: 100%">
         <template #title> APP设置 </template>
@@ -177,6 +194,7 @@ import {
   addAppAboutUsApi,
   updateAppAboutUsApi
 } from '@/api/manageSetting'
+import { addDevice, getDeviceList, updateDevice } from '@/api/expertEnd'
 import chooseSourceMaterial from '_c/chooseSourceMaterial/chooseSourceMaterial.vue'
 export default {
   components: {
@@ -195,7 +213,8 @@ export default {
       headers: {
         [this.$store.state.user.tokenHeader]: this.$store.state.user.token
       },
-      uploadUrl: '/apiFile/file/upload'
+      uploadUrl: '/apiFile/file/upload',
+      priceForm: {}
     }
   },
   mounted () {
@@ -209,6 +228,7 @@ export default {
       this.getVideoSetting()
       this.getClassify()
       this.getAppAboutUs()
+      this.getPriceSetting()
     },
     getAppAboutUs () {
       getAppAboutUsApi().then((res) => {
@@ -338,6 +358,25 @@ export default {
         this.aboutForm.editionUrl = res.data
         this.$Message.success('上传成功')
       }
+    },
+    getPriceSetting () {
+      getDeviceList('ad_price').then((res) => {
+        if (res.data.length > 0) {
+          this.priceForm = res.data[0]
+        } else {
+          this.priceForm = {}
+        }
+      })
+    },
+    handlPriceSubmit (name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          updateDevice(this.priceForm).then((res) => {
+            this.$Message.success('修改成功')
+            this.getData()
+          })
+        }
+      })
     }
   }
 }

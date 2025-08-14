@@ -56,7 +56,7 @@
 <script>
 import imgIcon from '@/assets/images/icon/img.png'
 import { pageData, delData, banData } from '@/api/user'
-import { getUserInfolistApi } from '@/api/userManage'
+import { getUserInfolistApi, UpgradeToleaderApi } from '@/api/userManage'
 import { checkTxt, checkTxtDef, timeFmt, checkFieldReqs } from '@/libs/util'
 import { userSexMap, userVipTypeMap, userStatusMap } from '@/libs/dict'
 import detail from './detail.vue'
@@ -180,6 +180,24 @@ export default {
           render: (h, params) => {
             let row = params.row
             return h('div', [
+              h('Button', {
+                props: {
+                  type: row.type.split(',').includes('commander') ? 'warning' : 'success',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    if (row.type.split(',').includes('commander')) {
+                      this.cancelCommander(row)
+                    } else {
+                      this.upgradeToleader(row)
+                    }
+                  }
+                }
+              }, row.type.split(',').includes('commander') ? '撤销团长' : '升级团长'),
               // h('Button', {
               //   props: {
               //     type: 'primary',
@@ -371,6 +389,38 @@ export default {
         },
         onCancel: () => {
 
+        }
+      })
+    },
+    upgradeToleader (row) {
+      this.$Modal.confirm({
+        title: '是否升级为团长？',
+        okText: '是',
+        cancelText: '否',
+        onOk: () => {
+          UpgradeToleaderApi({ id: row.id }).then(() => {
+            this.$Message.info('升级成功')
+            this.getList()
+          })
+        },
+        onCancel: () => {
+          this.$Message.info('取消')
+        }
+      })
+    },
+    cancelCommander (row) {
+      this.$Modal.confirm({
+        title: '是否撤销团长？',
+        okText: '是',
+        cancelText: '否',
+        onOk: () => {
+          cancelCommanderApi({ id: row.id }).then(() => {
+            this.$Message.info('撤销成功')
+            this.getList()
+          })
+        },
+        onCancel: () => {
+          this.$Message.info('取消')
         }
       })
     }

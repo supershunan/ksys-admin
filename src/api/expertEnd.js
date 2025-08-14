@@ -1,7 +1,7 @@
 /** 达人端 */
 import axios from '@/libs/api.request'
 
-// 公告 教程 推广详情 设置
+// 公告 教程 推广详情 设置 单价
 export const getDeviceList = (type) => {
   return axios.request({
     url: `/gconfig/getByType/${type}`,

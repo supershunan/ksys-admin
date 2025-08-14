@@ -8,8 +8,8 @@
                             <Icon type="ios-color-filter" slot="prepend"></Icon>
                         </Input>
                     </FormItem>
-                    <FormItem prop="name">
-                        <Input type="text" v-model="searchForm.name" placeholder="申请名称">
+                    <FormItem prop="title">
+                        <Input type="text" v-model="searchForm.title" placeholder="申请名称">
                             <Icon type="ios-color-filter" slot="prepend"></Icon>
                         </Input>
                     </FormItem>
@@ -88,7 +88,7 @@ export default {
         },
         {
           title: '申请名称',
-          key: 'name'
+          key: 'title'
         },
         {
           title: '申请内容',
