@@ -61,7 +61,7 @@ export default {
       markdownList: [
         {
           value: 'h5_user_protocol',
-          label: '用户协议'
+          label: '最新动态'
         },
         {
           value: 'h5_private_strategy',
@@ -129,15 +129,15 @@ export default {
         },
         {
           value: 'protect_personal_info_notice',
-          label: '个人信息保护指引'
+          label: '更新历史'
         },
         {
           value: 'shared_third_info',
-          label: '与第三方共享个人信息清单'
+          label: '违规词'
         },
         {
           value: 'permission',
-          label: '权限列表'
+          label: 'H5 App下载'
         },
         {
           value: 'recruit',
