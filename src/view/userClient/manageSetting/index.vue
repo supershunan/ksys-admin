@@ -58,8 +58,8 @@
         </Row>
       </Card>
     </div>
-    <Card style="width: 100%">
-      <template #title> 单价设置 </template>
+    <Card style="width: 100%; margin-top: 10px;">
+      <template #title> 激励视频单价设置 </template>
       <div>
         <Form ref="priceForm" :model="priceForm" :label-width="80">
             <FormItem label="最大值" prop="val" :rules="[{ required: true, message: '内容不能为空', trigger: 'blur' }]">
@@ -70,6 +70,24 @@
             </FormItem>
             <FormItem>
             <Button type="primary" @click="handlPriceSubmit('priceForm')"
+              >保存</Button
+            >
+          </FormItem>
+        </Form>
+      </div>
+    </Card>
+    <Card style="width: 100%; margin-top: 10px;">
+      <template #title> 信息流单价设置 </template>
+      <div>
+        <Form ref="priceForm2" :model="priceForm2">
+          <FormItem label="最大值" prop="val" :rules="[{ required: true, message: '内容不能为空', trigger: 'blur' }]">
+              <Input type="number" v-model="priceForm2.val"></Input>
+            </FormItem>
+            <FormItem label="最小值" prop="valOther" :rules="[{ required: true, message: '内容不能为空', trigger: 'blur' }]">
+              <Input type="number" v-model="priceForm2.valOther"></Input>
+            </FormItem>
+            <FormItem>
+            <Button type="primary" @click="handlPriceSubmit2('priceForm2')"
               >保存</Button
             >
           </FormItem>
@@ -214,7 +232,8 @@ export default {
         [this.$store.state.user.tokenHeader]: this.$store.state.user.token
       },
       uploadUrl: '/apiFile/file/upload',
-      priceForm: {}
+      priceForm: {},
+      priceForm2: {}
     }
   },
   mounted () {
@@ -229,6 +248,7 @@ export default {
       this.getClassify()
       this.getAppAboutUs()
       this.getPriceSetting()
+      this.getPrice2Setting()
     },
     getAppAboutUs () {
       getAppAboutUsApi().then((res) => {
@@ -371,10 +391,53 @@ export default {
     handlPriceSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          updateDevice(this.priceForm).then((res) => {
-            this.$Message.success('修改成功')
-            this.getData()
-          })
+          if (!this.priceForm.id) {
+            addDevice({
+              ...this.priceForm,
+              code: 'ad_price',
+              type: 'ad_price',
+              name: '广告的价格'
+            }).then(() => {
+              this.$Message.success('添加成功')
+              this.getData()
+            })
+          } else {
+            updateDevice(this.priceForm).then((res) => {
+              this.$Message.success('修改成功')
+              this.getData()
+            })
+          }
+        }
+      })
+    },
+    getPrice2Setting () {
+      getDeviceList('ad_price_1').then((res) => {
+        if (res.data.length > 0) {
+          this.priceForm2 = res.data[0]
+        } else {
+          this.priceForm2 = {}
+        }
+      })
+    },
+    handlPriceSubmit2 (name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          if (!this.priceForm2.id) {
+            addDevice({
+              ...this.priceForm2,
+              code: 'ad_price_1',
+              type: 'ad_price_1',
+              name: '广告的价格'
+            }).then(() => {
+              this.$Message.success('添加成功')
+              this.getData()
+            })
+          } else {
+            updateDevice(this.priceForm2).then((res) => {
+              this.$Message.success('修改成功')
+              this.getData()
+            })
+          }
         }
       })
     }
