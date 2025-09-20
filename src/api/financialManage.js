@@ -17,3 +17,34 @@ export const getMoneyListApi = (data) => {
     method: 'post'
   })
 }
+
+/** 提现记录 */
+export const getWithdrawalListApi = (data) => {
+  return axios.request({
+    url: '/withdrawal/page',
+    data: JSON.stringify(data),
+    method: 'post'
+  })
+}
+
+/**
+ * 导出待打款数据
+ */
+export const exportMoneyListApi = () => {
+  return axios.request({
+    url: '/withdrawal/export',
+    method: 'get',
+    responseType: 'blob'
+  })
+}
+
+/**
+ * 导入转账结果
+ */
+export const importResultApi = (data) => {
+  return axios.request({
+    url: '/withdrawal/import',
+    data: JSON.stringify(data),
+    method: 'post'
+  })
+}

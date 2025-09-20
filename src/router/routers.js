@@ -325,6 +325,15 @@ export default [
           title: '提现信息'
         },
         component: () => import('@/view/financialManage/withdrawalInformation/index.vue')
+      },
+      {
+        path: '/withdrawalList',
+        name: '提现记录',
+        meta: {
+          icon: 'md-medal',
+          title: '提现记录'
+        },
+        component: () => import('@/view/financialManage/withdrawalList/index.vue')
       }
     ]
   },

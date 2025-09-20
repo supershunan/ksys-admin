@@ -50,18 +50,19 @@ class HttpRequest {
     })
     // 响应拦截
     instance.interceptors.response.use(res => {
+      console.log(res)
       this.destroy(url)
       let rData = res.data
-      if (rData.code != 10001) {
-        Message.error(rData.msg)
-        if (rData.code == 10003) {
-          store.dispatch('handleLogOut')
-          setTimeout(() => {
-            window.location.reload()
-          }, 2000)
-        }
-        return Promise.reject(new Error(`参数错误: ${rData.code}`))
-      }
+      // if (rData.code != 10001) {
+      //   Message.error(rData.msg)
+      //   if (rData.code == 10003) {
+      //     store.dispatch('handleLogOut')
+      //     setTimeout(() => {
+      //       window.location.reload()
+      //     }, 2000)
+      //   }
+      //   return Promise.reject(new Error(`参数错误: ${rData.code}`))
+      // }
       return rData
     }, error => {
       this.destroy(url)
